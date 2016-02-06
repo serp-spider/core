@@ -20,15 +20,17 @@ class GoogleCaptchaTest extends \PHPUnit_Framework_TestCase
     {
 
         $url = GoogleUrlArchive::fromString('https://www.google.fr/search?q=simpsons&hl=en_US');
-        $errorDom = new GoogleError(file_get_contents('test/resources/captcha.html'), $url);
+        $effectiveUrl = GoogleUrlArchive::fromString('https://ipv4.google.com/sorry');
+        $errorDom = new GoogleError(file_get_contents('test/resources/captcha.html'), $url, $effectiveUrl);
 
         $this->assertTrue($errorDom->isCaptcha());
 
         $captchaDom = new GoogleCaptcha($errorDom);
 
-        $this->assertEquals('128.78.166.25', $captchaDom->getIp());
+        $this->assertEquals('128.78.166.25', $captchaDom->getDetectedIp());
 
-        var_dump($captchaDom->getImageUrl());
+        $expected = 'https://ipv4.google.com/sorry/image?id=11933951502432445488&q=CGMSBIBOphkYlPS4tQUiGQDxp4NL98wGI3m9KmgfVcObdGm1KM4Kn_Y&hl=en';
+        $this->assertEquals($expected, $captchaDom->getImageUrl());
 
     }
 }

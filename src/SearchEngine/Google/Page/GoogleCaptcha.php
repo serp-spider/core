@@ -30,6 +30,14 @@ class GoogleCaptcha implements CaptchaResponse
     }
 
     /**
+     * @return GoogleError
+     */
+    public function getErrorPage()
+    {
+        return $this->googleError;
+    }
+
+    /**
      * Gets the url of the image. Be aware that each call to this method will regenerate the captcha image
      * and the previous generated image will be invalid
      *
@@ -46,8 +54,9 @@ class GoogleCaptcha implements CaptchaResponse
             throw new Exception('Unable to find the captcha image');
         }
 
-        return $imageTag->item(0)->getAttribute('src');
-
+        $src =  $imageTag->item(0)->getAttribute('src');
+        $d = $this->googleError->getEffectiveUrl()->resolve($src);
+        return $d->getUrl();
     }
 
     /**
@@ -59,7 +68,7 @@ class GoogleCaptcha implements CaptchaResponse
     public function getImage()
     {
         $imageUrl = $this->getImageUrl();
-        return file_get_contents("https://google.com$imageUrl");
+        return file_get_contents($imageUrl);
     }
 
     public function getId()
@@ -74,14 +83,7 @@ class GoogleCaptcha implements CaptchaResponse
         return $id;
     }
 
-    public function getData()
-    {
-        return [
-            'captcha-id' => $this->getId()
-        ];
-    }
-
-    public function getIp()
+    public function getDetectedIp()
     {
         $regexp = '/IP address: (\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})/';
         $hasMatch = preg_match($regexp, $this->googleError->getDom()->C14N(), $match);

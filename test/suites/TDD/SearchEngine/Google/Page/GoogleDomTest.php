@@ -20,7 +20,7 @@ class GoogleDomTest extends \PHPUnit_Framework_TestCase
     public function getDom()
     {
         $url = GoogleUrlArchive::fromString('https://www.google.fr/search?q=simpsons&hl=en_US');
-        return new GoogleDom(file_get_contents('test/resources/simpsons.html'), $url);
+        return new GoogleDom(file_get_contents('test/resources/simpsons.html'), $url, $url);
     }
 
     public function testGetXPath()

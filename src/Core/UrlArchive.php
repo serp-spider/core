@@ -37,7 +37,7 @@ class UrlArchive
         array $query = [],
         $hash = ''
     ) {
-    
+
 
         $this->query = $query;
         $this->hash = $hash;
@@ -187,5 +187,21 @@ class UrlArchive
     public function getQueryString()
     {
         return implode('&', $this->query);
+    }
+
+    public function resolve($url)
+    {
+        if (!preg_match('#^[a-zA-Z]+://#', $url)) {
+            if ('/' == $url{0}) {
+                if ('/' == $url{1}) {
+                    $url = $this->getScheme() . ':' . $url;
+                } else {
+                    $url = $this->getScheme() . '://' . $this->getHost()  . $url;
+                }
+            } else {
+                // TODO ($this->resolve('bar');)
+            }
+        }
+        return self::fromString($url);
     }
 }

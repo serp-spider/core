@@ -104,4 +104,19 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(Url::class, $url);
         $this->assertEquals('https://foo/bar?qux=baz', $url->getUrl());
     }
+
+
+    public function testResolve()
+    {
+        $url = Url::fromString('https://foo/bar?qux=baz');
+
+        $newUrl = $url->resolve('//bar');
+        $this->assertEquals('https://bar', $newUrl->getUrl());
+
+        $newUrl = $url->resolve('/baz');
+        $this->assertEquals('https://foo/baz', $newUrl->getUrl());
+
+        $newUrl = $url->resolve('http://baz/foo');
+        $this->assertEquals('http://baz/foo', $newUrl->getUrl());
+    }
 }
