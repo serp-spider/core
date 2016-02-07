@@ -5,7 +5,9 @@
 
 namespace Serps\SearchEngine\Google\Page;
 
+use Serps\Exception;
 use Serps\SearchEngine\Google\Page\GoogleDom;
+use Serps\SearchEngine\Google\Parser\NaturalParser;
 
 class GoogleSerp extends GoogleDom
 {
@@ -24,5 +26,15 @@ class GoogleSerp extends GoogleDom
             return $matches[1];
         }
         return null;
+    }
+
+    public function getNaturalResults(){
+        $parser = new NaturalParser();
+        return $parser->parse($this);
+    }
+
+    public function getAdwordsResults(){
+        // TODO
+        throw  new Exception("Not implemented");
     }
 }
