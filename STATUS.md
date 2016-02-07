@@ -12,5 +12,8 @@ This project is a work in progress and this file lists the current status of the
     - **Bing**: not started
     - Additional search engines might come in the future
 - **Http interface**: WIP :grey_exclamation:
+    - CURL client: WIP :grey_exclamation:
 - **Captcha Management**: WIP :grey_exclamation:
+
+- Website + Documentation: not started
 
