@@ -8,8 +8,6 @@ matrix:
       env: PROCESS_CODECLIMATE=true
     - php: 5.6
     - php: 7.0
-    - php: hhvm
-
 
 before_script:
   - phpenv config-rm xdebug.ini
