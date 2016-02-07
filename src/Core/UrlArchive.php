@@ -160,7 +160,7 @@ class UrlArchive
      * Get the full uri: ``http://www.example.com/path?param=value#hash``
      * @return string
      */
-    public function getUrl()
+    public function buildUrl()
     {
         $uri = $this->getScheme() . '://' . $this->getHost();
 
@@ -180,7 +180,7 @@ class UrlArchive
     }
 
     public function __toString(){
-        return $this->getUrl();
+        return $this->buildUrl();
     }
 
     /**

@@ -19,7 +19,7 @@ trait GoogleUrlTrait
 {
 
     public abstract function getParamValue($param, $defaultValue = null);
-    public abstract function getUrl();
+    public abstract function buildUrl();
     public abstract function getParamRawValue($param, $defaultValue = null);
     public abstract function getHost();
     public abstract function getPath();
@@ -85,7 +85,7 @@ trait GoogleUrlTrait
         }
 
         $request = new Request(
-            $this->getUrl(),
+            $this->buildUrl(),
             'GET',
             'php://memory',
             $headers

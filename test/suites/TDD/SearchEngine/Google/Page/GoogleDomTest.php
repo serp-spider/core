@@ -31,11 +31,11 @@ class GoogleDomTest extends \PHPUnit_Framework_TestCase
 
 
 
-    public function testGetUrl()
+    public function testBuildUrl()
     {
         $dom = $this->getDom();
         $this->assertInstanceOf(GoogleUrlArchive::class, $dom->getUrl());
-        $this->assertEquals('https://www.google.fr/search?q=simpsons&hl=en_US', $dom->getUrl()->getUrl());
+        $this->assertEquals('https://www.google.fr/search?q=simpsons&hl=en_US', $dom->getUrl()->buildUrl());
     }
 
     public function testGetDom()

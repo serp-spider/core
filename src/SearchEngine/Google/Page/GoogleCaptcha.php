@@ -56,7 +56,7 @@ class GoogleCaptcha implements CaptchaResponse
 
         $src =  $imageTag->item(0)->getAttribute('src');
         $d = $this->googleError->getEffectiveUrl()->resolve($src);
-        return $d->getUrl();
+        return $d->buildUrl();
     }
 
     /**

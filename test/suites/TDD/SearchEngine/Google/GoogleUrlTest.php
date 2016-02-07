@@ -22,7 +22,7 @@ class GoogleUrlTest extends \PHPUnit_Framework_TestCase
         $googleUrl = GoogleUrl::fromString('https://google.com/search?q=simpsons');
         $this->assertInstanceOf(GoogleUrlArchive::class, $googleUrl->getArchive());
 
-        $this->assertEquals('https://google.com/search?q=simpsons', $googleUrl->getArchive()->getUrl());
+        $this->assertEquals('https://google.com/search?q=simpsons', $googleUrl->getArchive()->buildUrl());
     }
 
     public function testLanguageRestriction()

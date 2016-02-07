@@ -18,20 +18,20 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     public function testGetUrl()
     {
         $builder = new Url('example.com');
-        $this->assertEquals('https://example.com', $builder->getUrl());
+        $this->assertEquals('https://example.com', $builder->buildUrl());
 
         $builder->setHash('foo');
-        $this->assertEquals('https://example.com#foo', $builder->getUrl());
+        $this->assertEquals('https://example.com#foo', $builder->buildUrl());
 
         $builder->setParam('foo', 'bar');
         $builder->setParam('foobar', 'foo bar');
-        $this->assertEquals('https://example.com?foo=bar&foobar=foo+bar#foo', $builder->getUrl());
+        $this->assertEquals('https://example.com?foo=bar&foobar=foo+bar#foo', $builder->buildUrl());
 
         $builder->setPath('some/path');
-        $this->assertEquals('https://example.com/some/path?foo=bar&foobar=foo+bar#foo', $builder->getUrl());
+        $this->assertEquals('https://example.com/some/path?foo=bar&foobar=foo+bar#foo', $builder->buildUrl());
 
         $builder->setScheme('http');
-        $this->assertEquals('http://example.com/some/path?foo=bar&foobar=foo+bar#foo', $builder->getUrl());
+        $this->assertEquals('http://example.com/some/path?foo=bar&foobar=foo+bar#foo', $builder->buildUrl());
 
 
     }
@@ -102,7 +102,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $url = Url::fromString('https://foo/bar?qux=baz');
 
         $this->assertInstanceOf(Url::class, $url);
-        $this->assertEquals('https://foo/bar?qux=baz', $url->getUrl());
+        $this->assertEquals('https://foo/bar?qux=baz', $url->buildUrl());
     }
 
 
@@ -111,12 +111,12 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $url = Url::fromString('https://foo/bar?qux=baz');
 
         $newUrl = $url->resolve('//bar');
-        $this->assertEquals('https://bar', $newUrl->getUrl());
+        $this->assertEquals('https://bar', $newUrl->buildUrl());
 
         $newUrl = $url->resolve('/baz');
-        $this->assertEquals('https://foo/baz', $newUrl->getUrl());
+        $this->assertEquals('https://foo/baz', $newUrl->buildUrl());
 
         $newUrl = $url->resolve('http://baz/foo');
-        $this->assertEquals('http://baz/foo', $newUrl->getUrl());
+        $this->assertEquals('http://baz/foo', $newUrl->buildUrl());
     }
 }

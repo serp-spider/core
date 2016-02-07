@@ -10,7 +10,7 @@ use Psr\Http\Message\RequestInterface;
 interface SerpUrlInterface
 {
 
-    public function getUrl();
+    public function buildUrl();
 
     /**
      * @return RequestInterface
