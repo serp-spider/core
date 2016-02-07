@@ -179,6 +179,10 @@ class UrlArchive
         return $uri;
     }
 
+    public function __toString(){
+        return $this->getUrl();
+    }
+
     /**
      * Get the query string.
      * ``foo=bar&bar=foo`` in ``http://www.example.com?foo=bar&bar=foo``

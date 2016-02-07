@@ -12,7 +12,7 @@ use Serps\SearchEngine\Google\GoogleUrlTrait;
 /**
  * A freezed version of a google url
  */
-class GoogleUrlArchive extends UrlArchive
+class GoogleUrlArchive extends UrlArchive implements GoogleUrlInterface
 {
     use GoogleUrlTrait;
 }

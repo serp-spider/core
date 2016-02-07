@@ -3,13 +3,15 @@
  * @license see LICENSE
  */
 
-namespace Serps\SearchEngine\Google\Page;
+namespace Serps\SearchEngine\Google;
 
 use Serps\Core\Captcha\CaptchaSolverInterface;
 use Serps\Core\Http\HttpClientInterface;
 use Serps\Core\Http\Proxy;
 use Serps\Core\UrlArchive;
 use Serps\Exception;
+use Serps\SearchEngine\Google\Page\GoogleCaptcha;
+use Serps\SearchEngine\Google\Page\GoogleDom;
 use Serps\SearchEngine\Google\Page\GoogleError;
 use Serps\SearchEngine\Google\Page\GoogleSerp;
 use Serps\SearchEngine\Google\GoogleUrl;
@@ -24,15 +26,30 @@ class GoogleClient
      */
     protected $client;
 
+    /**
+     * @var CaptchaSolverInterface|null
+     */
     protected $captchaSolver;
 
-    public function __construct(HttpClientInterface $client, CaptchaSolverInterface $captchaSolver)
+    /**
+     * @param HttpClientInterface $client
+     * @param CaptchaSolverInterface|null $captchaSolver
+     */
+    public function __construct(HttpClientInterface $client, CaptchaSolverInterface $captchaSolver = null)
     {
         $this->client = $client;
         $this->captchaSolver = $captchaSolver;
     }
 
-    public function query(GoogleUrlTrait $googleUrl, Proxy $proxy = null)
+    /**
+     * @param GoogleUrlInterface $googleUrl
+     * @param Proxy|null $proxy
+     * @return GoogleDom
+     * @throws Exception\CaptchaException
+     * @throws Exception\PageNotFoundException
+     * @throws Exception\RequestErrorException
+     */
+    public function query(GoogleUrlInterface $googleUrl, Proxy $proxy = null)
     {
         $request = $googleUrl->buildRequest();
         $response = $this->client->sendRequest($request, $proxy);
@@ -40,7 +57,12 @@ class GoogleClient
         $statusCode = $response->getStatusCode();
         $urlArchive = $googleUrl->getArchive();
 
-        $effectiveUrl = UrlArchive::fromString($response->getHeader('X-SERPS-EFFECTIVE-URL'));
+        $effectiveUrl = $response->getHeader('X-SERPS-EFFECTIVE-URL');
+        if(!count($effectiveUrl) > 0){
+            throw new Exception("Response does not provide a value for the header X-SERPS-EFFECTIVE-URL");
+        }
+
+        $effectiveUrl = UrlArchive::fromString($effectiveUrl[0]);
 
         if (200 == $statusCode) {
 
@@ -60,7 +82,9 @@ class GoogleClient
                 $errorDom = new GoogleError((string)$response->getBody(), $urlArchive, $effectiveUrl, $proxy);
 
                 if ($errorDom->isCaptcha()) {
-                    throw new Exception\CaptchaException();
+                    throw new Exception\CaptchaException(new GoogleCaptcha($errorDom));
+                }else{
+                    throw new Exception\RequestErrorException($errorDom);
                 }
             }
         }

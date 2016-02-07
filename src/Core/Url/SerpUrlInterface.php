@@ -17,6 +17,5 @@ interface SerpUrlInterface
      */
     public function buildRequest();
 
-    public function setSearchTerm($search);
     public function getSearchTerm();
 }

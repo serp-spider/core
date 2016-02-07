@@ -10,9 +10,8 @@ use Zend\Diactoros\Request;
 /**
  * A fluent builder for a google url
  */
-class GoogleUrl extends Url implements SerpUrlInterface
+class GoogleUrl extends Url implements GoogleUrlInterface
 {
-
     use GoogleUrlTrait;
 
     const RESULT_TYPE_ALL  = 'all';
