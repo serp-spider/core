@@ -179,7 +179,8 @@ class UrlArchive
         return $uri;
     }
 
-    public function __toString(){
+    public function __toString()
+    {
         return $this->buildUrl();
     }
 

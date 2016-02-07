@@ -58,8 +58,8 @@ class GoogleClient
         $urlArchive = $googleUrl->getArchive();
 
         $effectiveUrl = $response->getHeader('X-SERPS-EFFECTIVE-URL');
-        if(!count($effectiveUrl) > 0){
-            throw new Exception("Response does not provide a value for the header X-SERPS-EFFECTIVE-URL");
+        if (!count($effectiveUrl) > 0) {
+            throw new Exception('Response does not provide a value for the header X-SERPS-EFFECTIVE-URL');
         }
 
         $effectiveUrl = UrlArchive::fromString($effectiveUrl[0]);
@@ -83,7 +83,7 @@ class GoogleClient
 
                 if ($errorDom->isCaptcha()) {
                     throw new Exception\CaptchaException(new GoogleCaptcha($errorDom));
-                }else{
+                } else {
                     throw new Exception\RequestErrorException($errorDom);
                 }
             }

@@ -5,7 +5,6 @@
 
 namespace Serps\SearchEngine\Google;
 
-
 use Serps\Core\Url\SerpUrlInterface;
 
 interface GoogleUrlInterface extends SerpUrlInterface
@@ -36,5 +35,4 @@ interface GoogleUrlInterface extends SerpUrlInterface
 
 
     public function getArchive();
-
 }

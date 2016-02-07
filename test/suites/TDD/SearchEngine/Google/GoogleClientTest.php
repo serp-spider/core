@@ -19,7 +19,8 @@ use Serps\SearchEngine\Google\Page\GoogleSerp;
 class GoogleClientTest extends \PHPUnit_Framework_TestCase
 {
 
-    public function testValidDom(){
+    public function testValidDom()
+    {
         $httpClientMock = $this->getMock(HttpClientInterface::class);
         $responseFromMock = new Response();
         $responseFromMock = $responseFromMock->withHeader('X-SERPS-EFFECTIVE-URL', 'https://www.google.fr/search?q=simpsons+movie+trailer');
@@ -39,7 +40,8 @@ class GoogleClientTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('https://www.google.fr/search?q=simpsons+movie+trailer', (string)$dom->getEffectiveUrl());
     }
 
-    public function testCaptchaDom(){
+    public function testCaptchaDom()
+    {
         $httpClientMock = $this->getMock(HttpClientInterface::class);
         $responseFromMock = new Response();
         $responseFromMock = $responseFromMock->withStatus(503);
@@ -53,13 +55,12 @@ class GoogleClientTest extends \PHPUnit_Framework_TestCase
         $googleClient = new GoogleClient($httpClientMock);
         $url = GoogleUrl::fromString('https://www.google.fr/search?q=simpsons+movie+trailer');
 
-        try{
+        try {
             $googleClient->query($url);
             $this->fail('Exception not thrown');
-        }catch (CaptchaException $e){
+        } catch (CaptchaException $e) {
             $this->assertInstanceOf(GoogleCaptcha::class, $e->getCaptcha());
             $this->assertEquals('128.78.166.25', $e->getCaptcha()->getDetectedIp());
         }
     }
-
 }

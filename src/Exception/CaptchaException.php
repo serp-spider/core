@@ -15,7 +15,8 @@ class CaptchaException extends RequestErrorException
      */
     protected $captcha;
 
-    public function __construct(CaptchaResponse $captchaResponse){
+    public function __construct(CaptchaResponse $captchaResponse)
+    {
         $this->captcha = $captchaResponse;
     }
 

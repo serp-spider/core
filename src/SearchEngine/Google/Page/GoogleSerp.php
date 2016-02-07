@@ -28,13 +28,15 @@ class GoogleSerp extends GoogleDom
         return null;
     }
 
-    public function getNaturalResults(){
+    public function getNaturalResults()
+    {
         $parser = new NaturalParser();
         return $parser->parse($this);
     }
 
-    public function getAdwordsResults(){
+    public function getAdwordsResults()
+    {
         // TODO
-        throw  new Exception("Not implemented");
+        throw  new Exception('Not implemented');
     }
 }
