@@ -7,4 +7,4 @@
 phpunit.dist.xml    export-ignore
 phpcs.xml           export-ignore 
 
-test/resources      linguist-vendored
+/test/resources/*   linguist-vendored
