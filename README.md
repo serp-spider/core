@@ -6,10 +6,7 @@ SERPS
 [![Build Status](https://travis-ci.org/serp-scrape/serps.svg?branch=master)](https://travis-ci.org/serp-scrape/serps)
 [![Test Coverage](https://codeclimate.com/github/serp-scrape/serps/badges/coverage.svg)](https://codeclimate.com/github/serp-scrape/serps/coverage)
 
-
-This is a [work in progress](STATUS.md).
-
-
+This is a work in progress.
 
 Install
 -------
@@ -18,6 +15,7 @@ Install it using composer: ``composer require serps/serps``
 
 The base package does not include an http client. 
 We advice you to use our curl client: ``composer require serps/http-client-curl``
+
 
 Usage
 -----
