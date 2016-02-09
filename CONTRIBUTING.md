@@ -21,10 +21,14 @@ Look at current tests in ``test/suites`` for more details. Think about adding ``
 If your test fixes an issue, first you will have to reproduce this issue in the test suit and you can comment 
 your test to tell it fixes the given issue.
 
-Coding standards
-----------------
+Conding Standards
+-----------------
 
+The code follow the PSR-2 coding standards
 
+Tools
+-----
 
-- Check standards: run ``./test/bin/phpcs.bash emacs``
-- fix standards: run ``./test/bin/phpcbf.bash``
+- Run test suit: ``composer test``
+- Check coding standards: ``composer cscheck``
+- Auto fix coding standards: ``.composer csfix``
