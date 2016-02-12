@@ -18,14 +18,17 @@ class ItemPositionTest extends \PHPUnit_Framework_TestCase
     {
         $itemPosition = new ItemPosition(
             1,
+            10,
             new BaseResult('classical', [])
         );
-        $this->assertEquals(1, $itemPosition->getPosition());
+        $this->assertEquals(1, $itemPosition->getOnPagePosition());
+        $this->assertEquals(10, $itemPosition->getRealPosition());
     }
 
     public function testGetType()
     {
         $itemPosition = new ItemPosition(
+            1,
             1,
             new BaseResult('classical', [])
         );
@@ -36,6 +39,7 @@ class ItemPositionTest extends \PHPUnit_Framework_TestCase
     {
         $itemPosition = new ItemPosition(
             1,
+            1,
             new BaseResult('classical', [])
         );
         $this->assertTrue($itemPosition->is('classical'));
@@ -45,6 +49,7 @@ class ItemPositionTest extends \PHPUnit_Framework_TestCase
     {
         $itemPosition = new ItemPosition(
             1,
+            1,
             new BaseResult('classical', ['foo' => 'bar'])
         );
         $this->assertEquals(['foo' => 'bar'], $itemPosition->getData());
@@ -53,6 +58,7 @@ class ItemPositionTest extends \PHPUnit_Framework_TestCase
     public function testGetDataValue()
     {
         $itemPosition = new ItemPosition(
+            1,
             1,
             new BaseResult('classical', ['foo' => 'bar'])
         );

@@ -8,7 +8,8 @@ namespace Serps\Core\Serp;
 class ItemPosition implements ResultDataInterface
 {
 
-    protected $position;
+    protected $positionOnPage;
+    protected $realPosition;
 
     /**
      * @var ResultDataInterface
@@ -20,15 +21,27 @@ class ItemPosition implements ResultDataInterface
      * @param $position
      * @param ResultDataInterface $itemData
      */
-    public function __construct($position, ResultDataInterface $itemData)
+    public function __construct($positionOnPage, $realPosition, ResultDataInterface $itemData)
     {
-        $this->position = $position;
+        $this->positionOnPage = $positionOnPage;
+        $this->realPosition = $realPosition;
         $this->itemData = $itemData;
     }
 
-    public function getPosition()
+    /**
+     * @return int the position of the item on the page (starting at 1)
+     */
+    public function getOnPagePosition()
     {
-        return $this->position;
+        return $this->positionOnPage;
+    }
+
+    /**
+     * @return int the general position of the item (starting at 1)
+     */
+    public function getRealPosition()
+    {
+        return $this->realPosition;
     }
 
     public function getType()

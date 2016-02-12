@@ -20,11 +20,11 @@ class ResultSet implements \Countable, \IteratorAggregate
 
     /**
      * ResultSet constructor.
-     * @param $startingAt
+     * @param int $startingAt the position of the first item of the page (starting at 1)
      */
     public function __construct($startingAt)
     {
-        $this->startingAt = $startingAt;
+        $this->startingAt = $startingAt - 1;
     }
 
 
@@ -33,8 +33,10 @@ class ResultSet implements \Countable, \IteratorAggregate
      */
     public function addItem(ResultDataInterface $item)
     {
+        $itemCount = count($this->items) + 1;
         $this->items[] = new ItemPosition(
-            count($this->items) + $this->startingAt,
+            $itemCount,
+            $itemCount + $this->startingAt,
             $item
         );
     }
