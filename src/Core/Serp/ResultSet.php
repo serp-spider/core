@@ -16,7 +16,7 @@ class ResultSet implements \Countable, \IteratorAggregate
     /**
      * @var ItemPosition[]
      */
-    protected $items;
+    protected $items = [];
 
     /**
      * ResultSet constructor.
