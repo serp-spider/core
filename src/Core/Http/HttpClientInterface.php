@@ -6,7 +6,7 @@
 namespace Serps\Core\Http;
 
 use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
+use Serps\Core\Http\SearchEngineResponse;
 
 interface HttpClientInterface
 {
@@ -15,7 +15,7 @@ interface HttpClientInterface
      *
      * @param RequestInterface $request
      * @param ProxyInterface $proxy
-     * @return ResponseInterface
+     * @return SearchEngineResponse
      */
     public function sendRequest(RequestInterface $request, ProxyInterface $proxy = null);
 }
