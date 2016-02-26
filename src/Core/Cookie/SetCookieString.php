@@ -77,10 +77,11 @@ abstract class SetCookieString
             $data['path'] = self::getDefaultPath($path);
         }
 
-        $path = $data['path'];
-        unset($data['path']);
+        if (!$data['domain']) {
+            $data['domain'] = $host;
+        }
 
-        return new Cookie($cookieName, $cookieValue, $host, $path, $data);
+        return new Cookie($cookieName, $cookieValue, $data);
     }
 
     /**

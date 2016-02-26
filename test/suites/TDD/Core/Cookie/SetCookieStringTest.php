@@ -24,7 +24,6 @@ class SetCookieStringTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('bar', $cookie->getValue());
 
         $this->assertEquals('Tue, 01-Jan-2050 08:00:00 GMT', $cookie->getExpire());
-        $this->assertEquals('foo.com', $cookie->getHost());
         $this->assertEquals('.foo.com', $cookie->getDomain());
 
     }

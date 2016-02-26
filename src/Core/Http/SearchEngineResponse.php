@@ -20,6 +20,8 @@ class SearchEngineResponse
     protected $effectiveUrl;
     protected $proxy;
 
+    protected $cookies;
+
     /**
      * SearchEngineResponse constructor.
      * @param $httpResponseHeaders [] the http headers form the response
@@ -31,21 +33,38 @@ class SearchEngineResponse
      * @param $proxy ProxyInterface|null the proxy used for the query
      */
     public function __construct(
-        $httpResponseHeaders,
+        array $httpResponseHeaders,
         $httpResponseStatus,
         $pageContent,
         $pageEvaluated,
         UrlArchive $initialUrl,
         UrlArchive $effectiveUrl,
+        array $cookies,
         ProxyInterface $proxy = null
     ) {
-        $this->httpResponseHeaders = $httpResponseHeaders;
+        foreach ($httpResponseHeaders as $k => $v) {
+            $this->httpResponseHeaders[strtoupper($k)] = $v;
+        }
         $this->httpResponseStatus = $httpResponseStatus;
         $this->pageEvaluated = $pageEvaluated;
         $this->pageContent = $pageContent;
         $this->initialUrl = $initialUrl;
         $this->effectiveUrl = $effectiveUrl;
         $this->proxy = $proxy;
+        $this->cookies = $cookies;
+    }
+
+    /**
+     * Get the header value or null if it does not exist
+     * @param $headerName
+     * @return null
+     */
+    public function getHeader($headerName)
+    {
+        if (isset($this->httpResponseHeaders[$headerName])) {
+            return $this->httpResponseHeaders[$headerName];
+        }
+        return null;
     }
 
     /**

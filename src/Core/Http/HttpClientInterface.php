@@ -6,6 +6,7 @@
 namespace Serps\Core\Http;
 
 use Psr\Http\Message\RequestInterface;
+use Serps\Core\Cookie\CookieJarInterface;
 use Serps\Core\Http\SearchEngineResponse;
 
 interface HttpClientInterface
@@ -15,7 +16,12 @@ interface HttpClientInterface
      *
      * @param RequestInterface $request
      * @param ProxyInterface $proxy
+     * @param CookieJarInterface|null $cookieJar
      * @return SearchEngineResponse
      */
-    public function sendRequest(RequestInterface $request, ProxyInterface $proxy = null);
+    public function sendRequest(
+        RequestInterface $request,
+        ProxyInterface $proxy = null,
+        CookieJarInterface $cookieJar = null
+    );
 }
