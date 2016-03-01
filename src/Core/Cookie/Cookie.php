@@ -25,7 +25,9 @@ class Cookie
 
     protected function getFlag($flag, $default = null)
     {
-        return isset($this->flags[$flag]) ? $this->flags[$flag] : $default;
+        return isset($this->flags[$flag]) ?
+            $this->flags[$flag]
+            : $default;
     }
 
 
@@ -59,7 +61,7 @@ class Cookie
      */
     public function getPath()
     {
-        return $this->getFlag('path');
+        return $this->getFlag('path', '/');
     }
 
     public function getDomain()
@@ -133,7 +135,7 @@ class Cookie
         return $this->getExpires() && time() > $this->getExpires();
     }
 
-        /**
+    /**
      * Check if the cookie is valid according to RFC 6265
      *
      * @return bool|string Returns true if valid or an error message if invalid
