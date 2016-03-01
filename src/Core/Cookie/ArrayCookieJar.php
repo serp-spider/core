@@ -23,7 +23,7 @@ class ArrayCookieJar implements CookieJarInterface
 
     /**
      * ArrayCookieJar constructor.
-     * @param $strictMode
+     * @param bool $strictMode pass to true to throw an exception when an invalid cookie is added
      */
     public function __construct($strictMode = false)
     {
@@ -39,7 +39,7 @@ class ArrayCookieJar implements CookieJarInterface
     }
 
     /**
-     * @param mixed $strictMode
+     * @param bool $strictMode pass to true to throw an exception when an invalid cookie is added
      */
     public function setStrictMode($strictMode)
     {
