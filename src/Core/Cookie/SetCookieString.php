@@ -77,7 +77,7 @@ abstract class SetCookieString
             $data['path'] = self::getDefaultPath($path);
         }
 
-        if (!$data['domain']) {
+        if (!isset($data['domain'])) {
             $data['domain'] = $host;
         }
 

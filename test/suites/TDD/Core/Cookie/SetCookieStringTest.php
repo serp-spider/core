@@ -25,5 +25,40 @@ class SetCookieStringTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Tue, 01-Jan-2050 08:00:00 GMT', $cookie->getExpire());
         $this->assertEquals('.foo.com', $cookie->getDomain());
 
+
+        // No path with given path empty
+        $cookieString = 'foo=bar;';
+        $cookie = SetCookieString::parse($cookieString, 'foo.com', '');
+
+        $this->assertEquals('/', $cookie->getPath());
+
+
+        // No path with given path '/'
+        $cookieString = 'foo=bar;';
+        $cookie = SetCookieString::parse($cookieString, 'foo.com', '/');
+
+        $this->assertEquals('/', $cookie->getPath());
+
+
+        // No path with given path '/bar'
+        $cookieString = 'foo=bar;';
+        $cookie = SetCookieString::parse($cookieString, 'foo.com', '/bar');
+
+        $this->assertEquals('/', $cookie->getPath());
+
+
+        // No path with given path 'bar'
+        $cookieString = 'foo=bar;';
+        $cookie = SetCookieString::parse($cookieString, 'foo.com', 'bar');
+
+        $this->assertEquals('/', $cookie->getPath());
+
+
+        // No path with given path '/bar/'
+        $cookieString = 'foo=bar;';
+        $cookie = SetCookieString::parse($cookieString, 'foo.com', '/bar/');
+
+        $this->assertEquals('/bar', $cookie->getPath());
+
     }
 }
