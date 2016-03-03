@@ -5,12 +5,14 @@
 
 namespace Serps\Core\Http;
 
+use Serps\Core\Cookie\Cookie;
 use Serps\Core\UrlArchive;
 
 class SearchEngineResponse
 {
 
     protected $httpResponseHeaders;
+    protected $headerNames;
     protected $httpResponseStatus;
 
     protected $pageEvaluated;
@@ -23,13 +25,13 @@ class SearchEngineResponse
     protected $cookies;
 
     /**
-     * SearchEngineResponse constructor.
      * @param $httpResponseHeaders [] the http headers form the response
      * @param $httpResponseStatus int the http status code from the respsone
      * @param $pageContent string content of the page evaluated or not
      * @param $pageEvaluated bool page was evaluated meaning the $pageContent might be changed by javascript
      * @param $initialUrl UrlArchive the initial url
      * @param $effectiveUrl UrlArchive the effective url that is the last url after a redirection
+     * @param $cookies Cookie[] the effective url that is the last url after a redirection
      * @param $proxy ProxyInterface|null the proxy used for the query
      */
     public function __construct(
@@ -43,10 +45,12 @@ class SearchEngineResponse
         ProxyInterface $proxy = null
     ) {
         foreach ($httpResponseHeaders as $k => $v) {
-            $this->httpResponseHeaders[strtoupper($k)] = $v;
+            $this->headerNames[strtoupper($k)] = $k;
         }
+        $this->httpResponseHeaders = $httpResponseHeaders;
+
         $this->httpResponseStatus = $httpResponseStatus;
-        $this->pageEvaluated = $pageEvaluated;
+        $this->pageEvaluated = (bool)$pageEvaluated;
         $this->pageContent = $pageContent;
         $this->initialUrl = $initialUrl;
         $this->effectiveUrl = $effectiveUrl;
@@ -61,21 +65,33 @@ class SearchEngineResponse
      */
     public function getHeader($headerName)
     {
-        if (isset($this->httpResponseHeaders[$headerName])) {
-            return $this->httpResponseHeaders[$headerName];
+        if ($this->hasHeader($headerName)) {
+            return $this->httpResponseHeaders[$this->headerNames[strtoupper($headerName)]];
         }
         return null;
     }
 
     /**
+     * Check if the given header was in the http response
+     * @param $headerName
+     * @return bool
+     */
+    public function hasHeader($headerName)
+    {
+        return isset($this->headerNames[strtoupper($headerName)]);
+    }
+
+    /**
+     * all http response headers
      * @return array
      */
-    public function getHttpResponseHeaders()
+    public function getHeaders()
     {
         return $this->httpResponseHeaders;
     }
 
     /**
+     * the http response status code
      * @return int
      */
     public function getHttpResponseStatus()
@@ -84,9 +100,10 @@ class SearchEngineResponse
     }
 
     /**
+     * Will return true if the page/javascript were evaluated, in this case dom might be updated
      * @return bool
      */
-    public function getPageEvaluated()
+    public function isPageEvaluated()
     {
         return $this->pageEvaluated;
     }
@@ -100,6 +117,7 @@ class SearchEngineResponse
     }
 
     /**
+     * the url that initiated the request
      * @return UrlArchive
      */
     public function getInitialUrl()
@@ -108,6 +126,7 @@ class SearchEngineResponse
     }
 
     /**
+     * the final url of the request. In case of a redirection, that will be the final url of the redirection
      * @return UrlArchive
      */
     public function getEffectiveUrl()
@@ -116,10 +135,21 @@ class SearchEngineResponse
     }
 
     /**
-     * @return ProxyInterface
+     * The proxy that was used. Will be null if no proxy was used
+     * @return ProxyInterface|null
      */
     public function getProxy()
     {
         return $this->proxy;
+    }
+
+    /**
+     * The cookie as they should be after the http call. That means cookies from the request + cookies from the response
+     * If the page was evaluated, that might also contain cookies set/removed by javascript.
+     * @return array|\Serps\Core\Cookie\Cookie[]
+     */
+    public function getCookies()
+    {
+        return $this->cookies;
     }
 }
