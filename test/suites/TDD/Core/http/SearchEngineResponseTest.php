@@ -23,7 +23,7 @@ class SearchEngineResponseTest extends \PHPUnit_Framework_TestCase
             '<html></html>',
             true,
             UrlArchive::fromString('http://foo.bar'),
-            UrlArchive::fromString('http://foo.bar'),
+            UrlArchive::fromString('http://foo.baz'),
             ['baz' => 'qux', 'quux' => 'baz'],
             null
         );
@@ -62,5 +62,36 @@ class SearchEngineResponseTest extends \PHPUnit_Framework_TestCase
     {
         $response = $this->getResponse();
         $this->assertEquals(true, $response->isPageEvaluated());
+    }
+
+    public function testGetPageContent()
+    {
+        $response = $this->getResponse();
+        $this->assertEquals('<html></html>', $response->getPageContent());
+    }
+
+    public function testGetInitialUrl()
+    {
+        $response = $this->getResponse();
+        $this->assertEquals('http://foo.bar', (string)$response->getInitialUrl());
+    }
+
+    public function testGetEffectiveUrl()
+    {
+        $response = $this->getResponse();
+        $this->assertEquals('http://foo.baz', (string)$response->getEffectiveUrl());
+    }
+
+    public function testGetProxy()
+    {
+        $response = $this->getResponse();
+        $this->assertNull($response->getProxy());
+    }
+
+
+    public function testGetCookies()
+    {
+        $response = $this->getResponse();
+        $this->assertEquals(['baz' => 'qux', 'quux' => 'baz'], $response->getCookies());
     }
 }
