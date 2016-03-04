@@ -11,6 +11,7 @@ use Zend\Diactoros\Request;
 
 /**
  * @covers Serps\Core\Cookie\ArrayCookieJar
+ * @covers Serps\Core\Cookie\Cookie
  */
 class ArrayCookieJarTest extends \PHPUnit_Framework_TestCase
 {

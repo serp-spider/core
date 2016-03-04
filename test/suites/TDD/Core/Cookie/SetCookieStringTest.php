@@ -9,6 +9,7 @@ use Serps\Core\Cookie\SetCookieString;
 
 /**
  * @covers Serps\Core\Cookie\SetCookieString
+ * @covers Serps\Core\Cookie\Cookie
  */
 class SetCookieStringTest extends \PHPUnit_Framework_TestCase
 {
