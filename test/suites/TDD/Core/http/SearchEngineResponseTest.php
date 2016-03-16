@@ -24,7 +24,6 @@ class SearchEngineResponseTest extends \PHPUnit_Framework_TestCase
             true,
             UrlArchive::fromString('http://foo.bar'),
             UrlArchive::fromString('http://foo.baz'),
-            ['baz' => 'qux', 'quux' => 'baz'],
             null
         );
     }
@@ -86,12 +85,5 @@ class SearchEngineResponseTest extends \PHPUnit_Framework_TestCase
     {
         $response = $this->getResponse();
         $this->assertNull($response->getProxy());
-    }
-
-
-    public function testGetCookies()
-    {
-        $response = $this->getResponse();
-        $this->assertEquals(['baz' => 'qux', 'quux' => 'baz'], $response->getCookies());
     }
 }

@@ -22,7 +22,6 @@ class SearchEngineResponse
     protected $effectiveUrl;
     protected $proxy;
 
-    protected $cookies;
 
     /**
      * @param $httpResponseHeaders [] the http headers form the response
@@ -31,7 +30,6 @@ class SearchEngineResponse
      * @param $pageEvaluated bool page was evaluated meaning the $pageContent might be changed by javascript
      * @param $initialUrl UrlArchive the initial url
      * @param $effectiveUrl UrlArchive the effective url that is the last url after a redirection
-     * @param $cookies Cookie[] the effective url that is the last url after a redirection
      * @param $proxy ProxyInterface|null the proxy used for the query
      */
     public function __construct(
@@ -41,7 +39,6 @@ class SearchEngineResponse
         $pageEvaluated,
         UrlArchive $initialUrl,
         UrlArchive $effectiveUrl,
-        array $cookies,
         ProxyInterface $proxy = null
     ) {
         foreach ($httpResponseHeaders as $k => $v) {
@@ -55,7 +52,6 @@ class SearchEngineResponse
         $this->initialUrl = $initialUrl;
         $this->effectiveUrl = $effectiveUrl;
         $this->proxy = $proxy;
-        $this->cookies = $cookies;
     }
 
     /**
@@ -141,15 +137,5 @@ class SearchEngineResponse
     public function getProxy()
     {
         return $this->proxy;
-    }
-
-    /**
-     * The cookie as they should be after the http call. That means cookies from the request + cookies from the response
-     * If the page was evaluated, that might also contain cookies set/removed by javascript.
-     * @return array|\Serps\Core\Cookie\Cookie[]
-     */
-    public function getCookies()
-    {
-        return $this->cookies;
     }
 }
