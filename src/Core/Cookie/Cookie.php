@@ -208,6 +208,6 @@ class Cookie
      */
     public function formatForCookieHeader()
     {
-        return $this->getName() . "=" . $this->getValue();
+        return $this->getName() . '=' . $this->getValue();
     }
 }
