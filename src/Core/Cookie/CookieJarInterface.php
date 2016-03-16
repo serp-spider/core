@@ -62,7 +62,7 @@ interface CookieJarInterface
      *
      * @param RequestInterface $request Request object to match
      *
-     * @return array
+     * @return Cookie[]
      */
     public function getMatchingCookies(RequestInterface $request);
 
@@ -76,7 +76,7 @@ interface CookieJarInterface
      * @param bool   $skipDiscardable Set to TRUE to skip cookies with the Discard attribute.
      * @param bool   $skipExpired     Set to FALSE to include expired
      *
-     * @return array Returns an array of Cookie objects
+     * @return Cookie[] the cookies that matched the parameters
      */
     public function all($domain = null, $path = null, $name = null, $skipDiscardable = false, $skipExpired = true);
 }

@@ -47,7 +47,9 @@ class ArrayCookieJar implements CookieJarInterface
     }
 
 
-
+    /**
+     * @inheritdoc
+     */
     public function set(Cookie $cookie)
     {
         $result = $cookie->validate();
@@ -106,9 +108,7 @@ class ArrayCookieJar implements CookieJarInterface
     }
 
     /**
-     * @param string $domain
-     * @param string $path
-     * @param string $name
+     * @inheritdoc
      */
     public function remove($domain = null, $path = null, $name = null)
     {
@@ -118,6 +118,9 @@ class ArrayCookieJar implements CookieJarInterface
         });
     }
 
+    /**
+     * @inheritdoc
+     */
     public function removeTemporary()
     {
         $this->cookies = array_filter($this->cookies, function (Cookie $cookie) {
@@ -126,6 +129,9 @@ class ArrayCookieJar implements CookieJarInterface
         return $this;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function removeExpired()
     {
         $currentTime = time();
@@ -135,6 +141,9 @@ class ArrayCookieJar implements CookieJarInterface
         return $this;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getMatchingCookies(RequestInterface $request)
     {
          // Find cookies that match this request
@@ -149,12 +158,7 @@ class ArrayCookieJar implements CookieJarInterface
     }
 
     /**
-     * @param null $domain
-     * @param null $path
-     * @param null $name
-     * @param bool|false $skipDiscardable
-     * @param bool|true $skipExpired
-     * @return Cookie[]
+     * @inheritdoc
      */
     public function all($domain = null, $path = null, $name = null, $skipDiscardable = false, $skipExpired = true)
     {
