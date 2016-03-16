@@ -200,4 +200,14 @@ class Cookie
     {
         return $this->getFlag('secure', false);
     }
+
+    /**
+     * Formats the cookies to be set in the Cookie header
+     *
+     * @return string the formatted cookie with this format: name=value
+     */
+    public function formatForCookieHeader()
+    {
+        return $this->getName() . "=" . $this->getValue();
+    }
 }
