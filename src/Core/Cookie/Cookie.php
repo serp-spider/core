@@ -48,13 +48,6 @@ class Cookie
     }
 
 
-    /**
-     * @return mixed
-     */
-    public function getExpire()
-    {
-        return $this->getFlag('expires');
-    }
 
     /**
      * @return mixed
