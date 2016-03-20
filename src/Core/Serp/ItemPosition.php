@@ -49,9 +49,9 @@ class ItemPosition implements ResultDataInterface
         return $this->itemData->getType();
     }
 
-    public function is($type)
+    public function is(...$type)
     {
-        return $this->itemData->is($type);
+        return $this->itemData->is(...$type);
     }
 
     public function getDataValue($name)

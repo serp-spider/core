@@ -24,9 +24,9 @@ class BaseResult implements ResultDataInterface
         return $this->type;
     }
 
-    public function is($type)
+    public function is(...$type)
     {
-        return $this->getType() == $type;
+        return in_array($this->getType(), $type);
     }
 
     public function getDataValue($name)

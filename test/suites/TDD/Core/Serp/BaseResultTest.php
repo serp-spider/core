@@ -23,6 +23,8 @@ class BaseResultTest extends \PHPUnit_Framework_TestCase
     {
         $result = new BaseResult('classical', []);
         $this->assertTrue($result->is('classical'));
+        $this->assertTrue($result->is('video', 'classical'));
+        $this->assertFalse($result->is('video', 'image'));
     }
 
     public function testGetData()

@@ -20,7 +20,7 @@ interface ResultDataInterface
      * @param $type
      * @return mixed
      */
-    public function is($type);
+    public function is(...$type);
 
     public function getDataValue($name);
 
