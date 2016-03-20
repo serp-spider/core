@@ -47,6 +47,16 @@ class ItemPositionTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($itemPosition->is('video', 'image'));
     }
 
+    public function testGetData()
+    {
+        $itemPosition = new ItemPosition(
+            1,
+            1,
+            new BaseResult('classical', ['foo' => 'bar'])
+        );
+        $this->assertEquals(['foo' => 'bar'], $itemPosition->getData());
+    }
+
     public function testGetDataValue()
     {
         $itemPosition = new ItemPosition(

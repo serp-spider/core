@@ -39,4 +39,13 @@ class BaseResult implements ResultDataInterface
         }
         return $data;
     }
+
+    public function getData()
+    {
+        $data = [];
+        foreach ($this->data as $k => $v) {
+            $data[$k] = $this->getDataValue($k);
+        }
+        return $data;
+    }
 }

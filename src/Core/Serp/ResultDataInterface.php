@@ -23,4 +23,6 @@ interface ResultDataInterface
     public function is(...$type);
 
     public function getDataValue($name);
+
+    public function getData();
 }

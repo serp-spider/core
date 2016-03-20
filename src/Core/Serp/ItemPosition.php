@@ -58,4 +58,9 @@ class ItemPosition implements ResultDataInterface
     {
         return $this->itemData->getDataValue($name);
     }
+
+    public function getData()
+    {
+        return $this->itemData->getData();
+    }
 }
