@@ -31,11 +31,12 @@ class BaseResult implements ResultDataInterface
 
     public function getDataValue($name)
     {
-        return isset($this->data[$name]) ? $this->data[$name] : null;
-    }
-
-    public function getData()
-    {
-        return $this->data;
+        $data = isset($this->data[$name]) ? $this->data[$name] : null;
+        if (is_callable($data)) {
+            $data = call_user_func($data);
+            $this->data[$name] = $data;
+            return $this->getDataValue($name);
+        }
+        return $data;
     }
 }

@@ -27,15 +27,17 @@ class BaseResultTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($result->is('video', 'image'));
     }
 
-    public function testGetData()
-    {
-        $result = new BaseResult('classical', ['foo' => 'bar']);
-        $this->assertEquals(['foo' => 'bar'], $result->getData());
-    }
-
     public function testGetDataValue()
     {
         $result = new BaseResult('classical', ['foo' => 'bar']);
+        $this->assertEquals('bar', $result->getDataValue('foo'));
+    }
+
+    public function testGetDataValueCallable()
+    {
+        $result = new BaseResult('classical', ['foo' => function () {
+            return 'bar';
+        }]);
         $this->assertEquals('bar', $result->getDataValue('foo'));
     }
 }
