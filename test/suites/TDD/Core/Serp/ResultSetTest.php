@@ -65,6 +65,9 @@ class ResultSetTest extends \PHPUnit_Framework_TestCase
 
         $videoResults = $resultSet->getResultsByType('video');
         $this->assertCount(0, $videoResults);
+
+        $classAndImageResults = $resultSet->getResultsByType('classical', 'image');
+        $this->assertCount(3, $classAndImageResults);
     }
 
     public function testHasType()
@@ -78,5 +81,8 @@ class ResultSetTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($resultSet->hasType('classical'));
         $this->assertTrue($resultSet->hasType('image'));
         $this->assertFalse($resultSet->hasType('video'));
+
+        $this->assertTrue($resultSet->hasType('video', 'image', 'classical'));
+        $this->assertFalse($resultSet->hasType('video', 'ads'));
     }
 }

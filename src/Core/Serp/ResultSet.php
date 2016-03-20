@@ -53,11 +53,11 @@ class ResultSet implements \Countable, \IteratorAggregate
      * @param $typeName
      * @return ItemPosition[]
      */
-    public function getResultsByType($typeName)
+    public function getResultsByType(...$types)
     {
         $results = [];
         foreach ($this->items as $item) {
-            if ($item->getType() == $typeName) {
+            if (in_array($item->getType(), $types)) {
                 $results[] = $item;
             }
         }
@@ -68,10 +68,10 @@ class ResultSet implements \Countable, \IteratorAggregate
      * @param $typeName
      * @return bool
      */
-    public function hasType($typeName)
+    public function hasType(...$types)
     {
         foreach ($this->items as $item) {
-            if ($item->getType() == $typeName) {
+            if (in_array($item->getType(), $types)) {
                 return true;
             }
         }
