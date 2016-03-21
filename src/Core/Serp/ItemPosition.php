@@ -44,14 +44,19 @@ class ItemPosition implements ResultDataInterface
         return $this->realPosition;
     }
 
-    public function getType()
+    public function getTypes()
     {
-        return $this->itemData->getType();
+        return $this->itemData->getTypes();
     }
 
-    public function is(...$type)
+    /**
+     * @param array ...$type
+     * @return bool
+     */
+    public function is($types)
     {
-        return $this->itemData->is(...$type);
+        $types = func_get_args();
+        return call_user_func_array([$this->itemData, 'is'], $types);
     }
 
     public function getDataValue($name)

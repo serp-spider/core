@@ -10,23 +10,34 @@ use Serps\Core\Serp\ResultDataInterface;
 class BaseResult implements ResultDataInterface
 {
 
-    protected $type;
+    protected $types;
     protected $data;
 
-    public function __construct($type, array $data)
+    public function __construct($types, array $data)
     {
-        $this->type = $type;
+        $this->types = is_array($types) ? $types : [$types];
         $this->data = $data;
     }
 
-    public function getType()
+    public function getTypes()
     {
-        return $this->type;
+        return $this->types;
     }
 
-    public function is(...$type)
+    /**
+     * @param array ...$type
+     * @return bool
+     */
+    public function is($types)
     {
-        return in_array($this->getType(), $type);
+        $types = func_get_args();
+
+        foreach ($types as $type) {
+            if (in_array($type, $this->types)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public function getDataValue($name)

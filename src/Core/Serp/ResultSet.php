@@ -50,14 +50,16 @@ class ResultSet implements \Countable, \IteratorAggregate
     }
 
     /**
-     * @param $typeName
+     * Get all the results matching one of the given types
+     * @param array ...$types
      * @return ItemPosition[]
      */
-    public function getResultsByType(...$types)
+    public function getResultsByType($types)
     {
+        $types = func_get_args();
         $results = [];
         foreach ($this->items as $item) {
-            if (in_array($item->getType(), $types)) {
+            if (call_user_func_array([$item, 'is'], $types)) {
                 $results[] = $item;
             }
         }
@@ -65,13 +67,16 @@ class ResultSet implements \Countable, \IteratorAggregate
     }
 
     /**
-     * @param $typeName
+     * Checks if the ResultSet has one of the given types
+     * @param string ...$types
      * @return bool
      */
-    public function hasType(...$types)
+    public function hasType($types)
     {
+        $types = func_get_args();
+
         foreach ($this->items as $item) {
-            if (in_array($item->getType(), $types)) {
+            if (call_user_func_array([$item, 'is'], $types)) {
                 return true;
             }
         }

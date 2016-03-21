@@ -13,14 +13,14 @@ interface ResultDataInterface
      * Get the type of the element
      * @return mixed
      */
-    public function getType();
+    public function getTypes();
 
     /**
-     * Check if the element is of the given type
-     * @param $type
+     * Check if the element has one of the given type
+     * @param array ...$type
      * @return mixed
      */
-    public function is(...$type);
+    public function is($types);
 
     public function getDataValue($name);
 

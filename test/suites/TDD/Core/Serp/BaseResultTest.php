@@ -13,10 +13,17 @@ use Serps\Core\Serp\BaseResult;
 class BaseResultTest extends \PHPUnit_Framework_TestCase
 {
 
-    public function testGetType()
+    public function testGetTypes()
     {
         $result = new BaseResult('classical', []);
-        $this->assertEquals('classical', $result->getType());
+        $this->assertEquals(['classical'], $result->getTypes());
+    }
+
+    public function testGetTypesMany()
+    {
+
+        $result = new BaseResult(['classical', 'video'], []);
+        $this->assertEquals(['classical', 'video'], $result->getTypes());
     }
 
     public function testIs()

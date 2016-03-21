@@ -25,14 +25,24 @@ class ItemPositionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(10, $itemPosition->getRealPosition());
     }
 
-    public function testGetType()
+    public function testGetTypes()
     {
         $itemPosition = new ItemPosition(
             1,
             1,
             new BaseResult('classical', [])
         );
-        $this->assertEquals('classical', $itemPosition->getType());
+        $this->assertEquals(['classical'], $itemPosition->getTypes());
+    }
+
+    public function testGetTypesMany()
+    {
+        $itemPosition = new ItemPosition(
+            1,
+            1,
+            new BaseResult(['classical', 'video'], [])
+        );
+        $this->assertEquals(['classical', 'video'], $itemPosition->getTypes());
     }
 
     public function testIs()
