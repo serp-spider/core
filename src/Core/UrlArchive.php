@@ -72,7 +72,7 @@ class UrlArchive
         }
 
         return new static(
-            $urlItems['host'],
+            isset($urlItems['host']) ? $urlItems['host'] : null,
             isset($urlItems['path']) ? $urlItems['path'] : null,
             isset($urlItems['scheme']) ? $urlItems['scheme'] : null,
             $query,
