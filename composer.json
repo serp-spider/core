@@ -4,7 +4,7 @@
   "description": "Search engine scrapper",
   "type": "library",
   "keywords": ["google", "yahoo", "bing", "search engine", "scrapper"],
-  "homepage": "https://github.com/serps/serps",
+  "homepage": "https://github.com/serp-spider/serps",
   "license": "Fair",
 
   "authors": [
