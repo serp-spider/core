@@ -32,8 +32,10 @@ class BaseResult implements ResultDataInterface
     {
         $types = func_get_args();
 
+        $testedTypes = $this->getTypes();
+
         foreach ($types as $type) {
-            if (in_array($type, $this->types)) {
+            if (in_array($type, $testedTypes)) {
                 return true;
             }
         }
