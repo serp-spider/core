@@ -22,7 +22,7 @@ We advice you to use our curl client: ``composer require serps/http-client-curl`
 Usage
 -----
 
-The following usage is only a short example, you can check the full documentation at (TODO)
+The following usage is only a short example, you can [check the full documentation](http://serp-spider.github.io/documentation/).
 
 
 ```php
