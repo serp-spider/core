@@ -6,17 +6,17 @@
 namespace Serps\Test\TDD\Core;
 
 use Serps\Core\Serp\BaseResult;
-use Serps\Core\Serp\ResultSet;
+use Serps\Core\Serp\IndexedResultSet;
 
 /**
- * @covers Serps\Core\Serp\ResultSet
+ * @covers Serps\Core\Serp\IndexedResultSet
  */
-class ResultSetTest extends \PHPUnit_Framework_TestCase
+class IndexedResultSetTest extends \PHPUnit_Framework_TestCase
 {
 
     public function testAddItem()
     {
-        $resultSet = new ResultSet(1);
+        $resultSet = new IndexedResultSet(1);
 
         $resultSet->addItem(new BaseResult('classical', []));
         $this->assertCount(1, $resultSet->getItems());
@@ -29,7 +29,7 @@ class ResultSetTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(2, $resultSet->getItems()[1]->getOnPagePosition());
 
 
-        $resultSet = new ResultSet(11);
+        $resultSet = new IndexedResultSet(11);
 
         $resultSet->addItem(new BaseResult('classical', []));
         $this->assertCount(1, $resultSet->getItems());
@@ -44,7 +44,7 @@ class ResultSetTest extends \PHPUnit_Framework_TestCase
 
     public function testGetResultsByType()
     {
-        $resultSet = new ResultSet(1);
+        $resultSet = new IndexedResultSet(1);
 
         $resultSet->addItem(new BaseResult('classical', []));
         $resultSet->addItem(new BaseResult('image', []));
@@ -72,7 +72,7 @@ class ResultSetTest extends \PHPUnit_Framework_TestCase
 
     public function testHasType()
     {
-        $resultSet = new ResultSet(1);
+        $resultSet = new IndexedResultSet(1);
 
         $resultSet->addItem(new BaseResult('classical', []));
         $resultSet->addItem(new BaseResult('image', []));

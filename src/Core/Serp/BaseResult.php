@@ -13,7 +13,7 @@ class BaseResult implements ResultDataInterface
     protected $types;
     protected $data;
 
-    public function __construct($types, array $data)
+    public function __construct($types, array $data = [])
     {
         $this->types = is_array($types) ? $types : [$types];
         $this->data = $data;

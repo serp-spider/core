@@ -8,7 +8,7 @@ namespace Serps\Core\Serp;
 use Serps\Core\Serp\ResultDataInterface;
 use Traversable;
 
-class ResultSet implements \Countable, \IteratorAggregate
+class IndexedResultSet implements ResultSetInterface
 {
 
     protected $startingAt;
