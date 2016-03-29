@@ -16,7 +16,7 @@ class IndexedResultSetTest extends \PHPUnit_Framework_TestCase
 
     public function testAddItem()
     {
-        $resultSet = new IndexedResultSet(1);
+        $resultSet = new IndexedResultSet();
 
         $resultSet->addItem(new BaseResult('classical', []));
         $this->assertCount(1, $resultSet->getItems());
@@ -29,6 +29,7 @@ class IndexedResultSetTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(2, $resultSet->getItems()[1]->getOnPagePosition());
 
 
+        // Test starting from more than 1
         $resultSet = new IndexedResultSet(11);
 
         $resultSet->addItem(new BaseResult('classical', []));
