@@ -8,6 +8,9 @@ namespace Serps\Test\TDD\Core;
 use Serps\Core\Serp\BaseResult;
 use Serps\Core\Serp\ResultSet;
 
+/**
+ * @covers Serps\Core\Serp\ResultSet
+ */
 class ResultSetTest extends \PHPUnit_Framework_TestCase
 {
 

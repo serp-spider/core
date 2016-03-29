@@ -62,10 +62,9 @@ class CompositeResultSet implements ResultSetInterface
     public function getResultsByType($types)
     {
         $types = func_get_args();
-        $items = [];
+        $items = new CompositeResultSet();
         foreach ($this->resultSets as $resultSet) {
-            $items = array_merge(
-                $items,
+            $items->addResultSet(
                 call_user_func_array([$resultSet, 'getResultsByType'], $types)
             );
         }
@@ -101,5 +100,28 @@ class CompositeResultSet implements ResultSetInterface
     public function getIterator()
     {
         return new \ArrayIterator($this->getItems());
+    }
+
+
+
+    public function offsetExists($offset)
+    {
+        return key_exists($offset, $this->getItems());
+    }
+
+    public function offsetGet($offset)
+    {
+        return $this->getItems()[$offset];
+    }
+
+    public function offsetSet($offset, $value)
+    {
+        // Not supported
+    }
+
+    public function offsetUnset($offset)
+    {
+        // Not supported
+        return null;
     }
 }

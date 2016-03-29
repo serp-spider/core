@@ -13,6 +13,11 @@ class ResultSet implements ResultSetInterface
      */
     protected $items = [];
 
+    public function addItems(array $items)
+    {
+        $this->items = array_merge($this->items, $items);
+    }
+
     /**
      * @param ResultDataInterface $item
      */
@@ -37,13 +42,13 @@ class ResultSet implements ResultSetInterface
     public function getResultsByType($types)
     {
         $types = func_get_args();
-        $results = [];
+        $items = new ResultSet();
         foreach ($this->items as $item) {
             if (call_user_func_array([$item, 'is'], $types)) {
-                $results[] = $item;
+                $items->addItem($item);
             }
         }
-        return $results;
+        return $items;
     }
 
     /**
@@ -71,5 +76,25 @@ class ResultSet implements ResultSetInterface
     public function getIterator()
     {
         return new \ArrayIterator($this->items);
+    }
+
+    public function offsetExists($offset)
+    {
+        return key_exists($offset, $this->items);
+    }
+
+    public function offsetGet($offset)
+    {
+        return $this->items[$offset];
+    }
+
+    public function offsetSet($offset, $value)
+    {
+        $this->items[$offset] = $value;
+    }
+
+    public function offsetUnset($offset)
+    {
+        unset($this->items[$offset]);
     }
 }
