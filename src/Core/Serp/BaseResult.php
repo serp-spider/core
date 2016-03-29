@@ -53,6 +53,12 @@ class BaseResult implements ResultDataInterface
         return $data;
     }
 
+
+    public function __get($name)
+    {
+        return $this->getDataValue($name);
+    }
+
     public function getData()
     {
         $data = [];

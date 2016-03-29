@@ -75,5 +75,6 @@ class ItemPositionTest extends \PHPUnit_Framework_TestCase
             new BaseResult('classical', ['foo' => 'bar'])
         );
         $this->assertEquals('bar', $itemPosition->getDataValue('foo'));
+        $this->assertEquals('bar', $itemPosition->foo);
     }
 }

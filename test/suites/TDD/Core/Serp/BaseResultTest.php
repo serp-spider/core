@@ -50,6 +50,7 @@ class BaseResultTest extends \PHPUnit_Framework_TestCase
     {
         $result = new BaseResult('classical', ['foo' => 'bar']);
         $this->assertEquals('bar', $result->getDataValue('foo'));
+        $this->assertEquals('bar', $result->foo);
     }
 
     public function testGetDataValueCallable()

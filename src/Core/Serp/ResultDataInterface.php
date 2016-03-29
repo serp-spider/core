@@ -25,4 +25,9 @@ interface ResultDataInterface
     public function getDataValue($name);
 
     public function getData();
+
+    /**
+     * Shortcut for getDataValue()
+     */
+    public function __get($name);
 }
