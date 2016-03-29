@@ -29,6 +29,24 @@ class ResultSetTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($item, $resultSet->getItems()[1]);
     }
 
+    public function testAddItems()
+    {
+
+        $resultSet = new ResultSet();
+
+        $items = [
+            new BaseResult('classical', []),
+            new BaseResult('classical', [])
+        ];
+
+        $resultSet->addItems($items);
+
+        $this->assertCount(2, $resultSet->getItems());
+        $this->assertSame($items[0], $resultSet->getItems()[0]);
+        $this->assertSame($items[1], $resultSet->getItems()[1]);
+
+    }
+
     public function testGetResultsByType()
     {
         $resultSet = new ResultSet(1);
@@ -64,5 +82,36 @@ class ResultSetTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($resultSet->hasType('video', 'image', 'classical'));
         $this->assertFalse($resultSet->hasType('video', 'ads'));
+    }
+
+    public function testArrayAccess()
+    {
+        $resultSet = new ResultSet(1);
+
+        $item0 = new BaseResult('classical', []);
+
+        $resultSet->addItem($item0);
+        $resultSet->addItem(new BaseResult('image', []));
+        $resultSet->addItem(new BaseResult('classical', []));
+
+        $this->assertSame($item0, $resultSet[0]);
+        $this->assertTrue(isset($resultSet[0]));
+        $this->assertTrue(isset($resultSet[1]));
+        $this->assertTrue(isset($resultSet[2]));
+        $this->assertFalse(isset($resultSet[3]));
+
+        try {
+            $resultSet[0] = $item0;
+            $this->fail('cannot add item');
+        } catch (\Exception $e) {
+
+        }
+
+        try {
+            unset($resultSet[0]);
+            $this->fail('cannot unset item');
+        } catch (\Exception $e) {
+
+        }
     }
 }

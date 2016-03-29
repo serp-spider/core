@@ -116,12 +116,11 @@ class CompositeResultSet implements ResultSetInterface
 
     public function offsetSet($offset, $value)
     {
-        // Not supported
+        throw new \Exception('Cannot set items in resultset, please use addResultSet()');
     }
 
     public function offsetUnset($offset)
     {
-        // Not supported
-        return null;
+        throw new \Exception('Deleting item is forbidden');
     }
 }

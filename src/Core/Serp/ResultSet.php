@@ -90,11 +90,11 @@ class ResultSet implements ResultSetInterface
 
     public function offsetSet($offset, $value)
     {
-        $this->items[$offset] = $value;
+        throw new \Exception('Cannot set items in resultset, please use addItem()');
     }
 
     public function offsetUnset($offset)
     {
-        unset($this->items[$offset]);
+        throw new \Exception('Deleting item is forbidden');
     }
 }
