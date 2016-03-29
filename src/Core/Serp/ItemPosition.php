@@ -5,27 +5,24 @@
 
 namespace Serps\Core\Serp;
 
-class ItemPosition implements ResultDataInterface
+class ItemPosition extends ProxyResult
 {
 
     protected $positionOnPage;
     protected $realPosition;
 
     /**
-     * @var ResultDataInterface
-     */
-    protected $itemData;
-
-    /**
      * ItemPosition constructor.
-     * @param $position
+     * @param int $positionOnPage
+     * @param int $realPosition
      * @param ResultDataInterface $itemData
      */
     public function __construct($positionOnPage, $realPosition, ResultDataInterface $itemData)
     {
         $this->positionOnPage = $positionOnPage;
         $this->realPosition = $realPosition;
-        $this->itemData = $itemData;
+
+        parent::__construct($itemData);
     }
 
     /**
@@ -42,35 +39,5 @@ class ItemPosition implements ResultDataInterface
     public function getRealPosition()
     {
         return $this->realPosition;
-    }
-
-    public function getTypes()
-    {
-        return $this->itemData->getTypes();
-    }
-
-    /**
-     * @param array ...$type
-     * @return bool
-     */
-    public function is($types)
-    {
-        $types = func_get_args();
-        return call_user_func_array([$this->itemData, 'is'], $types);
-    }
-
-    public function getDataValue($name)
-    {
-        return $this->itemData->getDataValue($name);
-    }
-
-    public function __get($name)
-    {
-        return $this->itemData->getDataValue($name);
-    }
-
-    public function getData()
-    {
-        return $this->itemData->getData();
     }
 }

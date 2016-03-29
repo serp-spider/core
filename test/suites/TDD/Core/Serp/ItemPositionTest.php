@@ -10,6 +10,7 @@ use Serps\Core\Serp\ItemPosition;
 
 /**
  * @covers Serps\Core\Serp\ItemPosition
+ * @covers Serps\Core\Serp\ProxyResult
  */
 class ItemPositionTest extends \PHPUnit_Framework_TestCase
 {
