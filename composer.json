@@ -1,10 +1,10 @@
 {
 
-  "name": "serps/serps",
+  "name": "serps/core",
   "description": "Search engine scrapper",
   "type": "library",
   "keywords": ["google", "yahoo", "bing", "search engine", "scrapper"],
-  "homepage": "https://github.com/serp-spider/serps",
+  "homepage": "https://github.com/serp-spider/core",
   "license": "Fair",
 
   "authors": [
