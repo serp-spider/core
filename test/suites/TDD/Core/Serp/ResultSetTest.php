@@ -104,14 +104,12 @@ class ResultSetTest extends \PHPUnit_Framework_TestCase
             $resultSet[0] = $item0;
             $this->fail('cannot add item');
         } catch (\Exception $e) {
-
         }
 
         try {
             unset($resultSet[0]);
             $this->fail('cannot unset item');
         } catch (\Exception $e) {
-
         }
     }
 }

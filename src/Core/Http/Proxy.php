@@ -10,17 +10,20 @@ use Serps\Exception;
 class Proxy implements ProxyInterface
 {
 
-    public $ip;
-    public $port;
-    public $user;
-    public $password;
+    protected $ip;
+    protected $port;
+    protected $user;
+    protected $password;
+    protected $scheme;
 
-    public function __construct($ip, $port, $user = null, $password = null)
+    public function __construct($ip, $port, $user = null, $password = null, $scheme = null)
     {
         $this->ip = $ip;
         $this->port = $port;
         $this->user = $user;
         $this->password = $password;
+        $this->scheme = $scheme;
+
     }
 
     public function getIp()
@@ -43,6 +46,10 @@ class Proxy implements ProxyInterface
         return $this->password;
     }
 
+    public function getScheme()
+    {
+        return $this->scheme;
+    }
 
     public static function createFromString($proxy)
     {
@@ -79,6 +86,11 @@ class Proxy implements ProxyInterface
             }
             $proxy = $user . '@' . $proxy;
         }
+
+        if ($this->scheme) {
+            $proxy =  $this->scheme . '://' . $proxy;
+        }
+
         return $proxy;
     }
 }
