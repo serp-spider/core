@@ -12,4 +12,6 @@ interface ProxyInterface
 
     public function getUser();
     public function getPassword();
+
+    public function getScheme();
 }
