@@ -105,4 +105,32 @@ class CookieTest extends \PHPUnit_Framework_TestCase
         $cookie = new Cookie('fo\\o', 'bar', ['domain' => 'foo.bar']);
         $this->assertNotTrue($cookie->validate());
     }
+
+    public function testToJson()
+    {
+        $cookie = new Cookie('foo', 'bar', [
+            'path'    => '/foo',
+            'domain'  => 'foo.bar',
+            'expires' => '123',
+            'discard' => true,
+            'secure'  => true,
+
+        ]);
+
+        $this->assertEquals(
+            json_encode([
+                'name' => 'foo',
+                'value' => 'bar',
+                'flags' =>  [
+                    'path'    => '/foo',
+                    'domain'  => 'foo.bar',
+                    'expires' => '123',
+                    'discard' => true,
+                    'secure'  => true,
+
+                ]
+            ]),
+            $cookie->toJson()
+        );
+    }
 }

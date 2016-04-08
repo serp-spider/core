@@ -203,4 +203,26 @@ class Cookie
     {
         return $this->getName() . '=' . $this->getValue();
     }
+
+
+    /**
+     * Formats the cookie into a json string to make it exportable.
+     * @return string a json representation of the cookie
+     */
+    public function toJson()
+    {
+        $data = [
+            'name' => $this->getName(),
+            'value' => $this->getValue(),
+            'flags' => [
+                'path' => $this->getPath(),
+                'domain' => $this->getDomain(),
+                'expires' => $this->getExpires(),
+                'discard' => $this->getDiscard(),
+                'secure'  => $this->getSecure(),
+
+            ]
+        ];
+        return json_encode($data);
+    }
 }
