@@ -209,9 +209,9 @@ class Cookie
      * Formats the cookie into a json string to make it exportable.
      * @return string a json representation of the cookie
      */
-    public function toJson()
+    public function export()
     {
-        $data = [
+        return [
             'name' => $this->getName(),
             'value' => $this->getValue(),
             'flags' => [
@@ -223,6 +223,5 @@ class Cookie
 
             ]
         ];
-        return json_encode($data);
     }
 }

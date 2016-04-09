@@ -176,4 +176,21 @@ class ArrayCookieJar implements CookieJarInterface
                 ($domain && !$cookie->matchesDomain($domain)));
         }));
     }
+
+    public function export()
+    {
+        $cookies = $this->all(null, null, null, false, false);
+        $data = [];
+        foreach ($cookies as $cookie) {
+            $data[] = $cookie->export();
+        }
+        return $data;
+    }
+
+    public function import($data)
+    {
+        foreach ($data as $cookieData) {
+            $this->set(new Cookie($cookieData['name'], $cookieData['value'], $cookieData['flags']));
+        }
+    }
 }

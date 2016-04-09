@@ -79,4 +79,16 @@ interface CookieJarInterface
      * @return Cookie[] the cookies that matched the parameters
      */
     public function all($domain = null, $path = null, $name = null, $skipDiscardable = false, $skipExpired = true);
+
+    /**
+     * Exports all cookies to make them serializable
+     * @return array
+     */
+    public function export();
+
+    /**
+     * Imports cookies that were export with @see export()
+     * @return mixed
+     */
+    public function import($data);
 }

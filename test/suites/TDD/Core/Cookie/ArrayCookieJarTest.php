@@ -160,4 +160,54 @@ class ArrayCookieJarTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $matchingCookies);
         $this->assertEquals('foo.bar', $matchingCookies[0]->getDomain());
     }
+
+    public function testExport()
+    {
+        $cookieJar = new ArrayCookieJar();
+
+        $cookieJar->set(new Cookie('foo', 'bar', [
+            'path'    => '/foo',
+            'domain'  => 'foo.bar',
+            'expires' => '123',
+            'discard' => true,
+            'secure'  => true,
+        ]));
+
+        $cookieJar->set(new Cookie('bar', 'baz', [
+            'path'    => '/baz',
+            'domain'  => 'foo.baz',
+            'expires' => '321',
+            'discard' => true,
+            'secure'  => true,
+        ]));
+
+        $this->assertEquals(
+            [
+                [
+                    'name' => 'foo',
+                    'value' => 'bar',
+                    'flags' =>  [
+                        'path'    => '/foo',
+                        'domain'  => 'foo.bar',
+                        'expires' => '123',
+                        'discard' => true,
+                        'secure'  => true,
+
+                    ]
+                ],
+                [
+                    'name' => 'bar',
+                    'value' => 'baz',
+                    'flags' =>  [
+                        'path'    => '/baz',
+                        'domain'  => 'foo.baz',
+                        'expires' => '321',
+                        'discard' => true,
+                        'secure'  => true,
+                    ]
+                ]
+            ],
+            $cookieJar->export()
+        );
+    }
 }

@@ -106,7 +106,7 @@ class CookieTest extends \PHPUnit_Framework_TestCase
         $this->assertNotTrue($cookie->validate());
     }
 
-    public function testToJson()
+    public function testExport()
     {
         $cookie = new Cookie('foo', 'bar', [
             'path'    => '/foo',
@@ -118,7 +118,7 @@ class CookieTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $this->assertEquals(
-            json_encode([
+            [
                 'name' => 'foo',
                 'value' => 'bar',
                 'flags' =>  [
@@ -129,8 +129,8 @@ class CookieTest extends \PHPUnit_Framework_TestCase
                     'secure'  => true,
 
                 ]
-            ]),
-            $cookie->toJson()
+            ],
+            $cookie->export()
         );
     }
 }
