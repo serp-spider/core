@@ -49,7 +49,7 @@ class ResultSetTest extends \PHPUnit_Framework_TestCase
 
     public function testGetResultsByType()
     {
-        $resultSet = new ResultSet(1);
+        $resultSet = new ResultSet();
 
         $resultSet->addItem(new BaseResult('classical', []));
         $resultSet->addItem(new BaseResult('image', []));
@@ -70,7 +70,7 @@ class ResultSetTest extends \PHPUnit_Framework_TestCase
 
     public function testHasType()
     {
-        $resultSet = new ResultSet(1);
+        $resultSet = new ResultSet();
 
         $resultSet->addItem(new BaseResult('classical', []));
         $resultSet->addItem(new BaseResult('image', []));
@@ -86,7 +86,7 @@ class ResultSetTest extends \PHPUnit_Framework_TestCase
 
     public function testArrayAccess()
     {
-        $resultSet = new ResultSet(1);
+        $resultSet = new ResultSet();
 
         $item0 = new BaseResult('classical', []);
 

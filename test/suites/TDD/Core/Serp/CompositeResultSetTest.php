@@ -8,6 +8,7 @@ namespace Serps\Test\TDD\Core;
 use Serps\Core\Serp\BaseResult;
 use Serps\Core\Serp\CompositeResultSet;
 use Serps\Core\Serp\IndexedResultSet;
+use Serps\Core\Serp\ResultSet;
 
 /**
  * @covers Serps\Core\Serp\CompositeResultSet
@@ -115,5 +116,50 @@ class CompositeResultSetTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([
             'foo', 'bar', 'baz', 'foo'
         ], $types);
+    }
+
+    public function testOffsetSet()
+    {
+        $this->setExpectedException('Exception');
+        $c = new CompositeResultSet();
+        $c['foo'] = 'bar';
+    }
+
+    public function testOffsetUnset()
+    {
+        $this->setExpectedException('Exception');
+        $c = new CompositeResultSet();
+        unset($c['foo']);
+    }
+
+    public function testOffsetGet()
+    {
+        $compositeRS = new CompositeResultSet();
+
+        $resultSet = new ResultSet();
+
+        $resultSet->addItem(new BaseResult('foo', []));
+        $resultSet->addItem(new BaseResult('bar', []));
+        $resultSet->addItem(new BaseResult('baz', []));
+
+        $compositeRS->addResultSet($resultSet);
+
+        $this->assertEquals('bar', $compositeRS[1]->getTypes()[0]);
+    }
+
+    public function testOffsetExists()
+    {
+        $compositeRS = new CompositeResultSet();
+
+        $resultSet = new ResultSet();
+
+        $resultSet->addItem(new BaseResult('foo', []));
+        $resultSet->addItem(new BaseResult('bar', []));
+        $resultSet->addItem(new BaseResult('baz', []));
+
+        $compositeRS->addResultSet($resultSet);
+
+        $this->assertTrue(isset($compositeRS[1]));
+        $this->assertFalse(isset($compositeRS[5]));
     }
 }
