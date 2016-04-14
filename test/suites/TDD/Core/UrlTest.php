@@ -11,6 +11,8 @@ use Serps\Core\UrlArchive;
 /**
  * @covers Serps\Core\Url
  * @covers Serps\Core\UrlArchive
+ * @covers Serps\Core\Url\AlterableUrlTrait
+ * @covers Serps\Core\Url\UrlArchiveTrait
  */
 class UrlTest extends \PHPUnit_Framework_TestCase
 {
