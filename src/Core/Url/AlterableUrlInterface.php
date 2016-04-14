@@ -3,25 +3,21 @@
  * @license see LICENSE
  */
 
-namespace Serps\Core;
+namespace Serps\Core\Url;
 
-use Serps\Core\Url\AlterableUrlInterface;
-use Serps\Core\Url\QueryParam;
-
-class Url extends UrlArchive implements AlterableUrlInterface
+/**
+ * Base interface
+ */
+interface AlterableUrlInterface extends UrlArchiveInterface
 {
 
-    /**
+     /**
      * Set the scheme.
      * ``foo`` in ``http://www.example.com#foo``
      * @param string $hash
      * @return $this
      */
-    public function setHash($hash)
-    {
-        $this->hash = $hash;
-        return $this;
-    }
+    public function setHash($hash);
 
     /**
      * Set the path.
@@ -29,11 +25,7 @@ class Url extends UrlArchive implements AlterableUrlInterface
      * @param string $path
      * @return $this
      */
-    public function setPath($path)
-    {
-        $this->path = $path;
-        return $this;
-    }
+    public function setPath($path);
 
     /**
      * Set the scheme.
@@ -41,11 +33,7 @@ class Url extends UrlArchive implements AlterableUrlInterface
      * @param string $scheme
      * @return $this
      */
-    public function setScheme($scheme)
-    {
-        $this->scheme = $scheme;
-    }
-
+    public function setScheme($scheme);
 
     /**
      * Set the hostname.
@@ -53,12 +41,7 @@ class Url extends UrlArchive implements AlterableUrlInterface
      * @param string $host the hostname
      * @return $this
      */
-    public function setHost($host)
-    {
-        $this->host = $host;
-        return $this;
-    }
-
+    public function setHost($host);
 
     /**
      * Add a parameter to the URL.
@@ -69,22 +52,13 @@ class Url extends UrlArchive implements AlterableUrlInterface
      * to disable this encoding
      * @return $this
      */
-    public function setParam($name, $value, $raw = false)
-    {
-        $this->query[$name] = new QueryParam($name, $value, $raw);
-        return $this;
-    }
+    public function setParam($name, $value, $raw = false);
 
     /**
      * Remove the given parameter
      * @param string $name name of the parameter to remove
      * @return $this;
      */
-    public function removeParam($name)
-    {
-        if (isset($this->query[$name])) {
-            unset($this->query[$name]);
-        }
-        return $this;
-    }
+    public function removeParam($name);
+
 }
