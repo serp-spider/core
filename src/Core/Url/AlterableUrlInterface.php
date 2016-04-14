@@ -60,5 +60,4 @@ interface AlterableUrlInterface extends UrlArchiveInterface
      * @return $this;
      */
     public function removeParam($name);
-
 }

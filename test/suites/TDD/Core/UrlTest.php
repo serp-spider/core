@@ -136,11 +136,11 @@ class UrlTest extends \PHPUnit_Framework_TestCase
 
         $newUrl = $url->resolve('//bar', UrlArchive::class);
         $this->assertEquals('https://bar', $newUrl->buildUrl());
-        $this->assertInstanceOf(UrlArchive::class, $newUrl);
+        $this->assertInstanceOf(Url\UrlArchiveInterface::class, $newUrl);
 
         $newUrl = $url->resolve('//bar', Url::class);
         $this->assertEquals('https://bar', $newUrl->buildUrl());
-        $this->assertInstanceOf(UrlArchive::class, $newUrl);
+        $this->assertInstanceOf(Url\UrlArchiveInterface::class, $newUrl);
     }
 
     public function testResolveAsBadType()

@@ -5,7 +5,6 @@
 
 namespace Serps\Core\Url;
 
-
 trait AlterableUrlTrait
 {
 
@@ -76,7 +75,8 @@ trait AlterableUrlTrait
         return $this;
     }
 
-    public function setParams($params){
+    public function setParams($params)
+    {
         $this->query = $params;
     }
 
@@ -92,5 +92,4 @@ trait AlterableUrlTrait
         }
         return $this;
     }
-
 }
