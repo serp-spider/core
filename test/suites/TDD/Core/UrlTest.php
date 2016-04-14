@@ -4,7 +4,9 @@
  */
 namespace Serps\Test\TDD\Core;
 
+use Serps\Core\Cookie\Cookie;
 use Serps\Core\Url;
+use Serps\Core\UrlArchive;
 
 /**
  * @covers Serps\Core\Url
@@ -109,14 +111,49 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     public function testResolve()
     {
         $url = Url::fromString('https://foo/bar?qux=baz');
+        $urlArchive = UrlArchive::fromString('https://foo/bar?qux=baz');
 
         $newUrl = $url->resolve('//bar');
         $this->assertEquals('https://bar', $newUrl->buildUrl());
+        $this->assertInstanceOf(Url::class, $newUrl);
+
+        $newUrl = $urlArchive->resolve('//bar');
+        $this->assertEquals('https://bar', $newUrl->buildUrl());
+        $this->assertInstanceOf(UrlArchive::class, $newUrl);
 
         $newUrl = $url->resolve('/baz');
         $this->assertEquals('https://foo/baz', $newUrl->buildUrl());
 
         $newUrl = $url->resolve('http://baz/foo');
         $this->assertEquals('http://baz/foo', $newUrl->buildUrl());
+    }
+
+    public function testResolveAs()
+    {
+        $url = Url::fromString('https://foo/bar?qux=baz');
+
+        $newUrl = $url->resolve('//bar', UrlArchive::class);
+        $this->assertEquals('https://bar', $newUrl->buildUrl());
+        $this->assertInstanceOf(UrlArchive::class, $newUrl);
+
+        $newUrl = $url->resolve('//bar', Url::class);
+        $this->assertEquals('https://bar', $newUrl->buildUrl());
+        $this->assertInstanceOf(UrlArchive::class, $newUrl);
+    }
+
+    public function testResolveAsBadType()
+    {
+        $url = Url::fromString('https://foo/bar?qux=baz');
+
+        $this->setExpectedException(\InvalidArgumentException::class);
+        $url->resolve('//bar', []);
+    }
+
+    public function testResolveAsBadClass()
+    {
+        $url = Url::fromString('https://foo/bar?qux=baz');
+
+        $this->setExpectedException(\InvalidArgumentException::class);
+        $url->resolve('//bar', Cookie::class);
     }
 }

@@ -7,7 +7,7 @@ namespace Serps\Core;
 
 use Serps\Core\Url;
 
-class UrlArchive
+class UrlArchive implements Url\UrlArchiveInterface
 {
 
     /**
@@ -194,7 +194,10 @@ class UrlArchive
         return implode('&', $this->query);
     }
 
-    public function resolve($url)
+    /**
+     * @inheritdoc
+     */
+    public function resolve($url, $as = null)
     {
         if (!preg_match('#^[a-zA-Z]+://#', $url)) {
             if ('/' == $url{0}) {
@@ -207,6 +210,27 @@ class UrlArchive
                 // TODO ($this->resolve('bar');)
             }
         }
-        return self::fromString($url);
+
+        if (null === $as) {
+            return self::fromString($url);
+        } else {
+            if (!is_string($as)) {
+                throw new \InvalidArgumentException(
+                    'Invalid argument for UrlArchive::resolve(), the class name must be a string'
+                );
+            }
+
+            $implements = class_implements($as, true);
+
+            if (!in_array(Url\UrlArchiveInterface::class, $implements)) {
+                throw new \InvalidArgumentException(
+                    'Invalid argument for UrlArchive::resolve(), the specified class must implement'
+                    . 'Serps\Core\Url\UrlArchiveInterface'
+                );
+            }
+
+            return call_user_func([$as, 'fromString'], $url);
+        }
+
     }
 }
