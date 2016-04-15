@@ -9,7 +9,7 @@ use Serps\Core\Captcha\CaptchaResponse;
 use Serps\Exception\RequestError\CaptchaException;
 
 /**
- * @covers Serps\Exception\CaptchaException
+ * @covers Serps\Exception\RequestError\CaptchaException
  */
 class CaptchaExceptionTest extends \PHPUnit_Framework_TestCase
 {
