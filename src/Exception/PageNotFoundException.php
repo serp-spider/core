@@ -5,7 +5,12 @@
 
 namespace Serps\Exception;
 
-class PageNotFoundException extends RequestErrorException
-{
+use Exception;
 
+class PageNotFoundException extends HttpResponseErrorException
+{
+    public function __construct($message, Exception $code, Exception $previous)
+    {
+        parent::__construct(404, $message, $code, $previous);
+    }
 }
