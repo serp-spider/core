@@ -3,7 +3,7 @@
  * @license see LICENSE
  */
 
-namespace Serps\Exception;
+namespace Serps\Exception\RequestError;
 
 use Serps\Core\Captcha\CaptchaResponse;
 
