@@ -16,7 +16,7 @@ class UnknownCaptchaTypeException extends CaptchaNotSolvableException
 
     protected $captchaType;
 
-    public function __construct($cpatchaType, $message = "", $code = 0, Exception $previous = null)
+    public function __construct($cpatchaType, $message = '', $code = 0, Exception $previous = null)
     {
         parent::__construct($message, $code, $previous);
     }
@@ -28,7 +28,4 @@ class UnknownCaptchaTypeException extends CaptchaNotSolvableException
     {
         return $this->captchaType;
     }
-
-
-
 }

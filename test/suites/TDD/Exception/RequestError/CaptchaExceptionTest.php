@@ -3,10 +3,10 @@
  * @license see LICENSE
  */
 
-namespace Serps\Test\TDD\Exception;
+namespace Serps\Test\TDD\Exception\RequestError;
 
 use Serps\Core\Captcha\CaptchaResponse;
-use Serps\Exception\CaptchaException;
+use Serps\Exception\RequestError\CaptchaException;
 
 /**
  * @covers Serps\Exception\CaptchaException
