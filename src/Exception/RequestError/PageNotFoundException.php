@@ -9,7 +9,7 @@ use Exception;
 
 class PageNotFoundException extends HttpResponseErrorException
 {
-    public function __construct($message, Exception $code, Exception $previous)
+    public function __construct($message = '', $code = 0, Exception $previous = null)
     {
         parent::__construct(404, $message, $code, $previous);
     }

@@ -11,7 +11,7 @@ class HttpResponseErrorException extends RequestErrorException
 {
     private $httpStatusCode;
 
-    public function __construct($httpStatusCode, $message, $code, Exception $previous)
+    public function __construct($httpStatusCode, $message = '', $code = 0, Exception $previous = null)
     {
         $this->httpStatusCode = $httpStatusCode;
         parent::__construct($message, $code, $previous);
