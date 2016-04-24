@@ -8,6 +8,9 @@ namespace Serps\Core\Url;
 use Serps\Core\Url\UrlArchiveInterface;
 use Serps\Core\Url\QueryParam;
 
+/**
+ * This trait offers implementation for @see UrlArchiveInterface
+ */
 trait UrlArchiveTrait
 {
 
@@ -196,7 +199,7 @@ trait UrlArchiveTrait
     }
 
     /**
-     * @inheritdoc
+     * @see UrlArchiveInterface::resolve
      */
     public function resolve($url, $as = null)
     {
@@ -214,6 +217,8 @@ trait UrlArchiveTrait
 
         if (null === $as) {
             return self::fromString($url);
+        } elseif ('string' == $as) {
+            return $url;
         } else {
             if (!is_string($as)) {
                 throw new \InvalidArgumentException(
