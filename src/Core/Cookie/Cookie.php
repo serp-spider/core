@@ -194,6 +194,11 @@ class Cookie
         return $this->getFlag('secure', false);
     }
 
+    public function getHttpOnly()
+    {
+        return $this->getFlag('http_only', false);
+    }
+
     /**
      * Formats the cookies to be set in the Cookie header
      *
@@ -220,7 +225,7 @@ class Cookie
                 'expires' => $this->getExpires(),
                 'discard' => $this->getDiscard(),
                 'secure'  => $this->getSecure(),
-
+                'http_only' => $this->getHttpOnly(),
             ]
         ];
     }
