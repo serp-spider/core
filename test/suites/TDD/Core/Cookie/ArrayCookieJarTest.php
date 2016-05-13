@@ -171,6 +171,7 @@ class ArrayCookieJarTest extends \PHPUnit_Framework_TestCase
             'expires' => '123',
             'discard' => true,
             'secure'  => true,
+            'http_only' => false,
         ]));
 
         $cookieJar->set(new Cookie('bar', 'baz', [
@@ -179,6 +180,7 @@ class ArrayCookieJarTest extends \PHPUnit_Framework_TestCase
             'expires' => '321',
             'discard' => true,
             'secure'  => true,
+            'http_only' => true,
         ]));
 
         $this->assertEquals(
@@ -192,7 +194,7 @@ class ArrayCookieJarTest extends \PHPUnit_Framework_TestCase
                         'expires' => '123',
                         'discard' => true,
                         'secure'  => true,
-
+                        'http_only' => false,
                     ]
                 ],
                 [
@@ -204,6 +206,7 @@ class ArrayCookieJarTest extends \PHPUnit_Framework_TestCase
                         'expires' => '321',
                         'discard' => true,
                         'secure'  => true,
+                        'http_only' => true,
                     ]
                 ]
             ],
