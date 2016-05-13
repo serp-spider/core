@@ -31,4 +31,4 @@ Tools
 
 - Run test suit: ``composer test``
 - Check coding standards: ``composer cscheck``
-- Auto fix coding standards: ``.composer csfix``
+- Auto fix coding standards: ``composer csfix``
