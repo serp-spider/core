@@ -114,7 +114,7 @@ class CookieTest extends \PHPUnit_Framework_TestCase
             'expires' => '123',
             'discard' => true,
             'secure'  => true,
-
+            'http_only' => true,
         ]);
 
         $this->assertEquals(
@@ -127,7 +127,7 @@ class CookieTest extends \PHPUnit_Framework_TestCase
                     'expires' => '123',
                     'discard' => true,
                     'secure'  => true,
-
+                    'http_only' => true,
                 ]
             ],
             $cookie->export()
