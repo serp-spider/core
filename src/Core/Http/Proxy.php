@@ -13,14 +13,16 @@ class Proxy implements ProxyInterface
     protected $ip;
     protected $port;
     protected $type;
+    protected $type;
     protected $user;
     protected $password;
     protected $scheme;
 
-    public function __construct($ip, $port, $type = null, $user = null, $password = null, $scheme = null)
+    public function __construct($ip, $port, $type = null, $type = null, $user = null, $password = null, $scheme = null)
     {
         $this->ip       = $ip;
         $this->port     = $port;
+        $this->type     = $type;
         $this->type     = $type;
         $this->user     = $user;
         $this->password = $password;
