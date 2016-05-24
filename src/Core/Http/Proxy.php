@@ -13,7 +13,7 @@ class Proxy implements ProxyInterface
     protected $ip;
     protected $port;
     protected $type;
-    protected $type;
+    protected $type; // Proxy Types: HTTP, SOCKS4 and SOCKS5
     protected $user;
     protected $password;
     protected $scheme;
@@ -38,6 +38,11 @@ class Proxy implements ProxyInterface
     public function getPort()
     {
         return $this->port;
+    }
+
+    public function getType()
+    {
+        return strtoupper($this->type);
     }
 
     public function getUser()
