@@ -13,21 +13,23 @@ class Proxy implements ProxyInterface
     protected $ip;
     protected $port;
     protected $type;
-    protected $type; // Proxy Types: HTTP, SOCKS4 and SOCKS5
     protected $user;
     protected $password;
-    protected $scheme;
 
-    public function __construct($ip, $port, $type = null, $user = null, $password = null, $scheme = null)
+    /**
+     * @param string $ip proxy ip
+     * @param int $port proxy port
+     * @param string|null $user username if proxy needs credentials
+     * @param string|null $password password if proxy needs credentials
+     * @param string $type proxy type: one of "HTTP", "HTTPS", "SOCKS4", "SOCKS5". This will be automatically uppercased
+     */
+    public function __construct($ip, $port, $user = null, $password = null, $type = 'HTTP')
     {
         $this->ip       = $ip;
         $this->port     = $port;
-        $this->type     = $type;
-        $this->type     = $type;
+        $this->type     = strtoupper($type);
         $this->user     = $user;
         $this->password = $password;
-        $this->scheme   = $scheme;
-
     }
 
     public function getIp()
@@ -42,7 +44,7 @@ class Proxy implements ProxyInterface
 
     public function getType()
     {
-        return strtoupper($this->type);
+        return $this->type;
     }
 
     public function getUser()
@@ -55,13 +57,15 @@ class Proxy implements ProxyInterface
         return $this->password;
     }
 
-    public function getScheme()
-    {
-        return $this->scheme;
-    }
-
     public static function createFromString($proxy)
     {
+
+        if (preg_match('#^[a-zA-Z0-9]+://#', $proxy)) {
+            list($type, $proxy) = explode('://', $proxy, 2);
+        } else {
+            $type = 'HTTP';
+        }
+
         $proxyPieces = explode('@', $proxy);
         if (count($proxyPieces) == 2) {
             $authPieces = explode(':', $proxyPieces[0]);
@@ -83,7 +87,7 @@ class Proxy implements ProxyInterface
         }
         $options['login']    = $authPieces[0];
         $options['password'] = $authPieces[1];
-        return new self($hostPieces[0], $hostPieces[1], $authPieces[0], $authPieces[1]);
+        return new self($hostPieces[0], $hostPieces[1], $authPieces[0], $authPieces[1], $type);
     }
 
     public function __toString()
@@ -96,8 +100,8 @@ class Proxy implements ProxyInterface
             $proxy = $user . '@' . $proxy;
         }
 
-        if ($this->scheme) {
-            $proxy = $this->scheme . '://' . $proxy;
+        if ($this->type) {
+            $proxy = strtolower($this->getType()) . '://' . $proxy;
         }
 
         return $proxy;
