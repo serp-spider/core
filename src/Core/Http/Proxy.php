@@ -18,7 +18,7 @@ class Proxy implements ProxyInterface
     protected $password;
     protected $scheme;
 
-    public function __construct($ip, $port, $type = null, $type = null, $user = null, $password = null, $scheme = null)
+    public function __construct($ip, $port, $type = null, $user = null, $password = null, $scheme = null)
     {
         $this->ip       = $ip;
         $this->port     = $port;
