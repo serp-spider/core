@@ -164,4 +164,25 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException(\InvalidArgumentException::class);
         $url->resolve('//bar', Cookie::class);
     }
+
+    public function testMerge()
+    {
+        $url = Url::merge('https://domain/dir/file?query=value#fragment', 'http://anotherschema');
+        $this->assertEquals('http://anotherschema', $url->buildUrl());
+
+        $url = Url::merge('https://domain/dir/file?query=value#fragment', '//anotherdomain');
+        $this->assertEquals('https://anotherdomain', $url->buildUrl());
+
+        $url = Url::merge('https://domain/dir/file?query=value#fragment', '/anotherpath');
+        $this->assertEquals('https://domain/anotherpath', $url->buildUrl());
+
+        $url = Url::merge('https://domain/dir/file?query=value#fragment', 'anotherfile');
+        $this->assertEquals('https://domain/dir/anotherfile', $url->buildUrl());
+
+        $url = Url::merge('https://domain/dir/file?query=value#fragment', '?anotherquery=value');
+        $this->assertEquals('https://domain/dir/file?anotherquery=value', $url->buildUrl());
+
+        $url = Url::merge('https://domain/dir/file?query=value#fragment', '#anotherfragment');
+        $this->assertEquals('https://domain/dir/file?query=value#anotherfragment', $url->buildUrl());
+    }
 }
