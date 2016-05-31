@@ -17,13 +17,16 @@ class SetCookieStringTest extends \PHPUnit_Framework_TestCase
     public function testParseCookie()
     {
 
-        $cookieString = 'foo=bar; path=/; domain=.foo.com; expires=Tue, 01-Jan-2050 08:00:00 GMT';
+        $expiresTime = time();
+        $cookieString = 'foo=bar; path=/; domain=.foo.com;';
+        $cookieString .=' expires=' . gmdate('D, d M Y H:i:s T', $expiresTime);
+        
         $cookie = SetCookieString::parse($cookieString, 'foo.com', '/bar');
 
         $this->assertEquals('foo', $cookie->getName());
         $this->assertEquals('bar', $cookie->getValue());
 
-        $this->assertEquals('Tue, 01-Jan-2050 08:00:00 GMT', $cookie->getExpires());
+        $this->assertEquals($expiresTime, $cookie->getExpires());
         $this->assertEquals('.foo.com', $cookie->getDomain());
 
 
