@@ -112,6 +112,11 @@ interface UrlArchiveInterface
     public function getQueryString();
 
     /**
+     * Convert a relative URI into an absolute URI.
+     *
+     * Algorithm is based on RFC-3986 section 5.2
+     * (@link http://tools.ietf.org/html/rfc3986#section-5.2)
+     *
      * @param string $url the absolute or relative url to resolve
      * @param string|null $as the FQCN to create (must be a UrlArchiveInterface),
      * or "string" to return a string or null to use self

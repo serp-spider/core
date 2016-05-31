@@ -69,8 +69,13 @@ trait UrlArchiveTrait
 
         $query = [];
         if (isset($urlItems['query'])) {
-            parse_str($urlItems['query'], $baseQuery);
-            foreach ($baseQuery as $param => $value) {
+            // Don't use a parse_str.
+            // Because it returns an empty string in the value, when it should be null.
+            // For example: param1&param2=
+            // The value of param1 must be a null.
+            $queryItems = explode('&', $urlItems['query']);
+            foreach ($queryItems as $queryItem) {
+                list($param, $value) = explode('=', $queryItem, 2);
                 $query[$param] = new QueryParam($param, $value);
             }
         }
@@ -203,15 +208,77 @@ trait UrlArchiveTrait
      */
     public function resolve($url, $as = null)
     {
-        if (!preg_match('#^[a-zA-Z]+://#', $url)) {
-            if ('/' == $url{0}) {
-                if ('/' == $url{1}) {
-                    $url = $this->getScheme() . ':' . $url;
-                } else {
-                    $url = $this->getScheme() . '://' . $this->getHost()  . $url;
+        if (empty($url)) {
+            $url = $this->buildUrl();
+        } elseif (!preg_match('#^[a-zA-Z]+://#', $url)) {
+            $baseItems = parse_url($this->buildUrl());
+            $relItems = parse_url($url);
+
+            $resultItems = [];
+            $skipBase = false;
+            foreach ([
+                'scheme',
+                'host',
+                'port',
+                'user',
+                'pass',
+                'path',
+                'query',
+                'fragment'
+            ] as $itemName) {
+                $itemValue = null;
+                if (!$skipBase) {
+                    $itemValue = $baseItems[$itemName];
                 }
-            } else {
-                // TODO ($this->resolve('bar');)
+                if (isset($relItems[$itemName])) {
+                    $itemValue = $relItems[$itemName];
+                    $skipBase = true;
+
+                    if ($itemName == 'path' && $itemValue{0} != '/') {
+                        $itemValue = $baseItems['path'] . '/../' . $itemValue;
+                    }
+                }
+
+                if (!is_null($itemValue)) {
+                    $resultItems[$itemName] = $itemValue;
+                }
+            }
+
+            if ($resultItems['path']) {
+                $resultItems['path'] = static::removePathDotSegments($resultItems['path']);
+            }
+
+            // unparse url
+            $url = '';
+            if ($resultItems['scheme']) {
+                $url .= $resultItems['scheme'] . ':';
+            }
+
+            if ($resultItems['host']) {
+                $url .= '//';
+
+                if (isset($resultItems['user'])) {
+                    $url .= $resultItems['user'];
+                    if (isset($resultItems['pass'])) {
+                        $url .= ':' . $resultItems['pass'];
+                    }
+                    $url .= '@';
+                }
+
+                $url .= $resultItems['host'];
+                if ($resultItems['port']) {
+                    $url .= ':' . $resultItems['port'];
+                }
+            }
+
+            if (isset($resultItems['path'])) {
+                $url .= $resultItems['path'];
+            }
+            if (isset($resultItems['query'])) {
+                $url .= '?' . $resultItems['query'];
+            }
+            if (isset($resultItems['fragment'])) {
+                $url .= '#' . $resultItems['fragment'];
             }
         }
 
@@ -238,5 +305,67 @@ trait UrlArchiveTrait
             return call_user_func([$as, 'fromString'], $url);
         }
 
+    }
+
+    /**
+     * Remove any extra dot segments (/../, /./) from a path
+     *
+     * Algorithm is adapted from RFC-3986 section 5.2.4
+     * (@link http://tools.ietf.org/html/rfc3986#section-5.2.4)
+     *
+     * @todo   consider optimizing
+     *
+     * @param  string $path
+     * @return string
+     */
+    public static function removePathDotSegments($path)
+    {
+        $output = '';
+        while ($path) {
+            if ($path == '..' || $path == '.') {
+                break;
+            }
+            switch (true) {
+                case ($path == '/.'):
+                    $path = '/';
+                    break;
+                case ($path == '/..'):
+                    $path   = '/';
+                    $lastSlashPos = strrpos($output, '/', -1);
+                    if (false === $lastSlashPos) {
+                        break;
+                    }
+                    $output = substr($output, 0, $lastSlashPos);
+                    break;
+                case (substr($path, 0, 4) == '/../'):
+                    $path   = '/' . substr($path, 4);
+                    $lastSlashPos = strrpos($output, '/', -1);
+                    if (false === $lastSlashPos) {
+                        break;
+                    }
+                    $output = substr($output, 0, $lastSlashPos);
+                    break;
+                case (substr($path, 0, 3) == '/./'):
+                    $path = substr($path, 2);
+                    break;
+                case (substr($path, 0, 2) == './'):
+                    $path = substr($path, 2);
+                    break;
+                case (substr($path, 0, 3) == '../'):
+                    $path = substr($path, 3);
+                    break;
+                default:
+                    $slash = strpos($path, '/', 1);
+                    if ($slash === false) {
+                        $seg = $path;
+                    } else {
+                        $seg = substr($path, 0, $slash);
+                    }
+                    $output .= $seg;
+                    $path    = substr($path, strlen($seg));
+                    break;
+            }
+        }
+        return $output;
     }
 }
