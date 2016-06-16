@@ -16,5 +16,5 @@ interface CaptchaSolverInterface
      * @throws CaptchaNotSolvableException
      * @throws UnknownCaptchaTypeException
      */
-    public static function solve(CaptchaResponse $captchaResponse);
+    public function solve(CaptchaResponse $captchaResponse);
 }
