@@ -21,13 +21,13 @@ class CaptchaSolving
 
     public function getCaptcha()
     {
-        if(null === $this->captchaDone){
+        if (null === $this->captchaDone) {
             $captcha = call_user_func($this->getCaptha);
-            if(false !== $captcha){
+            if (false !== $captcha) {
                 $this->captchaDone = $captcha;
             }
             return $captcha;
-        }else{
+        } else {
             return $this->captchaDone;
         }
     }
