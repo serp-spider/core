@@ -12,6 +12,7 @@ class CaptchaSolving
 {
 
     protected $getCaptha;
+    protected $captchaDone = null;
 
     public function __construct(callable $getCaptcha)
     {
@@ -20,7 +21,15 @@ class CaptchaSolving
 
     public function getCaptcha()
     {
-        return call_user_func($this->getCaptha);
+        if(null === $this->captchaDone){
+            $captcha = call_user_func($this->getCaptha);
+            if(false !== $captcha){
+                $this->captchaDone = $captcha;
+            }
+            return $captcha;
+        }else{
+            return $this->captchaDone;
+        }
     }
 
     /**
