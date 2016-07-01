@@ -7,17 +7,21 @@ namespace Serps\Core\Captcha;
 
 use Serps\Exception\CaptchaSolver\CaptchaNotSolvableException;
 use Serps\Exception\CaptchaSolver\UnknownCaptchaTypeException;
+use Serps\Exception\TimeoutException;
 
 interface CaptchaSolverInterface
 {
     /**
      * Solve a captcha and returns data depending on the captcha type
      * @param CaptchaResponse $captchaResponse
+     * @param int $timeout the timeout for captcha resolution in milliseconds.
+     * Leave it null to use adapter's default value
      * @return mixed
      * @throws CaptchaNotSolvableException
      * @throws UnknownCaptchaTypeException
+     * @throws TimeoutException
      */
-    public function solve(CaptchaResponse $captchaResponse);
+    public function solve(CaptchaResponse $captchaResponse, $timeout = null);
 
     /**
      * Submit a captcha for resolution and returns a helper to get the output on an async way
