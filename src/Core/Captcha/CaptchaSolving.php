@@ -34,13 +34,13 @@ class CaptchaSolving
 
     /**
      * try to get the captcha for the given time
-     * @param int $time max time to wait in second
+     * @param int $time max time to wait in milli second
      * @param int $interval interval between 2 test in micro second
      * @return null|mixed
      */
-    public function tryFor($time, $interval = 200)
+    public function tryFor($time, $interval = 500)
     {
-        $tryUntil = time() + $time;
+        $tryUntil = time() + ($time / 1000);
         while ($tryUntil > time()) {
             if ($c = $this->getCaptcha()) {
                 return $c;
