@@ -15,6 +15,7 @@ interface CaptchaSolverInterface
      * Solve a captcha and returns data depending on the captcha type
      * @param CaptchaResponse $captchaResponse
      * @param int $timeout the timeout for captcha resolution in milliseconds.
+     * Leave it null to use adapter's default value
      * @param int $tryDelay delay between each try of getting the captcha data.
      * Leave it null to use adapter's default value
      * @return mixed
