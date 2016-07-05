@@ -14,16 +14,12 @@ interface CaptchaSolverInterface
     /**
      * Solve a captcha and returns data depending on the captcha type
      * @param CaptchaResponse $captchaResponse
-     * @param int $timeout the timeout for captcha resolution in milliseconds.
-     * Leave it null to use adapter's default value
-     * @param int $tryDelay delay between each try of getting the captcha data in microseconds
-     * Leave it null to use adapter's default value
      * @return mixed
      * @throws CaptchaNotSolvableException
      * @throws UnknownCaptchaTypeException
      * @throws TimeoutException
      */
-    public function solve(CaptchaResponse $captchaResponse, $timeout = null, $tryDelay = null);
+    public function solve(CaptchaResponse $captchaResponse);
 
     /**
      * Submit a captcha for resolution and returns a helper to get the output on an async way
