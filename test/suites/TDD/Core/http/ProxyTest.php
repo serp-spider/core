@@ -17,7 +17,7 @@ class ProxyTest extends \PHPUnit_Framework_TestCase
     {
         $proxy = new Proxy('1.1.1.1', 80, 'user', 'pswd');
 
-        $this->assertEquals('1.1.1.1', $proxy->getIp());
+        $this->assertEquals('1.1.1.1', $proxy->getHost());
         $this->assertEquals(80, $proxy->getPort());
         $this->assertEquals('user', $proxy->getUser());
         $this->assertEquals('pswd', $proxy->getPassword());
@@ -40,28 +40,28 @@ class ProxyTest extends \PHPUnit_Framework_TestCase
     {
         $proxy = Proxy::createFromString('user:pswd@1.1.1.1:80');
 
-        $this->assertEquals('1.1.1.1', $proxy->getIp());
+        $this->assertEquals('1.1.1.1', $proxy->getHost());
         $this->assertEquals(80, $proxy->getPort());
         $this->assertEquals('user', $proxy->getUser());
         $this->assertEquals('pswd', $proxy->getPassword());
         $this->assertEquals('HTTP', $proxy->getType());
 
         $proxy = Proxy::createFromString('1.1.1.1:80');
-        $this->assertEquals('1.1.1.1', $proxy->getIp());
+        $this->assertEquals('1.1.1.1', $proxy->getHost());
         $this->assertEquals(80, $proxy->getPort());
         $this->assertEquals(null, $proxy->getUser());
         $this->assertEquals(null, $proxy->getPassword());
         $this->assertEquals('HTTP', $proxy->getType());
 
         $proxy = Proxy::createFromString('https://1.1.1.1:80');
-        $this->assertEquals('1.1.1.1', $proxy->getIp());
+        $this->assertEquals('1.1.1.1', $proxy->getHost());
         $this->assertEquals(80, $proxy->getPort());
         $this->assertEquals(null, $proxy->getUser());
         $this->assertEquals(null, $proxy->getPassword());
         $this->assertEquals('HTTPS', $proxy->getType());
 
         $proxy = Proxy::createFromString('socks5://1.1.1.1:80');
-        $this->assertEquals('1.1.1.1', $proxy->getIp());
+        $this->assertEquals('1.1.1.1', $proxy->getHost());
         $this->assertEquals(80, $proxy->getPort());
         $this->assertEquals(null, $proxy->getUser());
         $this->assertEquals(null, $proxy->getPassword());

@@ -7,7 +7,7 @@ namespace Serps\Core\Http;
 
 interface ProxyInterface
 {
-    public function getIp();
+    public function getHost();
     public function getPort();
 
     public function getUser();
