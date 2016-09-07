@@ -44,7 +44,6 @@ class ResultSetTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(2, $resultSet->getItems());
         $this->assertSame($items[0], $resultSet->getItems()[0]);
         $this->assertSame($items[1], $resultSet->getItems()[1]);
-
     }
 
     public function testGetResultsByType()

@@ -237,6 +237,5 @@ trait UrlArchiveTrait
 
             return call_user_func([$as, 'fromString'], $url);
         }
-
     }
 }

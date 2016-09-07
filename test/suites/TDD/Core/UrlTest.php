@@ -36,8 +36,6 @@ class UrlTest extends \PHPUnit_Framework_TestCase
 
         $builder->setScheme('http');
         $this->assertEquals('http://example.com/some/path?foo=bar&foobar=foo+bar#foo', $builder->buildUrl());
-
-
     }
 
     public function testSetParam()

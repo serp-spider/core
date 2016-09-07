@@ -60,6 +60,5 @@ class SetCookieStringTest extends \PHPUnit_Framework_TestCase
         $cookie = SetCookieString::parse($cookieString, 'foo.com', '/bar/');
 
         $this->assertEquals('/bar', $cookie->getPath());
-
     }
 }
