@@ -24,7 +24,7 @@ interface CaptchaSolverInterface
     /**
      * Submit a captcha for resolution and returns a helper to get the output on an async way
      * @param CaptchaResponse $captchaResponse
-     * @return CaptchaSolving
+     * @return AsyncCaptchaSolvingInterface
      * @throws CaptchaNotSolvableException
      * @throws UnknownCaptchaTypeException
      */
