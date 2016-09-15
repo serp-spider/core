@@ -19,6 +19,7 @@ use Serps\Core\Media\Stream;
  * @covers Serps\Core\Media\MediaFactory
  * @covers Serps\Core\Media\MediaInterface
  * @covers Serps\Core\Media\Stream
+ * @covers Serps\Core\Media\AbstractMedia
  */
 class MediaTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,22 +27,37 @@ class MediaTest extends \PHPUnit_Framework_TestCase
     public function mediaProvider()
     {
         $imAMedia = 'I\'m a media';
-        
+
+        // Use callback for coverage generation
         return [
-            [$imAMedia, new Binary($imAMedia)],
-            [$imAMedia, new Base64(base64_encode($imAMedia))],
-            [$imAMedia, new Stream(fopen('data://text/plain,' . $imAMedia, 'r'))],
-            [$imAMedia, new File(__DIR__ . '/i-m-a-media.txt')],
-            [$imAMedia, new File(__DIR__ . '/i-m-a-media.txt', true)],
-            [$imAMedia, MediaFactory::createMediaFromSrc('data:text/plain;base64,' . base64_encode($imAMedia))],
+            [$imAMedia, function ($imAMedia) {
+                return new Binary($imAMedia);
+            }],
+            [$imAMedia, function ($imAMedia) {
+                return new Base64(base64_encode($imAMedia));
+            }],
+            [$imAMedia, function ($imAMedia) {
+                return new Stream(fopen('data://text/plain,' . $imAMedia, 'r'));
+            }],
+            [$imAMedia, function ($imAMedia) {
+                return new File(__DIR__ . '/i-m-a-media.txt');
+            }],
+            [$imAMedia, function ($imAMedia) {
+                return new File(__DIR__ . '/i-m-a-media.txt', true);
+            }],
+            [$imAMedia, function ($imAMedia) {
+                return MediaFactory::createMediaFromSrc('data:text/plain;base64,' . base64_encode($imAMedia));
+            }],
         ];
     }
 
     /**
      * @dataProvider mediaProvider
      */
-    public function testMedia($baseData, MediaInterface $media)
+    public function testMedia($baseData, callable $mediaCb)
     {
+        $media = $mediaCb($baseData);
+
         $this->assertEquals($baseData, $media->asString());
         $this->assertEquals($baseData, $media->__toString());
         $this->assertEquals($baseData, base64_decode($media->asBase64()));
