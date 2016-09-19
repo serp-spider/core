@@ -72,11 +72,15 @@ class QueryParam
 
     /**
      * Generate the paramatere to be appended to the url
-     * @return string the parameter on this format: ``name=value``
+     * @return string the parameter on this format: ``name=value`` or ``name``
      */
     public function generate()
     {
-        return $this->getName() . '=' . $this->getValue();
+        $result = $this->getName();
+        if (!is_null($this->value)) {
+            $result .= '=' . $this->getValue();
+        }
+        return $result;
     }
 
     public function __toString()
