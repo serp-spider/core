@@ -63,6 +63,11 @@ abstract class SetCookieString
             }
             $data[$key] = $value;
         }
+
+        if (is_string($data['expires'])) {
+            $data['expires'] = strtotime($data['expires']);
+        }
+
         // Calculate the expires date
         if (!$data['expires'] && $data['max_age']) {
             $data['expires'] = time() + (int) $data['max_age'];
