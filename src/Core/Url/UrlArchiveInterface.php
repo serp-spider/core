@@ -17,24 +17,28 @@ interface UrlArchiveInterface
 
     /**
      * UrlInterface constructor.
+     * @param string $scheme
      * @param string $host
      * @param string $path
-     * @param string $scheme
-     * @param QueryParam[] $query
+     * @param QueryParam[]|array $query
      * @param string $hash
+     * @param int $port
+     * @param string $user
+     * @param string $pass
+     * @return static
      */
-    public function __construct(
+    public static function build(
+        $scheme,
         $host,
-        $path = '',
-        $scheme = 'https',
+        $path = null,
         array $query = [],
-        $hash = ''
+        $hash = null,
+        $port = null,
+        $user = null,
+        $pass = null
     );
 
-    /**
-     * @return QueryParam[]
-     */
-    public function getParams();
+
 
     /**
      * Builds an url instance from an url string
@@ -45,14 +49,59 @@ interface UrlArchiveInterface
 
 
     /**
-     * Set the scheme.
+     * Builds an url from an array of data, these data are the same as the one returned by the function parse_url:
+     * - scheme - e.g. http
+     * - host
+     * - port
+     * - user
+     * - pass
+     * - path
+     * - query
+     * - hash
+     *
+     * Any value can be omitted
+     *
+     * @param $array
+     * @return mixed
+     */
+    public static function fromArray(array $array);
+
+
+
+    /**
+     * get query params
+     * @return QueryParam[]
+     */
+    public function getParams();
+
+    /**
+     * get the auth username
+     * @return mixed
+     */
+    public function getUser();
+
+    /**
+     * get the auth password
+     * @return mixed
+     */
+    public function getPassword();
+
+    /**
+     * get the port  number (default 80)
+     * @return int
+     */
+    public function getPort();
+
+
+    /**
+     * get the hash.
      * ``foo`` in ``http://www.example.com#foo``
      * @return string
      */
     public function getHash();
 
     /**
-     * Set the scheme.
+     * Get the path.
      * ``some/path`` in ``http://www.example.com/some/path``
      * @return string
      */

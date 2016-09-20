@@ -14,40 +14,131 @@ use Serps\Core\Url\QueryParam;
 trait UrlArchiveTrait
 {
 
+    protected $hash;
+    protected $path;
+    protected $scheme;
+
     /**
      * @var QueryParam[]
      */
     protected $query = [];
-    protected $hash;
-    protected $path;
-    protected $scheme;
 
     /**
      * host name e.g: ``www.example.com``
      */
     protected $host;
 
-    /**
-     * @param string $host
-     * @param QueryParam[] $query
-     * @param $hash
-     * @param $path
-     * @param string $scheme
-     */
+    protected $user;
+    protected $pass;
+    protected $port;
+
     public function __construct(
         $host,
-        $path = '',
-        $scheme = 'https',
+        $path = null,
+        $scheme = null,
         array $query = [],
-        $hash = ''
+        $hash = null,
+        $port = null,
+        $user = null,
+        $pass = null
     ) {
 
-
-        $this->query = $query;
-        $this->hash = $hash;
-        $this->path = $path;
-        $this->scheme = $scheme;
         $this->host = $host;
+        $this->scheme = $scheme ? $scheme : 'https';
+        $this->path = $path ;
+        $this->hash = $hash;
+        $this->port = (int) $port;
+        $this->user = $user;
+        $this->pass = $pass;
+
+        $this->query = [];
+        foreach ($query as $k => $v) {
+            if (is_object($v)) {
+                if ($v instanceof QueryParam) {
+                    $this->query[] = new QueryParam($v->getName(), $v->getValue(), $v->isRaw());
+                } else {
+                    throw new \InvalidArgumentException('invalid query param item');
+                }
+            } else {
+                $this->query[] = new QueryParam($k, $v);
+            }
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function build(
+        $scheme = null,
+        $host = null,
+        $path = null,
+        array $query = [],
+        $hash = null,
+        $port = null,
+        $user = null,
+        $pass = null
+    ) {
+        return new static(
+            $host,
+            $path,
+            $scheme,
+            $query,
+            $hash,
+            $port,
+            $user,
+            $pass
+        );
+    }
+
+
+    public static function fromArray(array $urlItems)
+    {
+
+        $query = [];
+        if (isset($urlItems['query'])) {
+            parse_str($urlItems['query'], $baseQuery);
+            foreach ($baseQuery as $param => $value) {
+                $query[$param] = new QueryParam($param, $value);
+            }
+        }
+
+        return static::build(
+            isset($urlItems['scheme']) ? $urlItems['scheme'] : null,
+            isset($urlItems['host']) ? $urlItems['host'] : null,
+            isset($urlItems['path']) ? $urlItems['path'] : null,
+            $query,
+            isset($urlItems['fragment']) ? $urlItems['fragment'] : null,
+            isset($urlItems['port']) ? $urlItems['port'] : null,
+            isset($urlItems['user']) ? $urlItems['user'] : null,
+            isset($urlItems['path']) ? $urlItems['path'] : null
+        );
+    }
+
+    /**
+     * Builds an url instance from an url string
+     * @param string $url the url to parse
+     * @return static
+     */
+    public static function fromString($url)
+    {
+
+        // Normally a URI must be ASCII, however. However, often it's not and
+        // parse_url might corrupt these strings.
+        //
+        // For that reason we take any non-ascii characters from the uri and
+        // uriencode them first.
+        //
+        // code from https://github.com/fruux/sabre-uri
+        $url = preg_replace_callback(
+            '/[^[:ascii:]]/u',
+            function ($matches) {
+                return rawurlencode($matches[0]);
+            },
+            $url
+        );
+
+        $urlItems = parse_url($url);
+        return static::fromArray($urlItems);
     }
 
     /**
@@ -58,30 +149,23 @@ trait UrlArchiveTrait
         return $this->query;
     }
 
-    /**
-     * Builds an url instance from an url string
-     * @param string $url the url to parse
-     * @return static
-     */
-    public static function fromString($url)
+    public function getUser()
     {
-        $urlItems = parse_url($url);
+        return $this->user;
+    }
 
-        $query = [];
-        if (isset($urlItems['query'])) {
-            parse_str($urlItems['query'], $baseQuery);
-            foreach ($baseQuery as $param => $value) {
-                $query[$param] = new QueryParam($param, $value);
-            }
+    public function getPassword()
+    {
+        return $this->pass;
+    }
+
+    public function getPort()
+    {
+        if (empty($this->port)) {
+            return $this->getScheme() === 'https' ? 443 : 80;
+        } else {
+            return $this->port;
         }
-
-        return new static(
-            isset($urlItems['host']) ? $urlItems['host'] : null,
-            isset($urlItems['path']) ? $urlItems['path'] : null,
-            isset($urlItems['scheme']) ? $urlItems['scheme'] : null,
-            $query,
-            isset($urlItems['fragment']) ? $urlItems['fragment'] : null
-        );
     }
 
 
@@ -166,7 +250,17 @@ trait UrlArchiveTrait
      */
     public function buildUrl()
     {
-        $uri = $this->getScheme() . '://' . $this->getHost();
+        $scheme = $this->getScheme();
+        $uri = $scheme . '://' . $this->getHost();
+
+        $port = $this->getPort();
+        if ($port) {
+            if (('http' === $scheme && 80 !== $this->getPort())
+                || ('https' === $scheme && 443 !== $this->getPort())
+            ) {
+                $uri .= ':' . $port;
+            }
+        }
 
         if ($path = $this->getPath()) {
             $uri .= '/' . ltrim($path, '/');
@@ -179,6 +273,7 @@ trait UrlArchiveTrait
         if ($hash = $this->getHash()) {
             $uri .= '#' . $this->getHash();
         }
+
 
         return $uri;
     }

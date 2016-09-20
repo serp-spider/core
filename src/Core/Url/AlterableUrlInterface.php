@@ -28,6 +28,24 @@ interface AlterableUrlInterface extends UrlArchiveInterface
     public function setPath($path);
 
     /**
+     * Set the port
+     * @param int $port
+     */
+    public function setPort($port);
+
+    /**
+     * Set the user for auth
+     * @param string $user
+     */
+    public function setUser($user);
+
+    /**
+     * Set the pass for auth
+     * @param string $pass
+     */
+    public function setPass($pass);
+
+    /**
      * Set the scheme.
      * ``http`` in ``http://www.example.com``
      * @param string $scheme

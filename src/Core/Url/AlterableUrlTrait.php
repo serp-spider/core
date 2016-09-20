@@ -35,6 +35,34 @@ trait AlterableUrlTrait
     }
 
     /**
+     * Set the port
+     * @param int $port
+     */
+    public function setPort($port)
+    {
+        $this->port = $port;
+    }
+
+    /**
+     * Set the user for auth
+     * @param string $user
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+    }
+
+    /**
+     * Set the pass for auth
+     * @param string $pass
+     */
+    public function setPass($pass)
+    {
+        $this->pass = $pass;
+    }
+
+
+    /**
      * Set the scheme.
      * ``http`` in ``http://www.example.com``
      * @param string $scheme
