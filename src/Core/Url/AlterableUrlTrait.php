@@ -103,11 +103,6 @@ trait AlterableUrlTrait
         return $this;
     }
 
-    public function setParams($params)
-    {
-        $this->query = $params;
-    }
-
     /**
      * Remove the given parameter
      * @param string $name name of the parameter to remove
