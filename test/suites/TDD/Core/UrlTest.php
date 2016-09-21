@@ -18,6 +18,34 @@ class UrlTest extends \PHPUnit_Framework_TestCase
 {
 
 
+    public function testConstructor()
+    {
+        $url = new Url(
+            'example.com',
+            'somepath',
+            'http',
+            ['foo' => 'bar', new Url\QueryParam('baz', 'qux')],
+            'somehash',
+            81,
+            'uname',
+            'psw'
+        );
+
+        $this->assertEquals('example.com', $url->getHost());
+        $this->assertEquals('somepath', $url->getPath());
+        $this->assertEquals('http', $url->getScheme());
+        $this->assertEquals('bar', $url->getParamValue('foo'));
+        $this->assertEquals('qux', $url->getParamValue('baz'));
+        $this->assertEquals('somehash', $url->getHash());
+        $this->assertEquals(81, $url->getPort());
+        $this->assertEquals('uname', $url->getUser());
+        $this->assertEquals('psw', $url->getPassword());
+        
+        $this->assertEquals(
+            'http://uname:psw@example.com:81/somepath?foo=bar&baz=qux#somehash',
+            $url->buildUrl()
+        );
+    }
 
     public function testGetUrl()
     {
@@ -65,7 +93,26 @@ class UrlTest extends \PHPUnit_Framework_TestCase
 
         $builder->setParam('q', 'bar');
         $this->assertEquals('bar', $builder->getParamValue('q', 'foo'));
+
+        $builder->setParam('q', 'a+b');
+        $this->assertEquals('a%2Bb', $builder->getParamValue('q'));
     }
+
+    public function testGetParamRawValue()
+    {
+        $builder = new Url('example');
+
+        $this->assertNull($builder->getParamRawValue('q'));
+        $this->assertEquals('foo', $builder->getParamRawValue('q', 'foo'));
+
+        $builder->setParam('q', 'bar');
+        $this->assertEquals('bar', $builder->getParamRawValue('q', 'foo'));
+
+        $builder->setParam('q', 'a+b');
+        $this->assertEquals('a+b', $builder->getParamRawValue('q'));
+    }
+
+
 
     public function testRemoveParam()
     {

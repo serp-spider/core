@@ -55,12 +55,12 @@ trait UrlArchiveTrait
         foreach ($query as $k => $v) {
             if (is_object($v)) {
                 if ($v instanceof QueryParam) {
-                    $this->query[] = new QueryParam($v->getName(), $v->getValue(), $v->isRaw());
+                    $this->query[$v->getName()] = new QueryParam($v->getName(), $v->getValue(), $v->isRaw());
                 } else {
                     throw new \InvalidArgumentException('invalid query param item');
                 }
             } else {
-                $this->query[] = new QueryParam($k, $v);
+                $this->query[$k] = new QueryParam($k, $v);
             }
         }
     }
@@ -251,7 +251,17 @@ trait UrlArchiveTrait
     public function buildUrl()
     {
         $scheme = $this->getScheme();
-        $uri = $scheme . '://' . $this->getHost();
+        $uri = $scheme . '://';
+
+        if ($user=$this->getUser()) {
+            $uri .= $user;
+            if ($pass=$this->getPassword()) {
+                $uri .= ':' . $pass;
+            }
+            $uri .= '@';
+        }
+
+        $uri .= $this->getHost();
 
         $port = $this->getPort();
         if ($port) {
