@@ -7,6 +7,9 @@ namespace Serps\Test\Core\Captcha;
 
 use Serps\Core\Captcha\AsyncCaptchaSolvingCallback;
 
+/**
+ * @covers Serps\Core\Captcha\AsyncCaptchaSolvingCallback
+ */
 class AsyncCaptchaSolvingCallbackTest extends \PHPUnit_Framework_TestCase
 {
 
