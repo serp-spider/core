@@ -64,6 +64,30 @@ class UrlTest extends \PHPUnit_Framework_TestCase
 
         $builder->setScheme('http');
         $this->assertEquals('http://example.com/some/path?foo=bar&foobar=foo+bar#foo', $builder->buildUrl());
+
+        // if http and port is 80 we don't show it
+        $builder->setPort(80);
+        $this->assertEquals('http://example.com/some/path?foo=bar&foobar=foo+bar#foo', $builder->buildUrl());
+
+        // if https and port != 443 we show it
+        $builder->setScheme('https');
+        $this->assertEquals('https://example.com:80/some/path?foo=bar&foobar=foo+bar#foo', $builder->buildUrl());
+
+        // if https and port is 443 we don't show it
+        $builder->setPort(443);
+        $this->assertEquals('https://example.com/some/path?foo=bar&foobar=foo+bar#foo', $builder->buildUrl());
+
+        $builder->setScheme('http');
+        $this->assertEquals('http://example.com:443/some/path?foo=bar&foobar=foo+bar#foo', $builder->buildUrl());
+
+        $builder->setUser('homer');
+        $this->assertEquals('http://homer@example.com:443/some/path?foo=bar&foobar=foo+bar#foo', $builder->buildUrl());
+
+        $builder->setPass('donuts');
+        $this->assertEquals('http://homer:donuts@example.com:443/some/path?foo=bar&foobar=foo+bar#foo', $builder->buildUrl());
+
+        $builder->setUser(null);
+        $this->assertEquals('http://example.com:443/some/path?foo=bar&foobar=foo+bar#foo', $builder->buildUrl());
     }
 
     public function testSetParam()
