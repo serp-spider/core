@@ -154,6 +154,30 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('https://foo/bar?qux=baz', $url->buildUrl());
     }
 
+    /**
+     * Params need to be raw when parsed
+     */
+    public function testQueryParamParsing()
+    {
+        $url = new UrlArchive(
+            'google.com',
+            '/',
+            'http',
+            [
+                'foo' => 'foo+foo',
+                new Url\QueryParam('bar', 'bar+bar', false),
+                new Url\QueryParam('baz', 'baz+baz', true),
+            ]
+        );
+
+        $this->assertEquals('foo%2Bfoo', $url->getParamValue('foo'));
+        $this->assertEquals('foo+foo', $url->getParamRawValue('foo'));
+        $this->assertEquals('bar%2Bbar', $url->getParamValue('bar'));
+        $this->assertEquals('bar+bar', $url->getParamRawValue('bar'));
+        $this->assertEquals('baz+baz', $url->getParamValue('baz'));
+        $this->assertEquals('baz+baz', $url->getParamRawValue('baz'));
+    }
+
 
     public function testResolve()
     {

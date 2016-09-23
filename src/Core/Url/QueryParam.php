@@ -83,4 +83,9 @@ class QueryParam
     {
         return $this->generate();
     }
+
+    public function __clone()
+    {
+        return new self($this->getName(), $this->getRawValue(), $this->isRaw());
+    }
 }

@@ -55,7 +55,7 @@ trait UrlArchiveTrait
         foreach ($query as $k => $v) {
             if (is_object($v)) {
                 if ($v instanceof QueryParam) {
-                    $this->query[$v->getName()] = new QueryParam($v->getName(), $v->getValue(), $v->isRaw());
+                    $this->query[$v->getName()] = clone $v;
                 } else {
                     throw new \InvalidArgumentException('invalid query param item');
                 }
