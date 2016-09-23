@@ -163,8 +163,15 @@ interface UrlArchiveInterface
     /**
      * @param string $url the absolute or relative url to resolve
      * @param string|null $as the FQCN to create (must be a UrlArchiveInterface),
-     * or "string" to return a string or null to use self
+     * or null to use self
      * @return UrlArchiveInterface the generated url
      */
     public function resolve($url, $as = null);
+
+
+    /**
+     * @param string $url the absolute or relative url to resolve
+     * @return string the generated url
+     */
+    public function resolveAsString($url);
 }

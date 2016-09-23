@@ -213,7 +213,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(Url\UrlArchiveInterface::class, $newUrl);
 
         // Resolve as string
-        $newUrl = $url->resolve('//bar', 'string');
+        $newUrl = $url->resolveAsString('//bar');
         $this->assertInternalType('string', $newUrl);
         $this->assertEquals('https://bar', $newUrl);
     }

@@ -308,22 +308,10 @@ trait UrlArchiveTrait
      */
     public function resolve($url, $as = null)
     {
-        if (!preg_match('#^[a-zA-Z]+://#', $url)) {
-            if ('/' == $url{0}) {
-                if ('/' == $url{1}) {
-                    $url = $this->getScheme() . ':' . $url;
-                } else {
-                    $url = $this->getScheme() . '://' . $this->getHost()  . $url;
-                }
-            } else {
-                // TODO ($this->resolve('bar');)
-            }
-        }
+        $url = $this->resolveAsString($url);
 
         if (null === $as) {
             return self::fromString($url);
-        } elseif ('string' == $as) {
-            return $url;
         } else {
             if (!is_string($as)) {
                 throw new \InvalidArgumentException(
@@ -336,11 +324,28 @@ trait UrlArchiveTrait
             if (!in_array(UrlArchiveInterface::class, $implements)) {
                 throw new \InvalidArgumentException(
                     'Invalid argument for UrlArchive::resolve(), the specified class must implement'
-                    . 'Serps\Core\Url\UrlArchiveInterface'
+                    . UrlArchiveInterface::class
                 );
             }
 
             return call_user_func([$as, 'fromString'], $url);
         }
+    }
+
+    public function resolveAsString($url)
+    {
+        if (!preg_match('#^[a-zA-Z]+://#', $url)) {
+            if ('/' == $url{0}) {
+                if ('/' == $url{1}) {
+                    $url = $this->getScheme() . ':' . $url;
+                } else {
+                    $url = $this->getScheme() . '://' . $this->getHost()  . $url;
+                }
+            } else {
+                // TODO ($this->resolve('bar');)
+            }
+        }
+
+        return $url;
     }
 }
