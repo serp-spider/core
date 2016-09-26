@@ -39,8 +39,8 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('somehash', $url->getHash());
         $this->assertEquals(81, $url->getPort());
         $this->assertEquals('uname', $url->getUser());
-        $this->assertEquals('psw', $url->getPassword());
-        
+        $this->assertEquals('psw', $url->getPass());
+
         $this->assertEquals(
             'http://uname:psw@example.com:81/somepath?foo=bar&baz=qux#somehash',
             $url->buildUrl()
@@ -50,17 +50,17 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     public function testGetUrl()
     {
         $builder = new Url('example.com');
-        $this->assertEquals('https://example.com', $builder->buildUrl());
+        $this->assertEquals('example.com', $builder->buildUrl());
 
         $builder->setHash('foo');
-        $this->assertEquals('https://example.com#foo', $builder->buildUrl());
+        $this->assertEquals('example.com#foo', $builder->buildUrl());
 
         $builder->setParam('foo', 'bar');
         $builder->setParam('foobar', 'foo bar');
-        $this->assertEquals('https://example.com?foo=bar&foobar=foo+bar#foo', $builder->buildUrl());
+        $this->assertEquals('example.com?foo=bar&foobar=foo+bar#foo', $builder->buildUrl());
 
         $builder->setPath('some/path');
-        $this->assertEquals('https://example.com/some/path?foo=bar&foobar=foo+bar#foo', $builder->buildUrl());
+        $this->assertEquals('example.com/some/path?foo=bar&foobar=foo+bar#foo', $builder->buildUrl());
 
         $builder->setScheme('http');
         $this->assertEquals('http://example.com/some/path?foo=bar&foobar=foo+bar#foo', $builder->buildUrl());

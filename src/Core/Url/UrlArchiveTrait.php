@@ -5,8 +5,10 @@
 
 namespace Serps\Core\Url;
 
+use Serps\Core\Url;
 use Serps\Core\Url\UrlArchiveInterface;
 use Serps\Core\Url\QueryParam;
+use Serps\Core\UrlArchive;
 
 /**
  * This trait offers implementation for @see UrlArchiveInterface
@@ -33,7 +35,7 @@ trait UrlArchiveTrait
     protected $port;
 
     public function __construct(
-        $host,
+        $host = null,
         $path = null,
         $scheme = null,
         array $query = [],
@@ -44,10 +46,10 @@ trait UrlArchiveTrait
     ) {
 
         $this->host = $host;
-        $this->scheme = $scheme ? $scheme : 'https';
+        $this->scheme = $scheme;
         $this->path = $path ;
         $this->hash = $hash;
-        $this->port = (int) $port;
+        $this->port = $port;
         $this->user = $user;
         $this->pass = $pass;
 
@@ -154,18 +156,14 @@ trait UrlArchiveTrait
         return $this->user;
     }
 
-    public function getPassword()
+    public function getPass()
     {
         return $this->pass;
     }
 
     public function getPort()
     {
-        if (empty($this->port)) {
-            return $this->getScheme() === 'https' ? 443 : 80;
-        } else {
-            return $this->port;
-        }
+        return $this->port;
     }
 
 
@@ -251,11 +249,15 @@ trait UrlArchiveTrait
     public function buildUrl()
     {
         $scheme = $this->getScheme();
-        $uri = $scheme . '://';
+        if ($scheme) {
+            $uri = $scheme . '://';
+        } else {
+            $uri = '';
+        }
 
         if ($user=$this->getUser()) {
             $uri .= $user;
-            if ($pass=$this->getPassword()) {
+            if ($pass=$this->getPass()) {
                 $uri .= ':' . $pass;
             }
             $uri .= '@';
@@ -334,18 +336,69 @@ trait UrlArchiveTrait
 
     public function resolveAsString($url)
     {
-        if (!preg_match('#^[a-zA-Z]+://#', $url)) {
-            if ('/' == $url{0}) {
-                if ('/' == $url{1}) {
-                    $url = $this->getScheme() . ':' . $url;
-                } else {
-                    $url = $this->getScheme() . '://' . $this->getHost()  . $url;
-                }
-            } else {
-                // TODO ($this->resolve('bar');)
-            }
-        }
+        $delta = UrlArchive::fromString($url);
 
-        return $url;
+
+        if ($delta->getScheme()) {
+            return $delta->buildUrl();
+        } else {
+            $newUrl = new Url();
+            if (!($scheme = $delta->getScheme())) {
+                $scheme = $this->getScheme();
+            }
+            if (!($host = $delta->getHost())) {
+                $host = $this->getHost();
+            }
+            if (!($port = $delta->getPort())) {
+                $port = $this->getPort();
+            }
+            $newUrl->setScheme($scheme);
+            $newUrl->setHost($host);
+            $newUrl->setPort($port);
+
+            if ($delta->getHost()) {
+                $path = $delta->getPath();
+            } else {
+                $path = $delta->getPath();
+                // If empty path take the parent one
+                if (empty($path)) {
+                    $path = $this->getPath();
+                // If does not start with a slash take the relative path (remove the last part of the url)
+                } elseif ('/' != $path{0}) {
+                    $path = $this->getPath();
+                    if (strpos($path, '/') !== false) {
+                        $path = substr($path, 0, strrpos($path, '/'));
+                    }
+                    $path .= '/' . $delta->getPath();
+                }
+            }
+
+
+            // Removing .. and .
+            $pathParts = explode('/', $path);
+            $newPathParts = [];
+            foreach ($pathParts as $pathPart) {
+                switch ($pathPart) {
+                    //case '' :
+                    case '.':
+                        break;
+                    case '..':
+                        array_pop($newPathParts);
+                        break;
+                    default:
+                        $newPathParts[] = $pathPart;
+                        break;
+                }
+            }
+            $path = implode('/', $newPathParts);
+            $newUrl->setPath($path);
+
+            // TODO QUERY STRING
+            if ($hash = $delta->getHash()) {
+                $newUrl->setHash($hash);
+            }
+
+            return $newUrl->buildUrl();
+        }
     }
 }

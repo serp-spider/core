@@ -84,7 +84,7 @@ interface UrlArchiveInterface
      * get the auth password
      * @return mixed
      */
-    public function getPassword();
+    public function getPass();
 
     /**
      * get the port  number (default 80)
