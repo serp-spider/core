@@ -128,6 +128,7 @@ interface UrlArchiveInterface
      */
     public function getParamValue($name, $default = null);
 
+
     /**
      * @param string $name
      * @param mixed $default
@@ -140,6 +141,12 @@ interface UrlArchiveInterface
      * @return bool
      */
     public function hasParam($name);
+
+    /**
+     * Get the authority of the url
+     * @return mixed
+     */
+    public function getAuthority();
 
     /**
      * Get the full uri: ``http://www.example.com/path?param=value#hash``

@@ -35,9 +35,9 @@ trait UrlArchiveTrait
     protected $port;
 
     public function __construct(
+        $scheme = null,
         $host = null,
         $path = null,
-        $scheme = null,
         array $query = [],
         $hash = null,
         $port = null,
@@ -81,9 +81,9 @@ trait UrlArchiveTrait
         $pass = null
     ) {
         return new static(
+            $scheme,
             $host,
             $path,
-            $scheme,
             $query,
             $hash,
             $port,
@@ -93,15 +93,31 @@ trait UrlArchiveTrait
     }
 
 
+    /**
+     * Alternative to the builtin parse_str php function that will replace periods with underscores
+     */
+    protected static function parseStr($str)
+    {
+        $data = [];
+        $strParts = explode('&', $str);
+        foreach ($strParts as $part) {
+            $subParts = explode('=', $part, 1);
+            $data[$subParts[0]] = isset($subParts[1]) ? $subParts[1] : null;
+        }
+        return $data;
+    }
+
+    /**
+     * @param array $urlItems
+     * @return static
+     */
     public static function fromArray(array $urlItems)
     {
 
-        $query = [];
         if (isset($urlItems['query'])) {
-            parse_str($urlItems['query'], $baseQuery);
-            foreach ($baseQuery as $param => $value) {
-                $query[$param] = new QueryParam($param, $value);
-            }
+            $query = self::parseStr($urlItems['query']);
+        } else {
+            $query = [];
         }
 
         return static::build(
@@ -116,14 +132,8 @@ trait UrlArchiveTrait
         );
     }
 
-    /**
-     * Builds an url instance from an url string
-     * @param string $url the url to parse
-     * @return static
-     */
-    public static function fromString($url)
+    protected static function parseUrl($url)
     {
-
         // Normally a URI must be ASCII, however. However, often it's not and
         // parse_url might corrupt these strings.
         //
@@ -139,7 +149,17 @@ trait UrlArchiveTrait
             $url
         );
 
-        $urlItems = parse_url($url);
+        return parse_url($url);
+    }
+
+    /**
+     * Builds an url instance from an url string
+     * @param string $url the url to parse
+     * @return static
+     */
+    public static function fromString($url)
+    {
+        $urlItems = self::parseUrl($url);
         return static::fromArray($urlItems);
     }
 
@@ -242,6 +262,33 @@ trait UrlArchiveTrait
         return isset($this->query[$name]);
     }
 
+    public function getAuthority()
+    {
+        $authority = '';
+
+        if ($host = $this->getHost()) {
+            if ($user = $this->getUser()) {
+                $authority .= $user;
+                if ($pass = $this->getPass()) {
+                    $authority .= ':' . $pass;
+                }
+                $authority .= '@';
+            }
+
+            $authority .= $this->getHost();
+
+            if ($port = $this->getPort()) {
+                if (!(80 == $port && 'http' === $this->getScheme())
+                    && !(443 == $port && 'https' === $this->getScheme() )
+                ) {
+                    $authority .= ':' . $port;
+                }
+            }
+        }
+
+        return $authority;
+    }
+
     /**
      * Get the full uri: ``http://www.example.com/path?param=value#hash``
      * @return string
@@ -250,28 +297,13 @@ trait UrlArchiveTrait
     {
         $scheme = $this->getScheme();
         if ($scheme) {
-            $uri = $scheme . '://';
+            $uri = $scheme . ':';
         } else {
             $uri = '';
         }
 
-        if ($user=$this->getUser()) {
-            $uri .= $user;
-            if ($pass=$this->getPass()) {
-                $uri .= ':' . $pass;
-            }
-            $uri .= '@';
-        }
-
-        $uri .= $this->getHost();
-
-        $port = $this->getPort();
-        if ($port) {
-            if (('http' === $scheme && 80 !== $this->getPort())
-                || ('https' === $scheme && 443 !== $this->getPort())
-            ) {
-                $uri .= ':' . $port;
-            }
+        if ($authority = $this->getAuthority()) {
+            $uri .= '//' . $authority;
         }
 
         if ($path = $this->getPath()) {
@@ -336,35 +368,27 @@ trait UrlArchiveTrait
 
     public function resolveAsString($url)
     {
-        $delta = UrlArchive::fromString($url);
+        $deltaArray = self::parseUrl($url);
+        $delta = Url::fromArray($deltaArray);
 
-
-        if ($delta->getScheme()) {
+        if ($scheme = $delta->getScheme()) {
             return $delta->buildUrl();
         } else {
-            $newUrl = new Url();
-            if (!($scheme = $delta->getScheme())) {
-                $scheme = $this->getScheme();
-            }
-            if (!($host = $delta->getHost())) {
-                $host = $this->getHost();
-            }
-            if (!($port = $delta->getPort())) {
-                $port = $this->getPort();
-            }
-            $newUrl->setScheme($scheme);
-            $newUrl->setHost($host);
-            $newUrl->setPort($port);
+            $delta->setScheme($this->getScheme());
 
-            if ($delta->getHost()) {
-                $path = $delta->getPath();
-            } else {
-                $path = $delta->getPath();
-                // If empty path take the parent one
+            $path = $delta->getPath();
+            if (empty($delta->getAuthority())) {
+                $delta->setUser($this->getUser());
+                $delta->setPass($this->getPass());
+                $delta->setHost($this->getHost());
+                $delta->setPort($this->getPort());
+
                 if (empty($path)) {
                     $path = $this->getPath();
-                // If does not start with a slash take the relative path (remove the last part of the url)
-                } elseif ('/' != $path{0}) {
+                    if (empty($delta->getParams())) {
+                        $delta->setParams($this->getParams());
+                    }
+                } elseif ('/' !== $path{0}) {
                     $path = $this->getPath();
                     if (strpos($path, '/') !== false) {
                         $path = substr($path, 0, strrpos($path, '/'));
@@ -372,7 +396,6 @@ trait UrlArchiveTrait
                     $path .= '/' . $delta->getPath();
                 }
             }
-
 
             // Removing .. and .
             $pathParts = explode('/', $path);
@@ -391,14 +414,18 @@ trait UrlArchiveTrait
                 }
             }
             $path = implode('/', $newPathParts);
-            $newUrl->setPath($path);
 
-            // TODO QUERY STRING
-            if ($hash = $delta->getHash()) {
-                $newUrl->setHash($hash);
+            // If ends with . or .. we want to preserve / at end
+            $lastItem = end($pathParts);
+            if ('.' === $lastItem || '..' === $lastItem) {
+                $path .= '/';
             }
 
-            return $newUrl->buildUrl();
+            $delta->setPath($path);
+
+            // In every cases we want to keep $delta hash
+
+            return $delta->buildUrl();
         }
     }
 }

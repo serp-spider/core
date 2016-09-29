@@ -73,6 +73,12 @@ interface AlterableUrlInterface extends UrlArchiveInterface
     public function setParam($name, $value, $raw = false);
 
     /**
+     * Remove current params and replace them with given params
+     * @param array $params
+     */
+    public function setParams(array $params);
+
+    /**
      * Remove the given parameter
      * @param string $name name of the parameter to remove
      * @return $this;

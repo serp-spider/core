@@ -76,6 +76,10 @@ class QueryParam
      */
     public function generate()
     {
+        $value = $this->getValue();
+        if (empty($value)) {
+            return $this->getName();
+        }
         return $this->getName() . '=' . $this->getValue();
     }
 
