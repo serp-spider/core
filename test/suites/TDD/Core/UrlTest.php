@@ -261,11 +261,15 @@ class UrlTest extends \PHPUnit_Framework_TestCase
 
     public function testParseParams()
     {
-        $url = Url::fromString('https://foo/bar?qux=baz&foo=bar&baz=foobar');
+        $url = Url::fromString('https://foo/bar?qux=baz&foo=bar&baz=foo+bar');
         $this->assertEquals('baz', $url->getParamValue('qux'));
         $this->assertEquals('bar', $url->getParamValue('foo'));
-        $this->assertEquals('foobar', $url->getParamValue('baz'));
+        $this->assertEquals('foo+bar', $url->getParamValue('baz'));
         $this->assertCount(3, $url->getParams());
+
+        // Verify that url-encodable characters are not processed again
+        $url = Url::fromString($url->buildUrl());
+        $this->assertEquals('foo+bar', $url->getParamValue('baz'));
     }
 
 

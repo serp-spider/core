@@ -102,7 +102,7 @@ trait UrlArchiveTrait
         $strParts = explode('&', $str);
         foreach ($strParts as $part) {
             $subParts = explode('=', $part, 2);
-            $data[$subParts[0]] = isset($subParts[1]) ? $subParts[1] : null;
+            $data[$subParts[0]] = isset($subParts[1]) ? urldecode($subParts[1]) : null;
         }
         return $data;
     }
