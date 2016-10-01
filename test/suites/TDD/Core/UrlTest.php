@@ -270,6 +270,17 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         // Verify that url-encodable characters are not processed again
         $url = Url::fromString($url->buildUrl());
         $this->assertEquals('foo+bar', $url->getParamValue('baz'));
+
+
+        // Test null/zero/false/emtpy values
+        $url = Url::fromString('https://foo/bar?null=null&false=false&zero=0&empty&emptyequals=');
+        $this->assertEquals('null', $url->getParamValue('null'));
+        $this->assertEquals('false', $url->getParamValue('false'));
+        $this->assertEquals('0', $url->getParamValue('zero'));
+        $this->assertEquals('', $url->getParamValue('empty'));
+        $this->assertEquals('', $url->getParamValue('emptyequals'));
+        $this->assertCount(5, $url->getParams());
+        $this->assertEquals('null=null&false=false&zero=0&empty&emptyequals', $url->getQueryString());
     }
 
 
