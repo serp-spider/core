@@ -276,6 +276,28 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     }
 
 
+    public function testCloneAs()
+    {
+        $url = UrlArchive::fromString('http://foobar.baz');
+        $clonedUrl = $url->cloneAs(Url::class);
+
+        $this->assertInstanceOf(Url::class, $clonedUrl);
+        $this->assertEquals('http://foobar.baz', $clonedUrl->buildUrl());
+
+        $clonedUrl = $url->cloneAs(UrlArchive::class);
+        $this->assertInstanceOf(UrlArchive::class, $clonedUrl);
+        $this->assertEquals('http://foobar.baz', $clonedUrl->buildUrl());
+    }
+
+    public function testClone()
+    {
+        $url = UrlArchive::fromString('http://foobar.baz');
+        $clonedUrl = clone $url;
+
+        $this->assertInstanceOf(UrlArchive::class, $clonedUrl);
+        $this->assertEquals('http://foobar.baz', $clonedUrl->buildUrl());
+    }
+
     /**
      * @dataProvider RFC3986ResolveDataProvider
      */

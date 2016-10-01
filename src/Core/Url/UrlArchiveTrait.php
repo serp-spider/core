@@ -338,42 +338,19 @@ trait UrlArchiveTrait
     }
 
     /**
-     * @see UrlArchiveInterface::resolve
+     * Resolve the given url, and returns it as an alterable url, that's made for minor performance update between
+     * resolve and resolveAsString (thus resolveAsString does not need double transformation of the url)
+     * This method must remain private
+     *
+     * @param string $a class to resolve to, must be an alterableUrl class
+     * @param string $url url to resolve
+     * @return AlterableUrlInterface
      */
-    public function resolve($url, $as = null)
+    private function resolveAsAlterableUrl($url, $as)
     {
-        $url = $this->resolveAsString($url);
+        $delta = call_user_func([$as, 'fromString'], $url);
 
-        if (null === $as) {
-            return self::fromString($url);
-        } else {
-            if (!is_string($as)) {
-                throw new \InvalidArgumentException(
-                    'Invalid argument for UrlArchive::resolve(), the class name must be a string'
-                );
-            }
-
-            $implements = class_implements($as, true);
-
-            if (!in_array(UrlArchiveInterface::class, $implements)) {
-                throw new \InvalidArgumentException(
-                    'Invalid argument for UrlArchive::resolve(), the specified class must implement'
-                    . UrlArchiveInterface::class
-                );
-            }
-
-            return call_user_func([$as, 'fromString'], $url);
-        }
-    }
-
-    public function resolveAsString($url)
-    {
-        $deltaArray = self::parseUrl($url);
-        $delta = Url::fromArray($deltaArray);
-
-        if ($scheme = $delta->getScheme()) {
-            return $delta->buildUrl();
-        } else {
+        if (!($scheme = $delta->getScheme())) {
             $delta->setScheme($this->getScheme());
 
             $path = $delta->getPath();
@@ -424,8 +401,94 @@ trait UrlArchiveTrait
             $delta->setPath($path);
 
             // In every cases we want to keep $delta hash
-
-            return $delta->buildUrl();
         }
+
+        return $delta;
+    }
+
+    /**
+     * @see UrlArchiveInterface::resolve
+     */
+    public function resolve($url, $as = null)
+    {
+        if (null === $as) {
+            $as = static::class;
+            $implements = class_implements($as, true);
+        } else {
+            if (!is_string($as)) {
+                throw new \InvalidArgumentException(
+                    'Invalid argument for UrlArchive::resolve(), the class name must be a string'
+                );
+            } elseif (!class_exists($as, true)) {
+                throw new \InvalidArgumentException($as . ' class does not exist');
+            }
+
+            // Check if the given class implements urlArchive
+            $implements = class_implements($as, true);
+
+            if (!in_array(UrlArchiveInterface::class, $implements)) {
+                throw new \InvalidArgumentException(
+                    'Invalid argument for ' . __CLASS__ . '::' . __METHOD__ . ', the specified class must implement'
+                    . UrlArchiveInterface::class
+                );
+            }
+        }
+
+        // If not resolved as an alterable url we need to use an alterable url and to transform it latter
+        if (!in_array(AlterableUrlInterface::class, $implements)) {
+            return $this->resolveAsAlterableUrl($url, Url::class)->cloneAs($as);
+        } else {
+            return $this->resolveAsAlterableUrl($url, Url::class);
+        }
+    }
+
+    public function resolveAsString($url)
+    {
+        return $this->resolveAsAlterableUrl($url, Url::class)->buildUrl();
+    }
+
+    /**
+     * @param null $as
+     * @return UrlArchiveInterface
+     */
+    public function cloneAs($as = null)
+    {
+
+        if (null === $as) {
+            $as = static::class;
+        } else {
+            if (!is_string($as)) {
+                throw new \InvalidArgumentException('Invalid argument for ' . static::class . '::' . __METHOD__);
+            } elseif (!class_exists($as, true)) {
+                throw new \InvalidArgumentException($as . ' class does not exist');
+            }
+
+            // Check if the given class implements urlArchive
+            $implements = class_implements($as, true);
+
+            if (!in_array(UrlArchiveInterface::class, $implements)) {
+                throw new \InvalidArgumentException(
+                    'Invalid argument for ' . __CLASS__ . '::' . __METHOD__ . '(), the specified class must implement'
+                    . UrlArchiveInterface::class
+                );
+            }
+        }
+
+        return call_user_func(
+            [$as, 'build'],
+            $this->getScheme(),
+            $this->getHost(),
+            $this->getPath(),
+            $this->getParams(),
+            $this->getHash(),
+            $this->getPort(),
+            $this->getUser(),
+            $this->getPass()
+        );
+    }
+
+    public function __clone()
+    {
+        return $this->cloneAs();
     }
 }

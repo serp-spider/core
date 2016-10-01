@@ -168,6 +168,7 @@ interface UrlArchiveInterface
     public function getQueryString();
 
     /**
+     * resolves an url as defined in RFC3986
      * @param string $url the absolute or relative url to resolve
      * @param string|null $as the FQCN to create (must be a UrlArchiveInterface),
      * or null to use self
@@ -181,4 +182,13 @@ interface UrlArchiveInterface
      * @return string the generated url
      */
     public function resolveAsString($url);
+
+    /**
+     * clone the given url as an instance of the given class name
+     * @param string $as class name to resolve to
+     * @return UrlArchiveInterface
+     */
+    public function cloneAs($as = null);
+
+    public function __clone();
 }
