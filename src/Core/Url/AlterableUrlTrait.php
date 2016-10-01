@@ -98,9 +98,28 @@ trait AlterableUrlTrait
      */
     public function setParam($name, $value, $raw = false)
     {
-
         $this->query[$name] = new QueryParam($name, $value, $raw);
         return $this;
+    }
+
+    /**
+     * Remove current params and replace them with given params
+     * @param array $params
+     */
+    public function setParams(array $params)
+    {
+        $this->query = [];
+        foreach ($params as $k => $v) {
+            if (is_object($v)) {
+                if ($v instanceof QueryParam) {
+                    $this->query[$v->getName()] = clone $v;
+                } else {
+                    throw new \InvalidArgumentException('invalid query param item');
+                }
+            } else {
+                $this->query[$k] = new QueryParam($k, $v);
+            }
+        }
     }
 
     /**

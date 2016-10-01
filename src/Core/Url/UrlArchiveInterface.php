@@ -84,7 +84,7 @@ interface UrlArchiveInterface
      * get the auth password
      * @return mixed
      */
-    public function getPassword();
+    public function getPass();
 
     /**
      * get the port  number (default 80)
@@ -128,6 +128,7 @@ interface UrlArchiveInterface
      */
     public function getParamValue($name, $default = null);
 
+
     /**
      * @param string $name
      * @param mixed $default
@@ -140,6 +141,12 @@ interface UrlArchiveInterface
      * @return bool
      */
     public function hasParam($name);
+
+    /**
+     * Get the authority of the url
+     * @return mixed
+     */
+    public function getAuthority();
 
     /**
      * Get the full uri: ``http://www.example.com/path?param=value#hash``
@@ -161,6 +168,7 @@ interface UrlArchiveInterface
     public function getQueryString();
 
     /**
+     * resolves an url as defined in RFC3986
      * @param string $url the absolute or relative url to resolve
      * @param string|null $as the FQCN to create (must be a UrlArchiveInterface),
      * or null to use self
@@ -174,4 +182,13 @@ interface UrlArchiveInterface
      * @return string the generated url
      */
     public function resolveAsString($url);
+
+    /**
+     * clone the given url as an instance of the given class name
+     * @param string $as class name to resolve to
+     * @return UrlArchiveInterface
+     */
+    public function cloneAs($as = null);
+
+    public function __clone();
 }

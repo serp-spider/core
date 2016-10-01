@@ -21,9 +21,9 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     public function testConstructor()
     {
         $url = new Url(
+            'http',
             'example.com',
             'somepath',
-            'http',
             ['foo' => 'bar', new Url\QueryParam('baz', 'qux')],
             'somehash',
             81,
@@ -39,8 +39,8 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('somehash', $url->getHash());
         $this->assertEquals(81, $url->getPort());
         $this->assertEquals('uname', $url->getUser());
-        $this->assertEquals('psw', $url->getPassword());
-        
+        $this->assertEquals('psw', $url->getPass());
+
         $this->assertEquals(
             'http://uname:psw@example.com:81/somepath?foo=bar&baz=qux#somehash',
             $url->buildUrl()
@@ -49,18 +49,18 @@ class UrlTest extends \PHPUnit_Framework_TestCase
 
     public function testGetUrl()
     {
-        $builder = new Url('example.com');
-        $this->assertEquals('https://example.com', $builder->buildUrl());
+        $builder = new Url(null, 'example.com');
+        $this->assertEquals('//example.com', $builder->buildUrl());
 
         $builder->setHash('foo');
-        $this->assertEquals('https://example.com#foo', $builder->buildUrl());
+        $this->assertEquals('//example.com#foo', $builder->buildUrl());
 
         $builder->setParam('foo', 'bar');
         $builder->setParam('foobar', 'foo bar');
-        $this->assertEquals('https://example.com?foo=bar&foobar=foo+bar#foo', $builder->buildUrl());
+        $this->assertEquals('//example.com?foo=bar&foobar=foo+bar#foo', $builder->buildUrl());
 
         $builder->setPath('some/path');
-        $this->assertEquals('https://example.com/some/path?foo=bar&foobar=foo+bar#foo', $builder->buildUrl());
+        $this->assertEquals('//example.com/some/path?foo=bar&foobar=foo+bar#foo', $builder->buildUrl());
 
         $builder->setScheme('http');
         $this->assertEquals('http://example.com/some/path?foo=bar&foobar=foo+bar#foo', $builder->buildUrl());
@@ -136,7 +136,24 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('a+b', $builder->getParamRawValue('q'));
     }
 
+    public function testGetAuthority()
+    {
+        $url = new Url();
 
+        $this->assertEmpty($url->getAuthority());
+
+        $url->setUser('foo');
+        $this->assertEmpty($url->getAuthority());
+
+        $url->setPass('bar');
+        $this->assertEmpty($url->getAuthority());
+
+        $url->setPort(50);
+        $this->assertEmpty($url->getAuthority());
+
+        $url->setHost('foobar.baz');
+        $this->assertEquals('foo:bar@foobar.baz:50', $url->getAuthority());
+    }
 
     public function testRemoveParam()
     {
@@ -153,7 +170,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
 
     public function testSetHost()
     {
-        $builder = new Url('example');
+        $builder = new Url(null, 'example');
         $this->assertEquals('example', $builder->getHost());
         $builder->setHost('google.com');
         $this->assertEquals('google.com', $builder->getHost());
@@ -256,5 +273,86 @@ class UrlTest extends \PHPUnit_Framework_TestCase
 
         $this->setExpectedException(\InvalidArgumentException::class);
         $url->resolve('//bar', Cookie::class);
+    }
+
+
+    public function testCloneAs()
+    {
+        $url = UrlArchive::fromString('http://foobar.baz');
+        $clonedUrl = $url->cloneAs(Url::class);
+
+        $this->assertInstanceOf(Url::class, $clonedUrl);
+        $this->assertEquals('http://foobar.baz', $clonedUrl->buildUrl());
+
+        $clonedUrl = $url->cloneAs(UrlArchive::class);
+        $this->assertInstanceOf(UrlArchive::class, $clonedUrl);
+        $this->assertEquals('http://foobar.baz', $clonedUrl->buildUrl());
+    }
+
+    public function testClone()
+    {
+        $url = UrlArchive::fromString('http://foobar.baz');
+        $clonedUrl = clone $url;
+
+        $this->assertInstanceOf(UrlArchive::class, $clonedUrl);
+        $this->assertEquals('http://foobar.baz', $clonedUrl->buildUrl());
+    }
+
+    /**
+     * @dataProvider RFC3986ResolveDataProvider
+     */
+    public function testRFC3986Resolve($relUri, $mustResolved)
+    {
+        $url = Url::fromString('http://a/b/c/d;p?q');
+        $this->assertEquals($mustResolved, $url->resolveAsString($relUri));
+    }
+
+    public function RFC3986ResolveDataProvider()
+    {
+        return [
+            ['https:'        ,  'https:'],
+            // Examples from https://tools.ietf.org/html/rfc3986#section-5.4.1
+            ['g'             ,  'http://a/b/c/g'],
+            ['./g'           ,  'http://a/b/c/g'],
+            ['g/'            ,  'http://a/b/c/g/'],
+            ['/g'            ,  'http://a/g'],
+            ['//g'           ,  'http://g'],
+            ['?y'            ,  'http://a/b/c/d;p?y'],
+            ['g?y'           ,  'http://a/b/c/g?y'],
+            ['#s'            ,  'http://a/b/c/d;p?q#s'],
+            ['g#s'           ,  'http://a/b/c/g#s'],
+            ['g?y#s'         ,  'http://a/b/c/g?y#s'],
+            [';x'            ,  'http://a/b/c/;x'],
+            ['g;x'           ,  'http://a/b/c/g;x'],
+            ['g;x?y#s'       ,  'http://a/b/c/g;x?y#s'],
+            [''              ,  'http://a/b/c/d;p?q'],
+            ['.'             ,  'http://a/b/c/'],
+            ['./'            ,  'http://a/b/c/'],
+            ['..'            ,  'http://a/b/'],
+            ['../'           ,  'http://a/b/'],
+            ['../g'          ,  'http://a/b/g'],
+            ['../..'         ,  'http://a/'],
+            ['../../'        ,  'http://a/'],
+            ['../../g'       ,  'http://a/g'],
+            // Examples from https://tools.ietf.org/html/rfc3986#section-5.4.2
+            ['../../../g'    ,  'http://a/g'],
+            ['../../../../g' ,  'http://a/g'],
+            ['/./g'          ,  'http://a/g'],
+            ['/../g'         ,  'http://a/g'],
+            ['g.'            ,  'http://a/b/c/g.'],
+            ['.g'            ,  'http://a/b/c/.g'],
+            ['g..'           ,  'http://a/b/c/g..'],
+            ['..g'           ,  'http://a/b/c/..g'],
+            ['./../g'        ,  'http://a/b/g'],
+            ['./g/.'         ,  'http://a/b/c/g/'],
+            ['g/./h'         ,  'http://a/b/c/g/h'],
+            ['g/../h'        ,  'http://a/b/c/h'],
+            ['g;x=1/./y'     ,  'http://a/b/c/g;x=1/y'],
+            ['g;x=1/../y'    ,  'http://a/b/c/y'],
+            ['g?y/./x'       ,  'http://a/b/c/g?y/./x'],
+            ['g?y/../x'      ,  'http://a/b/c/g?y/../x'],
+            ['g#s/./x'       ,  'http://a/b/c/g#s/./x'],
+            ['g#s/../x'      ,  'http://a/b/c/g#s/../x'],
+        ];
     }
 }
