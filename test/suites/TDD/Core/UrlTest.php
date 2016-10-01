@@ -259,6 +259,16 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('https://bar', $newUrl);
     }
 
+    public function testParseParams()
+    {
+        $url = Url::fromString('https://foo/bar?qux=baz&foo=bar&baz=foobar');
+        $this->assertEquals('baz', $url->getParamValue('qux'));
+        $this->assertEquals('bar', $url->getParamValue('foo'));
+        $this->assertEquals('foobar', $url->getParamValue('baz'));
+        $this->assertCount(3, $url->getParams());
+    }
+
+
     public function testResolveAsBadType()
     {
         $url = Url::fromString('https://foo/bar?qux=baz');

@@ -101,7 +101,7 @@ trait UrlArchiveTrait
         $data = [];
         $strParts = explode('&', $str);
         foreach ($strParts as $part) {
-            $subParts = explode('=', $part, 1);
+            $subParts = explode('=', $part, 2);
             $data[$subParts[0]] = isset($subParts[1]) ? $subParts[1] : null;
         }
         return $data;
