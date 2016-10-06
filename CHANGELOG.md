@@ -14,7 +14,6 @@
     * url resolution is now compatible with rfc3986
     * query params now accept empty value [7233b7d1b67ed2a061746c210171b121ac931bb9](https://github.com/serp-spider/core/commit/7233b7d1b67ed2a061746c210171b121ac931bb9#diff-ea6d1c5de04976abd5f773367a57da23R79)
     * fix a bug with query params that are number only [#25](https://github.com/serp-spider/core/pull/25) 
-  
-  * fix a bug concerning parsing of cookie expiration time [#13](https://github.com/serp-spider/core/pull/13)
+  * cookie expiration time was not on the same standard everywhere [#13](https://github.com/serp-spider/core/pull/13)
 
 ------------------
