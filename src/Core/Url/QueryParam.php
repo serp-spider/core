@@ -78,7 +78,7 @@ class QueryParam
     {
         $value = $this->getValue();
         if (null === $value || strlen($value) == 0) {
-            return $this->getName();
+            return (string) $this->getName();
         }
         return $this->getName() . '=' . $this->getValue();
     }

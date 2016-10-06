@@ -69,4 +69,13 @@ class QueryParamTest extends \PHPUnit_Framework_TestCase
         $queryParamRaw = new QueryParam('foo', 'foo bar', true);
         $this->assertEquals($queryParamRaw->generate(), (string)$queryParamRaw);
     }
+
+    /**
+     * https://github.com/serp-spider/core/pull/25
+     */
+    public function testToStringWithNullValueAndNumericName()
+    {
+        $queryParamRaw = new QueryParam(14, null, true);
+        $this->assertEquals('14', (string) $queryParamRaw);
+    }
 }
