@@ -32,6 +32,18 @@ class WebPage extends DocumentWrapper
         return $this->url;
     }
 
+    /**
+     * Get data from a given html form. Form data can be fill with given data
+     *
+     * @param \DOMElement $formNode the form DOMElement
+     * @param array $formData optional data to replace the default data from the html
+     * @param bool $strict by default the data returned will we be processed from form element inputs and
+     * given data that are not present as an input in the form will be ignored. Pass this argument to false in order
+     * to return all data from the original data
+     * @param bool $submit by default this method will search for the first submit and get data from it (if the
+     * submit is named)
+     * @return array
+     */
     public function formGetData(\DOMElement $formNode, array $formData = [], $strict = true, $submit = true)
     {
 
@@ -117,9 +129,14 @@ class WebPage extends DocumentWrapper
     }
 
     /**
+     * Build a request from the given form. The form data, the form method and action will be considered
      * @param \DOMElement $formNode
-     * @param array $formData
-     * @param RequestInterface|null $request
+     * @param array $formData @see formGetData
+     * @param bool $strict @see formGetData
+     * @param bool $submit @see formGetData
+     * @param RequestInterface|null $request an optional request instance to fill with the form preset.
+     * If this parameter is omitted the method will try to find a request builder
+     * from zendframework/zend-diactoros or guzzlehttp/psr7
      * @return RequestInterface
      */
     public function requestFromForm(
@@ -145,6 +162,7 @@ class WebPage extends DocumentWrapper
             }
         }
 
+        /* @var RequestInterface $request */
 
 
         $formAction = $formNode->getAttribute('action');
