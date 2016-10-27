@@ -11,6 +11,7 @@ use Serps\Core\Dom\DomNodeList;
 /**
  * @covers Serps\Core\Dom\DocumentWrapper
  * @covers Serps\Core\Dom\DomNodeList
+ * @covers Serps\Core\Dom\DomXpath
  */
 class DocumentWrapperTest extends \PHPUnit_Framework_TestCase
 {
