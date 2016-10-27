@@ -32,46 +32,11 @@ class WebPage extends DocumentWrapper
         return $this->url;
     }
 
-    /**
-     * @param \DOMElement $formNode
-     * @param array $formData
-     * @param RequestInterface|null $request
-     * @return RequestInterface
-     */
-    public function requestFromForm(\DOMElement $formNode, array $formData = [], RequestInterface $request = null)
+    public function formGetData(\DOMElement $formNode, array $formData = [], $strict = true, $submit = true)
     {
 
-        if (null == $request) {
-            if (class_exists('Zend\Diactoros\Request')) {
-                $request = new \Zend\Diactoros\Request();
-            } elseif (class_exists('GuzzleHttp\Psr7\Request')) {
-                $request = new \GuzzleHttp\Psr7\Request();
-            } else {
-                throw new \InvalidArgumentException(
-                    'No request to fill for the form. '
-                    . 'Please provide a RequestInterface instance or make one of these package available: '
-                    . '[zendframework/zend-diactoros, guzzlehttp/psr7]'
-                );
-            }
-        }
-
-
-
-        $formAction = $formNode->getAttribute('action');
-        if (!$formAction) {
-            $formAction = '';
-        }
-        $formUrl = $this->getUrl()->resolve($formAction);
-
-        $method = $formNode->getAttribute('method');
-        if (!$method) {
-            $method = 'get';
-        }
-
         $items = $this->xpathQuery('(//input | //textarea | //select)', $formNode);
-
         $consumed = [];
-
         $queryItems = [];
 
 
@@ -101,12 +66,101 @@ class WebPage extends DocumentWrapper
             }
         }
 
-        foreach ($formData as $queryName => $queryValue) {
-            if (!in_array($queryName, $consumed)) {
-                $queryItems[] = http_build_query([$queryName => $queryValue]);
+        if (!$strict) {
+            foreach ($formData as $queryName => $queryValue) {
+                if (!in_array($queryName, $consumed)) {
+                    $queryItems[] = http_build_query([$queryName => $queryValue]);
+                }
             }
         }
 
+        if (true === $submit) {
+            // when the submit button is pressed, and if the submit has a name, it will add an item in the query string
+            $items = $this->cssQuery('input[type="submit"], button', $formNode);
+
+            foreach ($items as $item) {
+                if ($item->hasAttribute('disabled')) {
+                    continue;
+                }
+                $name = $item->hasAttribute('name') ? $item->getAttribute('name') : false;
+
+                if ($item->tagName == 'input') {
+                    if (!$name) {
+                        break;
+                    }
+                    $value = $item->hasAttribute('value')
+                        ? $item->getAttribute('value')
+                        : 'Submit'; // chrome uses "Submit" as default value
+                    $queryItems[] = http_build_query([$name => $value]);
+                    break;
+                } else {
+                    if ($item->hasAttribute('type')
+                        && in_array($item->getAttribute('type'), ['button', 'reset'])
+                    ) {
+                    // buttons with type = 'reset' or 'button' are not valid to submit the form
+                        continue;
+                    } else {
+                        if (!$name) {
+                            break;
+                        }
+                        $value = $item->hasAttribute('value')
+                            ? $item->getAttribute('value')
+                            : '';
+                        $queryItems[] = http_build_query([$name => $value]);
+                        break;
+                    }
+                }
+            }
+        }
+
+        return $queryItems;
+    }
+
+    /**
+     * @param \DOMElement $formNode
+     * @param array $formData
+     * @param RequestInterface|null $request
+     * @return RequestInterface
+     */
+    public function requestFromForm(
+        \DOMElement $formNode,
+        array $formData = [],
+        $strict = true,
+        $submit = true,
+        RequestInterface $request = null
+    ) {
+
+
+        if (null == $request) {
+            if (class_exists('Zend\Diactoros\Request')) {
+                $request = new \Zend\Diactoros\Request();
+            } elseif (class_exists('GuzzleHttp\Psr7\Request')) {
+                $request = new \GuzzleHttp\Psr7\Request();
+            } else {
+                throw new \InvalidArgumentException(
+                    'No request to fill for the form. '
+                    . 'Please provide a RequestInterface instance or make one of these package available: '
+                    . '[zendframework/zend-diactoros, guzzlehttp/psr7]'
+                );
+            }
+        }
+
+
+
+        $formAction = $formNode->getAttribute('action');
+        if (!$formAction) {
+            $formAction = '';
+        }
+        $formUrl = $this->getUrl()->resolve($formAction);
+
+        $method = $formNode->getAttribute('method');
+        if (!$method) {
+            $method = 'get';
+        } else {
+            $method = strtolower($method);
+        }
+
+        $queryItems = $this->formGetData($formNode, $formData, $strict, $submit);
 
         $url = $request->getUri()
             ->withScheme($this->nullToEmpty($formUrl->getScheme()))
@@ -153,7 +207,7 @@ class WebPage extends DocumentWrapper
                 // TODO ?
                 break;
             case 'submit':
-                // TODO
+                // Submit are not parsed they are processed after because only 1 submit will be used
                 break;
             case 'radio':
             case 'checkbox':
