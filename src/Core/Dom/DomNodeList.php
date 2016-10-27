@@ -6,7 +6,6 @@
 namespace Serps\Core\Dom;
 
 use DOMNodeList as BaseDomNodeList;
-use Serps\Core\Dom\NodeOverride\QueryableDomElement;
 
 /**
  * @property int $length
@@ -29,11 +28,6 @@ class DomNodeList implements \Countable, \Iterator
 
     public function item($index)
     {
-
-        $item = $this->nodeList->item($index);
-        if ($item instanceof QueryableDomElement) {
-        }
-
         return $this->nodeList->item($index);
     }
 
