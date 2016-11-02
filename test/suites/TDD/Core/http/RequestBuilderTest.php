@@ -13,7 +13,7 @@ use Zend\Diactoros\Request as DiactorosRequest;
 use GuzzleHttp\Psr7\Request as GuzzleRequest;
 
 /**
- * @covers Serps\Core\Http\RequestBuilder
+ * @covers Serps\Core\Psr7\RequestBuilder
  */
 class RequestBuilderTest extends \PHPUnit_Framework_TestCase
 {
