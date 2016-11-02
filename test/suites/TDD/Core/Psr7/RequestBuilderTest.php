@@ -3,7 +3,7 @@
  * @license see LICENSE
  */
 
-namespace Serps\Test\Core\Http\Proxy;
+namespace Serps\Test\Core\Psr7\Proxy;
 
 use Psr\Http\Message\RequestInterface;
 use Serps\Core\Psr7\RequestBuilder;
