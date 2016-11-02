@@ -36,7 +36,7 @@ EOF;
         $request = $webpage->requestFromForm($form);
 
         $this->assertEquals('http://example.com?foo=bar&bar', (string) $request->getUri());
-        $this->assertEquals('get', (string) $request->getMethod());
+        $this->assertEquals('get', strtolower($request->getMethod()));
     }
 
     public function testFormPost()
@@ -58,7 +58,7 @@ EOF;
 
         $this->assertEquals('http://example.com', (string) $request->getUri());
         $this->assertEquals('foo=bar', (string) $request->getBody());
-        $this->assertEquals('post', (string) $request->getMethod());
+        $this->assertEquals('post', strtolower($request->getMethod()));
     }
 
     public function testParseSelect()
