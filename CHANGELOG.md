@@ -21,7 +21,7 @@
 * Additions
   * Css parser was moved from google package to core [2f7d022d6da4905519a02d65c2f262aefc8b6bbf](https://github.com/serp-spider/core/commit/2f7d022d6da4905519a02d65c2f262aefc8b6bbf)
   * ``Dom`` component that offers better parsing of the dom (replacement for the ``googleDom`` class from google package)
-
+  * ``RequestBuilder`` class that allows to construct PSR7 request from installed packages (``zendframework/zend-diactoros`` or ``guzzlehttp/psr7``)
 
 
 ------------------

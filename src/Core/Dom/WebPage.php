@@ -7,6 +7,7 @@ namespace Serps\Core\Dom;
 
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\UriInterface;
+use Serps\Core\Psr7\RequestBuilder;
 use Serps\Core\Url\UrlArchiveInterface;
 
 class WebPage extends DocumentWrapper
@@ -149,20 +150,9 @@ class WebPage extends DocumentWrapper
 
 
         if (null == $request) {
-            if (class_exists('Zend\Diactoros\Request')) {
-                $request = new \Zend\Diactoros\Request();
-            } elseif (class_exists('GuzzleHttp\Psr7\Request')) {
-                $request = new \GuzzleHttp\Psr7\Request();
-            } else {
-                throw new \InvalidArgumentException(
-                    'No request to fill for the form. '
-                    . 'Please provide a RequestInterface instance or make one of these package available: '
-                    . '[zendframework/zend-diactoros, guzzlehttp/psr7]'
-                );
-            }
+            $request = RequestBuilder::buildRequest();
         }
 
-        /* @var RequestInterface $request */
 
 
         $formAction = $formNode->getAttribute('action');
