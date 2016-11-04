@@ -12,17 +12,20 @@ use Zend\Diactoros\Stream;
 use Zend\Diactoros\Request as DiactorosRequest;
 use GuzzleHttp\Psr7\Request as GuzzleRequest;
 
-/**
- * @covers Serps\Core\Psr7\RequestBuilder
- */
 class RequestBuilderTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
      * @dataProvider requestProvider
      */
-    public function testBuildRequest(RequestInterface $testedRequest, RequestInterface $expectedRequest, $expectedClass)
+    public function testBuildEmptyRequestRequest($builder, $expectedClass, $url = null, $method = null, $headers = [], $body = null)
     {
+        $body = new Stream('php://temp', 'r+');
+        $body->write($body ? $body : '');
+        $expectedRequest = new DiactorosRequest($url, $method ? $method : 'GET', $body, $headers);
+
+        $testedRequest = $builder->invokeArgs(null, [$url, $method, $headers, $body]);
+
         $this->assertInstanceOf($expectedClass, $testedRequest);
         $this->assertEquals($expectedRequest->getMethod(), $testedRequest->getMethod());
         $this->assertEquals((string) $expectedRequest->getUri(), (string) $testedRequest->getUri());
@@ -42,27 +45,22 @@ class RequestBuilderTest extends \PHPUnit_Framework_TestCase
         return $method;
     }
 
+
     public function requestProvider()
     {
-
-        $emptyRequest = new DiactorosRequest('', 'GET');
-
-        $postBody = new Stream('php://temp', 'r+');
-        $postBody->write('a=b&c=d');
-        $postRequest = new DiactorosRequest('http://example.com', 'POST', $postBody, ['User-Agent' => 'foobar']);
-
         $diactorosBuilder = $this->getBuilderMethod('requestFromZendDiactoros');
         $guzzlebuilder    = $this->getBuilderMethod('requestFromGuzzlePSR7');
+        $globalBuilder    = $this->getBuilderMethod('buildRequest');
 
 
         return [
-            [RequestBuilder::buildRequest(), $emptyRequest, DiactorosRequest::class],
-            [$guzzlebuilder->invokeArgs(null, []), $emptyRequest, GuzzleRequest::class],
-            [$diactorosBuilder->invokeArgs(null, []), $emptyRequest, DiactorosRequest::class],
+            [$globalBuilder, DiactorosRequest::class],
+            [$guzzlebuilder, GuzzleRequest::class],
+            [$diactorosBuilder, DiactorosRequest::class],
 
-            [RequestBuilder::buildRequest('http://example.com', 'POST', ['User-Agent' => 'foobar'], 'a=b&c=d'), $postRequest, DiactorosRequest::class],
-            [$guzzlebuilder->invokeArgs(null, ['http://example.com', 'POST', ['User-Agent' => 'foobar'], 'a=b&c=d']), $postRequest, GuzzleRequest::class],
-            [$diactorosBuilder->invokeArgs(null, ['http://example.com', 'POST', ['User-Agent' => 'foobar'], 'a=b&c=d']), $postRequest, DiactorosRequest::class],
+            [$globalBuilder, DiactorosRequest::class, 'http://example.com', 'POST', ['User-Agent' => 'foobar'], 'a=b&c=d'],
+            [$guzzlebuilder, GuzzleRequest::class, 'http://example.com', 'POST', ['User-Agent' => 'foobar'], 'a=b&c=d'],
+            [$diactorosBuilder, DiactorosRequest::class, 'http://example.com', 'POST', ['User-Agent' => 'foobar'], 'a=b&c=d']
         ];
     }
 }
