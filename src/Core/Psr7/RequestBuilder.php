@@ -5,6 +5,7 @@
 
 namespace Serps\Core\Psr7;
 
+use Psr\Http\Message\RequestInterface;
 use Serps\Exception;
 use Zend\Diactoros\Request as ZendDiactorosRequest;
 use GuzzleHttp\Psr7\Request as GuzzlePsr7Request;
@@ -14,6 +15,14 @@ class RequestBuilder
 {
 
 
+    /**
+     * @param $url
+     * @param $method
+     * @param $headers
+     * @param $body
+     * @return RequestInterface
+     * @throws Exception
+     */
     public static function buildRequest($url = null, $method = null, $headers = null, $body = null)
     {
         if (class_exists(ZendDiactorosRequest::class)) {
@@ -24,7 +33,7 @@ class RequestBuilder
             throw new Exception(
                 'No PSR-7 implementation was found. '
                 . 'Please make one of these package available: '
-                . '[zendframework/zend-diactoros, guzzlehttp/psr7]'
+                . '"zendframework/zend-diactoros" or "guzzlehttp/psr7"'
             );
         }
 

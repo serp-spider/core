@@ -1,6 +1,6 @@
 <phpunit bootstrap="vendor/autoload.php"
          backupGlobals="false"
-         forceCoversAnnotation="true"
+         forceCoversAnnotation="false"
          backupStaticAttributes="false"
          colors="true"
          verbose="true"
@@ -32,7 +32,7 @@
     <logging>
         <log type="coverage-html" target="build/logs/html" lowUpperBound="35" highLowerBound="70"/>
         <log type="coverage-clover" target="build/logs/clover.xml"/>
-        <log type="coverage-text" target="php://stdout" showUncoveredFiles="false"/>
+        <log type="coverage-text" target="php://stdout" showUncoveredFiles="true"/>
     </logging>
 
 </phpunit>
