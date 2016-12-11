@@ -33,7 +33,7 @@ class RequestBuilder
             throw new Exception(
                 'No PSR-7 implementation was found. '
                 . 'Please make one of these package available: '
-                . '[zendframework/zend-diactoros, guzzlehttp/psr7]'
+                . '"zendframework/zend-diactoros" or "guzzlehttp/psr7"'
             );
         }
 

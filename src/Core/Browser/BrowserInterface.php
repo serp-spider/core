@@ -13,7 +13,7 @@ use Serps\Core\Url\UrlArchiveInterface;
 /**
  * A browser instance centralizes information for requests: user agent, accept language header, cookies and  proxy
  *
- * the class the class Serps\Core\Browser\AbstractBrowser helps to implement this interface
+ * the class Serps\Core\Browser\AbstractBrowser helps to implement this interface
  *
  * @see Serps\Core\Browser\AbstractBrowser
  */
