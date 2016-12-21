@@ -203,9 +203,11 @@ trait UrlArchiveTrait
      */
     public function resolve($url, $as = null)
     {
-        if (!preg_match('#^[a-zA-Z]+://#', $url)) {
+        if (empty($url)) {
+            $url = (string) $this;
+        } elseif (!preg_match('#^[a-zA-Z]+://#', $url)) {
             if ('/' == $url{0}) {
-                if ('/' == $url{1}) {
+                if (isset($url{1}) && '/' == $url{1}) {
                     $url = $this->getScheme() . ':' . $url;
                 } else {
                     $url = $this->getScheme() . '://' . $this->getHost()  . $url;

@@ -162,4 +162,21 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException(\InvalidArgumentException::class);
         $url->resolve('//bar', Cookie::class);
     }
+
+    /**
+     * From #27
+     * @link https://github.com/serp-spider/core/issues/27
+     */
+    public function testResolveRelative()
+    {
+        $url = Url::fromString('https://foo/bar?qux=baz');
+
+        // single slash
+        $newUrl = $url->resolve('/', 'string');
+        $this->assertEquals('https://foo/', $newUrl);
+
+        // empty
+        $newUrl = $url->resolve('', 'string');
+        $this->assertEquals('https://foo/bar?qux=baz', $newUrl);
+    }
 }
