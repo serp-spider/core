@@ -43,7 +43,7 @@ The following usage is only a short example, you can [check the full documentati
         $results = $googleSerp->getNaturalResults();
         
         foreach($results as $result){
-            $resultType = $result->getType();
+            $resultTypes = $result->getTypes();
             $resultPosition = $result->getPosition();
             // an array of data depending on the result type
             $resultData = $result->getData(); 
