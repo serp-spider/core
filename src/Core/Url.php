@@ -12,4 +12,26 @@ use Serps\Core\Url\QueryParam;
 class Url implements AlterableUrlInterface
 {
     use AlterableUrlTrait;
+
+    public function __construct(
+        $scheme = null,
+        $host = null,
+        $path = null,
+        array $query = [],
+        $hash = null,
+        $port = null,
+        $user = null,
+        $pass = null
+    ) {
+        $this->initWithDefaults(
+            $scheme,
+            $host,
+            $path,
+            $query,
+            $hash,
+            $port,
+            $user,
+            $pass
+        );
+    }
 }

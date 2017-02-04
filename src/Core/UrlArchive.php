@@ -10,4 +10,26 @@ use Serps\Core\Url;
 class UrlArchive implements Url\UrlArchiveInterface
 {
     use Url\UrlArchiveTrait;
+
+    public function __construct(
+        $scheme = null,
+        $host = null,
+        $path = null,
+        array $query = [],
+        $hash = null,
+        $port = null,
+        $user = null,
+        $pass = null
+    ) {
+        $this->initWithDefaults(
+            $scheme,
+            $host,
+            $path,
+            $query,
+            $hash,
+            $port,
+            $user,
+            $pass
+        );
+    }
 }

@@ -34,7 +34,8 @@ trait UrlArchiveTrait
     protected $pass;
     protected $port;
 
-    public function __construct(
+
+    private function initWithDefaults(
         $scheme = null,
         $host = null,
         $path = null,
@@ -66,6 +67,7 @@ trait UrlArchiveTrait
             }
         }
     }
+
 
     /**
      * @inheritdoc
