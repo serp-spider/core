@@ -12,9 +12,13 @@ use Serps\Core\UrlArchive;
 
 /**
  * This trait offers implementation for @see UrlArchiveInterface
+ * @method static build($scheme, $host, $path=null, array $query=[], $hash = null, $port = null, $user = null, $pass)
  */
 trait UrlArchiveTrait
 {
+
+    // info: build static method is declared in docblock instead of as a abstract static method,
+    // because before php7 it was considered as an error to have an abstract static method in a trait
 
     protected $hash;
     protected $path;
@@ -67,33 +71,6 @@ trait UrlArchiveTrait
             }
         }
     }
-
-
-    /**
-     * @inheritdoc
-     */
-    public static function build(
-        $scheme = null,
-        $host = null,
-        $path = null,
-        array $query = [],
-        $hash = null,
-        $port = null,
-        $user = null,
-        $pass = null
-    ) {
-        return new static(
-            $scheme,
-            $host,
-            $path,
-            $query,
-            $hash,
-            $port,
-            $user,
-            $pass
-        );
-    }
-
 
     /**
      * Alternative to the builtin parse_str php function that will replace periods with underscores

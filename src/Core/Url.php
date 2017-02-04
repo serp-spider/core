@@ -34,4 +34,29 @@ class Url implements AlterableUrlInterface
             $pass
         );
     }
+
+    /**
+     * @inheritdoc
+     */
+    public static function build(
+        $scheme = null,
+        $host = null,
+        $path = null,
+        array $query = [],
+        $hash = null,
+        $port = null,
+        $user = null,
+        $pass = null
+    ) {
+        return new static(
+            $scheme,
+            $host,
+            $path,
+            $query,
+            $hash,
+            $port,
+            $user,
+            $pass
+        );
+    }
 }
