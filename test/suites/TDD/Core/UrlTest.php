@@ -380,4 +380,57 @@ class UrlTest extends \PHPUnit_Framework_TestCase
             ['g#s/../x'      ,  'http://a/b/c/g#s/../x'],
         ];
     }
+
+    /**
+     * @dataProvider queryParamDataProvider
+     */
+    public function testParseStr($toParse, $expected)
+    {
+        $actual = UrlArchive::parseStr($toParse);
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function queryParamDataProvider()
+    {
+        return [
+            ['foo=bar', ['foo' => 'bar']],
+            ['foo=foo.bar', ['foo' => 'foo.bar']],
+            ['foo=foo.bar[]', ['foo' => 'foo.bar[]']],
+            ['foo[]=bar', ['foo' => ['bar']]],
+            ['foo.bar', ['foo.bar' => '']],
+            ['foo.bar[]', ['foo.bar' => ['']]],
+            ['foo bar', ['foo bar' => '']],
+            ['foo%20bar', ['foo bar' => '']],
+            ['foo%20bar[]', ['foo bar' => ['']]],
+            ['foo[foo.bar]=bar', ['foo' => ['foo.bar' => 'bar']]],
+            ['foo[foo%20bar]=bar', ['foo' => ['foo bar' => 'bar']]],
+
+            // Cases with replacement
+            ['foo=bar&foo=qux', ['foo' => 'qux']],
+            ['foo bar=bar&foo bar=qux', ['foo bar' => 'qux']],
+            ['foo bar[]=bar&foo bar[]=qux', ['foo bar' => ['bar', 'qux']]],
+
+            // Complex cases
+            ['foo.bar=blarg1&foo_bar=blarg2&foo%20bar=blarg3', ['foo.bar' => 'blarg1', 'foo_bar' => 'blarg2', 'foo bar' => 'blarg3']],
+
+            [
+                'foo%20bar=blarg&foo[bar][blarg.bar]=bar&foo.bar=blarg&foobar.blarg[]=bar&blarg.foo&blargfoo.bar[asdf]=w00t&normal=normal',
+                [
+                    'foo bar' => 'blarg',
+                    'foo' => [
+                        'bar' => [
+                            'blarg.bar' => 'bar',
+                        ],
+                    ],
+                    'foo.bar' => 'blarg',
+                    'foobar.blarg' => ['bar'],
+                    'blarg.foo' => null,
+                    'blargfoo.bar' => [
+                        'asdf' => 'w00t',
+                    ],
+                    'normal' => 'normal',
+                ]
+            ],
+        ];
+    }
 }

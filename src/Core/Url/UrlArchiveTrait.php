@@ -74,16 +74,55 @@ trait UrlArchiveTrait
 
     /**
      * Alternative to the builtin parse_str php function that will replace periods with underscores
+     *
+     * Inspired by @elyobo solution (see link)
+     *
+     * @link https://gist.github.com/elyobo/6200838
      */
-    protected static function parseStr($str)
+    public static function parseStr($str)
     {
-        $data = [];
-        $strParts = explode('&', $str);
-        foreach ($strParts as $part) {
-            $subParts = explode('=', $part, 2);
-            $data[$subParts[0]] = isset($subParts[1]) ? urldecode($subParts[1]) : null;
+
+        if (!$str) {
+            return [];
         }
-        return $data;
+
+        $foundKeys = [];
+        $finalKeys = [];
+
+
+        $source = preg_replace_callback(
+            '/                                                                  
+            # Match at start of string or &                                     
+            (?:^|(?<=&))                                                        
+            # Exclude cases where the period is in brackets, e.g. foo[bar.blarg]
+            [^=&\[]*                                                            
+            # Affected cases: periods and spaces                                
+            (?:\.|%20| )                                                          
+            # Keep matching until assignment, next variable, end of string or   
+            # start of an array                                                 
+            [^=&\[]*                                                            
+            /x',
+            function ($key) use (&$foundKeys) {
+                $foundKeys[] = $key = base64_encode(urldecode($key[0]));
+                return urlencode($key);
+            },
+            $str
+        );
+
+        parse_str($source, $data);
+
+        foreach ($data as $key => $val) {
+            // Only unprocess encoded keys
+
+            if (!in_array($key, $foundKeys)) {
+                $finalKeys[$key] = $val;
+            } else {
+                $key = base64_decode($key);
+                $finalKeys[$key] = $val;
+            }
+        }
+
+        return $finalKeys;
     }
 
     /**
