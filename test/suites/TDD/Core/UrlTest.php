@@ -284,6 +284,29 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     }
 
 
+    /**
+     * @issue https://github.com/serp-spider/core/issues/23
+     */
+    public function testFromStringWithQueryArray()
+    {
+        $url = Url::fromString('https://foo/bar?qux=baz&foo[]=bar&foo[]=foo+bar');
+
+        $params = $url->getParams();
+        $arrayParams = [];
+        foreach ($params as $p) {
+            $arrayParams[$p->getName()] = $p->getValue();
+        }
+
+        $this->assertEquals(
+            [
+                'qux' => 'baz',
+                'foo' => ['bar', 'foo bar']
+            ],
+            $arrayParams
+        );
+    }
+
+
     public function testResolveAsBadType()
     {
         $url = Url::fromString('https://foo/bar?qux=baz');

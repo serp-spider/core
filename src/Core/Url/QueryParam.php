@@ -51,7 +51,11 @@ class QueryParam
     public function getValue()
     {
         if (!$this->isRaw()) {
-            return urlencode($this->value);
+            if (is_string($this->value)) {
+                return urlencode($this->value);
+            } else {
+                return $this->value;
+            }
         }
         return $this->value;
     }
