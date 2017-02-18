@@ -91,16 +91,16 @@ trait UrlArchiveTrait
 
 
         $source = preg_replace_callback(
-            '/                                                                  
-            # Match at start of string or &                                     
-            (?:^|(?<=&))                                                        
+            '/
+            # Match at start of string or &
+            (?:^|(?<=&))
             # Exclude cases where the period is in brackets, e.g. foo[bar.blarg]
-            [^=&\[]*                                                            
-            # Affected cases: periods and spaces                                
-            (?:\.|%20| )                                                          
-            # Keep matching until assignment, next variable, end of string or   
-            # start of an array                                                 
-            [^=&\[]*                                                            
+            [^=&\[]*
+            # Affected cases: periods and spaces
+            (?:\.|%20| )
+            # Keep matching until assignment, next variable, end of string or
+            # start of an array
+            [^=&\[]*
             /x',
             function ($key) use (&$foundKeys) {
                 $foundKeys[] = $key = base64_encode(urldecode($key[0]));
