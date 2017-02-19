@@ -92,7 +92,7 @@ class QueryParam
             }
         } elseif (is_array($value)) {
             if (empty($value)) {
-                return $this->getName() . '[]';
+                return $this->getName();
             } else {
                 return $this->arrayToStringRecursive($this->getName(), $value);
             }

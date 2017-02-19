@@ -78,8 +78,13 @@ class QueryParamTest extends \PHPUnit_Framework_TestCase
 
     public function testArrayValue()
     {
+
         $queryParam = new QueryParam('foo', ['foo', 'foo bar', 'foo' => 'bar', 'qux' => ['foobar', 'quxbar']]);
         $this->assertEquals(['foo', 'foo bar', 'foo' => 'bar', 'qux' => ['foobar', 'quxbar']], $queryParam->getValue());
         $this->assertEquals('foo[0]=foo&foo[1]=foo+bar&foo[foo]=bar&foo[qux][0]=foobar&foo[qux][1]=quxbar', $queryParam->generate());
+
+        $queryParam = new QueryParam('foo', []);
+        $this->assertEquals([], $queryParam->getValue());
+        $this->assertEquals('foo', $queryParam->generate());
     }
 }
