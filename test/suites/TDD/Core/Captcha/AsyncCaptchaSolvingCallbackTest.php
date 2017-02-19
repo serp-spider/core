@@ -49,13 +49,13 @@ class AsyncCaptchaSolvingCallbackTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(0, $count->count);
 
-        $this->assertEquals(false, $asyncSolving->tryFor(1, 1000));
+        $this->assertEquals(false, $asyncSolving->tryFor(0.05, 0.06));
         $this->assertEquals(1, $count->count);
-        $this->assertEquals(true, $asyncSolving->tryFor(10, 50));
+        $this->assertEquals(true, $asyncSolving->tryFor(10, 0.05));
         $this->assertEquals(3, $count->count);
 
         // Cached
-        $this->assertEquals(true, $asyncSolving->tryFor(1, 1000));
+        $this->assertEquals(true, $asyncSolving->tryFor(1, 0.5));
         $this->assertEquals(3, $count->count);
     }
 }

@@ -38,7 +38,7 @@ class AsyncCaptchaSolvingCallback implements AsyncCaptchaSolvingInterface
     /**
      * try to get the captcha for the given time
      * @param int $time max time to wait in second
-     * @param int $interval interval between 2 test in micro second
+     * @param int $interval interval between 2 test in second
      * @return null|mixed
      */
     public function tryFor($time, $interval = null)
@@ -46,12 +46,12 @@ class AsyncCaptchaSolvingCallback implements AsyncCaptchaSolvingInterface
         if (null == $interval) {
             $interval = $this->tryForDefaultDelay;
         }
-        $tryUntil = microtime(true) + ($time / 1000);
+        $tryUntil = microtime(true) + $time;
         while ($tryUntil > microtime(true)) {
             if ($c = $this->getCaptcha()) {
                 return $c;
             }
-            usleep($interval);
+            usleep($interval * 1000000);
         }
         return null;
     }
