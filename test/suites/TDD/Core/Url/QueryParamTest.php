@@ -55,20 +55,17 @@ class QueryParamTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foo', $queryParam->getName());
     }
 
-    public function testGenerate()
+    public function testGenerateAndToString()
     {
         $queryParam = new QueryParam('foo', 'foo bar');
         $this->assertEquals('foo=foo+bar', $queryParam->generate());
+        $this->assertEquals($queryParam->generate(), (string)$queryParam);
 
         $queryParamRaw = new QueryParam('foo', 'foo bar', true);
         $this->assertEquals('foo=foo bar', $queryParamRaw->generate());
-    }
-
-    public function testToString()
-    {
-        $queryParamRaw = new QueryParam('foo', 'foo bar', true);
         $this->assertEquals($queryParamRaw->generate(), (string)$queryParamRaw);
     }
+
 
     /**
      * https://github.com/serp-spider/core/pull/25
@@ -77,5 +74,12 @@ class QueryParamTest extends \PHPUnit_Framework_TestCase
     {
         $queryParamRaw = new QueryParam(14, null, true);
         $this->assertEquals('14', (string) $queryParamRaw);
+    }
+
+    public function testArrayValue()
+    {
+        $queryParam = new QueryParam('foo', ['foo', 'foo bar', 'foo' => 'bar', 'qux' => ['foobar', 'quxbar']]);
+        $this->assertEquals(['foo', 'foo bar', 'foo' => 'bar', 'qux' => ['foobar', 'quxbar']], $queryParam->getValue());
+        $this->assertEquals('foo[0]=foo&foo[1]=foo+bar&foo[foo]=bar&foo[qux][0]=foobar&foo[qux][1]=quxbar', $queryParam->generate());
     }
 }

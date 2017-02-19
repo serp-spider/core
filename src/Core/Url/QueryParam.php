@@ -80,11 +80,43 @@ class QueryParam
      */
     public function generate()
     {
-        $value = $this->getValue();
-        if (null === $value || strlen($value) == 0) {
-            return (string) $this->getName();
+        return $this->queryItemToString($this->getValue());
+    }
+
+    private function queryItemToString($value)
+    {
+
+        if (is_string($value)) {
+            if (strlen($value) > 0) {
+                return $this->getName() . '=' . $value;
+            }
+        } elseif (is_array($value)) {
+            if (empty($value)) {
+                return $this->getName() . '[]';
+            } else {
+                return $this->arrayToStringRecursive($this->getName(), $value);
+            }
         }
-        return $this->getName() . '=' . $this->getValue();
+
+        return (string) $this->getName();
+    }
+
+    private function arrayToStringRecursive($currentKey, $dataArray)
+    {
+        $data = [];
+        foreach ($dataArray as $k => $v) {
+            $key = "${currentKey}[${k}]";
+            if (is_array($v)) {
+                $str = $this->arrayToStringRecursive($key, $v);
+            } else {
+                if (!$this->isRaw()) {
+                    $v = urlencode($v);
+                }
+                $str = $key . '=' . $v;
+            }
+            $data[] = $str;
+        }
+        return implode('&', $data);
     }
 
     public function __toString()
