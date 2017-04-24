@@ -13,16 +13,19 @@ This is a work in progress.
 Install
 -------
 
-Install it using composer: ``composer require serps/serps``
+Install it using composer: ``composer require serps/core``
 
 The base package does not include an http client. 
 We advice you to use our curl client: ``composer require serps/http-client-curl``
 
 
-Usage
------
+Example
+-------
 
-The following usage is only a short example, you can [check the full documentation](http://serp-spider.github.io/documentation/).
+The following example is only a short example of what you can do with serps.
+For further details you can [check the full documentation](http://serp-spider.github.io/documentation/).
+
+Note: This example requires the google package that you can install with  ``composer require serps/search-engine-google``.
 
 
 ```php
