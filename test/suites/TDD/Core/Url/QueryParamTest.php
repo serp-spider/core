@@ -66,6 +66,29 @@ class QueryParamTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($queryParamRaw->generate(), (string)$queryParamRaw);
     }
 
+    /**
+     * @link https://github.com/serp-spider/core/issues/30
+     */
+    public function testGenerateNumber()
+    {
+
+        $queryParam = new QueryParam('foo', 5);
+        $this->assertEquals('foo=5', $queryParam->generate());
+        $this->assertEquals($queryParam->generate(), (string)$queryParam);
+
+        $queryParam = new QueryParam('foo', 0);
+        $this->assertEquals('foo=0', $queryParam->generate());
+        $this->assertEquals($queryParam->generate(), (string)$queryParam);
+
+        $queryParam = new QueryParam('foo', -1);
+        $this->assertEquals('foo=-1', $queryParam->generate());
+        $this->assertEquals($queryParam->generate(), (string)$queryParam);
+
+        $queryParam = new QueryParam('foo', 5.5);
+        $this->assertEquals('foo=5.5', $queryParam->generate());
+        $this->assertEquals($queryParam->generate(), (string)$queryParam);
+    }
+
 
     /**
      * https://github.com/serp-spider/core/pull/25

@@ -75,7 +75,7 @@ class QueryParam
 
 
     /**
-     * Generate the paramatere to be appended to the url
+     * Generate the parameter to be appended to the url
      * @return string the parameter on this format: ``name=value``
      */
     public function generate()
@@ -90,6 +90,8 @@ class QueryParam
             if (strlen($value) > 0) {
                 return $this->getName() . '=' . $value;
             }
+        } elseif (is_numeric($value)) {
+            return $this->getName() . '=' . $value;
         } elseif (is_array($value)) {
             if (empty($value)) {
                 return $this->getName();
