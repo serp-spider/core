@@ -25,10 +25,7 @@ class File extends AbstractMedia
 
     private function getFileContent()
     {
-        if (!file_exists($this->file)) {
-            return '';
-        }
-        return file_get_contents($this->file);
+        return @file_get_contents($this->file);
     }
 
     public function asString()
