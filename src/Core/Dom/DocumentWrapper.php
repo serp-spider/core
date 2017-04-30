@@ -40,11 +40,13 @@ class DocumentWrapper
         $this->dom->loadHTML($domString);
         libxml_use_internal_errors(false);
         libxml_clear_errors();
+
+        $this->dom->registerNodeClass(\DOMElement::class, DomElement::class);
     }
 
     /**
      * get the object xpath to query it
-     * @return \DOMXPath
+     * @return DomXpath
      */
     public function getXpath()
     {

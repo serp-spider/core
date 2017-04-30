@@ -48,9 +48,19 @@ class DomNodeList implements \Countable, \Iterator
         return false;
     }
 
+    /**
+     * @param $index
+     * @return DomNodeInterface
+     */
     public function item($index)
     {
-        return $this->nodeList->item($index);
+        $item = $this->nodeList->item($index);
+
+        if (!$item instanceof DomNodeInterface) {
+            return new OtherDomNode($item);
+        }
+
+        return $item;
     }
 
     public function __get($name)
