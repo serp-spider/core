@@ -26,6 +26,28 @@ class DomNodeList implements \Countable, \Iterator
         $this->documentWrapper = $doc;
     }
 
+    /**
+     * Check if at least one of the elements in the collection as the given class
+     * @param $className
+     * @return bool
+     */
+    public function hasClass($className)
+    {
+        foreach ($this->nodeList as $node) {
+            if ($node instanceof \DOMElement) {
+                $classes = $node->getAttribute('class');
+                if ($classes) {
+                    $classes = explode(' ', $classes);
+                    if (in_array($className, $classes)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
     public function item($index)
     {
         return $this->nodeList->item($index);
