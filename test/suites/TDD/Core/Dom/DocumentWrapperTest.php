@@ -62,5 +62,8 @@ class DocumentWrapperTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('b', $item->getAttribute('a'));
         $this->assertTrue($item->hasClass('foo'));
+
+
+        $this->assertNull($list->item(20));
     }
 }

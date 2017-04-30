@@ -56,6 +56,10 @@ class DomNodeList implements \Countable, \Iterator
     {
         $item = $this->nodeList->item($index);
 
+        if (!$item) {
+            return null;
+        }
+
         if (!$item instanceof DomNodeInterface) {
             return new OtherDomNode($item);
         }
