@@ -50,7 +50,7 @@ class DomNodeList implements \Countable, \Iterator
 
     /**
      * @param $index
-     * @return DomNodeInterface
+     * @return DomNodeInterface|null
      */
     public function item($index)
     {
@@ -58,6 +58,27 @@ class DomNodeList implements \Countable, \Iterator
 
         if (!$item) {
             return null;
+        }
+
+        if (!$item instanceof DomNodeInterface) {
+            return new OtherDomNode($item);
+        }
+
+        return $item;
+    }
+
+    /**
+     * This is almost the same as item() method but while item() might return null if an element does not exist this
+     * method will always return a valid object
+     * @param $index
+     * @return DomNodeInterface
+     */
+    public function getNodeAt($index)
+    {
+        $item = $this->nodeList->item($index);
+
+        if (!$item) {
+            return new NullDomNode();
         }
 
         if (!$item instanceof DomNodeInterface) {
