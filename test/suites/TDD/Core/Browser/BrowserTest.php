@@ -5,6 +5,8 @@
 
 namespace Serps\Test\Core\Browser;
 
+use Serps\Core\Cookie\ArrayCookieJar;
+use Serps\Core\Http\Proxy;
 use Serps\Core\Http\StackingHttpClient;
 use Serps\Core\Browser\Browser;
 use Serps\Core\Psr7\RequestBuilder;
@@ -89,5 +91,39 @@ class BrowserTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEquals('POST', strtoupper($httpClient->getStack()[0]->request->getMethod()));
         $this->assertEquals('a=b', (string) $httpClient->getStack()[0]->request->getBody());
+    }
+
+    public function testAccessors()
+    {
+
+        $userAgent= 'bar';
+        $language = 'foo';
+        $cookieJar = new ArrayCookieJar();
+        $proxy = Proxy::createFromString('localhost:80');
+
+        $browser = new Browser(new StackingHttpClient(), $userAgent, $language, $cookieJar, $proxy);
+
+        $this->assertEquals('foo', $browser->getAcceptLanguage());
+        $this->assertEquals('bar', $browser->getUserAgent());
+        $this->assertSame($cookieJar, $browser->getCookieJar());
+        $this->assertSame($proxy, $browser->getProxy());
+
+
+        $cookieJar2 = new ArrayCookieJar();
+        $proxy2 = Proxy::createFromString('localhost:90');
+        $browser->setAcceptLanguage('baz');
+        $browser->setUserAgent('qux');
+        $browser->setCookieJar($cookieJar2);
+        $browser->setProxy($proxy2);
+
+        $this->assertEquals('baz', $browser->getAcceptLanguage());
+        $this->assertEquals('qux', $browser->getUserAgent());
+        $this->assertSame($cookieJar2, $browser->getCookieJar());
+        $this->assertSame($proxy2, $browser->getProxy());
+
+        $browser->setCookieJar(null);
+        $browser->setProxy(null);
+        $this->assertNull($browser->getCookieJar());
+        $this->assertNull($browser->getProxy());
     }
 }

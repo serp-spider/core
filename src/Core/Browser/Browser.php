@@ -6,6 +6,7 @@
 namespace Serps\Core\Browser;
 
 use Psr\Http\Message\RequestInterface;
+use Serps\Core\Cookie\Cookie;
 use Serps\Core\Cookie\CookieJarInterface;
 use Serps\Core\Http\HttpClientInterface;
 use Serps\Core\Http\ProxyInterface;
@@ -91,5 +92,37 @@ class Browser extends AbstractBrowser
     public function getHttpClient()
     {
         return $this->httpClient;
+    }
+
+    /**
+     * @param null|string $acceptLanguage
+     */
+    public function setAcceptLanguage($acceptLanguage)
+    {
+        $this->acceptLanguage = $acceptLanguage;
+    }
+
+    /**
+     * @param null|string $userAgent
+     */
+    public function setUserAgent($userAgent)
+    {
+        $this->userAgent = $userAgent;
+    }
+
+    /**
+     * @param null|CookieJarInterface $cookieJar
+     */
+    public function setCookieJar(CookieJarInterface $cookieJar = null)
+    {
+        $this->cookieJar = $cookieJar;
+    }
+
+    /**
+     * @param null|ProxyInterface $proxy
+     */
+    public function setProxy(ProxyInterface $proxy = null)
+    {
+        $this->proxy = $proxy;
     }
 }
