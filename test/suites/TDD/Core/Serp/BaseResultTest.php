@@ -45,6 +45,21 @@ class BaseResultTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['foo' => 'bar', 'bar' => 'baz'], $result->getData());
     }
 
+    public function testNestedGetDataValue()
+    {
+        $barValue = new BaseResult('foo', [
+            'bar' => 'baz',
+            'foo' => 'qux'
+        ]);
+
+        $result = new BaseResult('classical', [
+            'foo' => 'bar',
+            'bar' => function () use ($barValue) {
+                return $barValue;
+            }
+        ]);
+        $this->assertSame($barValue, $result->getDataValue('bar'));
+    }
 
 
     public function testNestedGetData()
