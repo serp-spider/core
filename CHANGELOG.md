@@ -1,8 +1,16 @@
 # CHANGELOG
 
+## 0.3.0 (not released)
+
+> 20xx-xx-xx
+
+* breaking change:
+    * method ResultDataInterface::getData() will now return sub results as parsed arrays instead of objects
+
+
 ## 0.2.0 
 
-> Date: *20xx-xx-xx* (unreleased)
+> 2017-05-01
     
 * New dependency: ``"symfony/css-selector": "^2|^3"``
     

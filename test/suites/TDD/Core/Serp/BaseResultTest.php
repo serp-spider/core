@@ -46,6 +46,50 @@ class BaseResultTest extends \PHPUnit_Framework_TestCase
     }
 
 
+
+    public function testNestedGetData()
+    {
+        $result = new BaseResult('classical', [
+            'foo' => 'bar',
+            'bar' => function () {
+                return new BaseResult('foo', [
+                    'bar' => 'baz',
+                    'foo' => 'qux'
+                ]);
+            }
+        ]);
+        $this->assertEquals(['foo' => 'bar', 'bar' => ['bar' => 'baz', 'foo' => 'qux']], $result->getData());
+    }
+
+    public function testNestedInArrayGetData()
+    {
+        $result = new BaseResult('classical', [
+            'foo' => 'bar',
+            'bar' => function () {
+                return [
+                    new BaseResult('foo', [
+                        'bar' => 'baz',
+                        'foo' => 'qux'
+                    ]),
+                    new BaseResult('foo', [
+                        'bar' => 'far',
+                        'foo' => 'boz'
+                    ]),
+                ];
+            }
+        ]);
+        $this->assertEquals([
+            'foo' => 'bar',
+            'bar' => [
+                ['bar' => 'baz', 'foo' => 'qux'],
+                ['bar' => 'far', 'foo' => 'boz'],
+            ]
+        ], $result->getData());
+    }
+
+
+
+
     public function testGetDataValue()
     {
         $result = new BaseResult('classical', ['foo' => 'bar']);

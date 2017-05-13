@@ -47,6 +47,18 @@ class BaseResult implements ResultDataInterface
         $data = isset($this->data[$name]) ? $this->data[$name] : null;
         if (is_callable($data)) {
             $data = call_user_func($data);
+
+            if (is_array($data)) {
+                foreach ($data as $k => $v) {
+                    if (is_object($v) && $v instanceof ResultDataInterface) {
+                        $data[$k] = $v->getData();
+                    }
+                }
+            } elseif (is_object($data) && $data instanceof ResultDataInterface) {
+                $data = $data->getData();
+            }
+
+
             $this->data[$name] = $data;
             return $this->getDataValue($name);
         }
