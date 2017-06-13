@@ -5,6 +5,7 @@
 
 namespace Serps\Core\Serp;
 
+use Closure;
 use Serps\Core\Serp\ResultDataInterface;
 
 class BaseResult implements ResultDataInterface
@@ -45,7 +46,7 @@ class BaseResult implements ResultDataInterface
     public function getDataValue($name)
     {
         $data = isset($this->data[$name]) ? $this->data[$name] : null;
-        if (is_callable($data)) {
+        if ($data instanceof Closure) {
             $data = call_user_func($data);
             $this->data[$name] = $data;
             return $this->getDataValue($name);

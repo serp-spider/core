@@ -119,4 +119,15 @@ class BaseResultTest extends \PHPUnit_Framework_TestCase
         }]);
         $this->assertEquals('bar', $result->getDataValue('foo'));
     }
+
+    /**
+     * covers a bug where string values are considered to be callable
+     *
+     * @link https://github.com/serp-spider/search-engine-google/issues/71
+     */
+    public function testGetDataValueStringCallable()
+    {
+        $result = new BaseResult('classical', ['foo' => 'strpos']);
+        $this->assertEquals('strpos', $result->getDataValue('foo'));
+    }
 }
