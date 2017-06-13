@@ -4,9 +4,16 @@
 
 > 20xx-xx-xx
 
-* breaking change:
-    * method ResultDataInterface::getData() will now return sub results as parsed arrays instead of objects
 
+## 0.2.1 
+
+> 2017-06-13
+
+* breaking change:
+  * method ResultDataInterface::getData() will now return sub results as parsed arrays instead of objects (e047801)
+
+* bug fix
+  * getDataValue failed to parse string value with the name of an existing php function (649c214)
 
 ## 0.2.0 
 
