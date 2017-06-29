@@ -18,5 +18,5 @@ Install it using [composer](https://getcomposer.org/) with the package
 Documentation
 -------------
 
-Browse the website and documentation at https://serp-spider.github.io/
+Browse the website and documentation at https://serp-spider.github.io/documentation/
 
