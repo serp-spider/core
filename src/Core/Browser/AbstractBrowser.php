@@ -14,8 +14,8 @@ use function var_dump;
 abstract class AbstractBrowser implements BrowserInterface
 {
 
-    protected $defaultHeaders = [];
-    protected $defaultHeadersUC = [];
+    private $defaultHeaders = [];
+    private $defaultHeadersUC = [];
 
     /**
      * @inheritdoc
