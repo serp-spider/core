@@ -4,6 +4,10 @@
 
 > 20xx-xx-xx
 
+## 0.2.2
+
+* Addition
+  * browser class is now able to set default headers for every requests [serp-spider/search-engine-google#73](https://github.com/serp-spider/search-engine-google/issues/73)
 
 ## 0.2.1 
 
