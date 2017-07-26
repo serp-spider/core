@@ -6,6 +6,8 @@
 
 ## 0.2.2
 
+> 2017-07-26
+
 * Addition
   * browser class is now able to set default headers for every requests [serp-spider/search-engine-google#73](https://github.com/serp-spider/search-engine-google/issues/73)
 
