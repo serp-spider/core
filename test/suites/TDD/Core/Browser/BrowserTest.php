@@ -5,6 +5,7 @@
 
 namespace Serps\Test\Core\Browser;
 
+use Serps\Core\Browser\AbstractBrowser;
 use Serps\Core\Cookie\ArrayCookieJar;
 use Serps\Core\Http\Proxy;
 use Serps\Core\Http\StackingHttpClient;
@@ -73,6 +74,7 @@ class BrowserTest extends \PHPUnit_Framework_TestCase
         ////
         // test request with method headers and body
         $browser = new Browser($httpClient, 'foo-browser'); // Set a browser with different UA
+        $browser->setDefaultHeader('foo-bar', 'baz');
         $httpClient->resetStack();
         $request = RequestBuilder::buildRequest('http://foo.com', 'POST', ['User-Agent' => 'foobarua', 'x-foo' => 'bar'], 'a=b');
 
@@ -84,6 +86,7 @@ class BrowserTest extends \PHPUnit_Framework_TestCase
             [
                 'User-Agent' => ['foo-browser'],
                 'Accept-Language' => ['en-US,en;q=0.8'],
+                'foo-bar' => ['baz'],
                 'x-foo' => ['bar'],
                 'Host' => ['foo.com']
             ],
@@ -91,6 +94,21 @@ class BrowserTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEquals('POST', strtoupper($httpClient->getStack()[0]->request->getMethod()));
         $this->assertEquals('a=b', (string) $httpClient->getStack()[0]->request->getBody());
+    }
+
+    public function testDefaultHeaders()
+    {
+        /* @var \Serps\Core\Browser\AbstractBrowser $browser */
+        $browser = $this->getMockForAbstractClass(AbstractBrowser::class);
+
+        $this->assertFalse($browser->hasDefaultHeader('foo'));
+        $this->assertNull($browser->getDefaultHeaderValue('foo'));
+        $browser->setDefaultHeader('foo', 'bar');
+        $this->assertTrue($browser->hasDefaultHeader('foo'));
+        $this->assertTrue($browser->hasDefaultHeader('Foo'));
+        $this->assertEquals('bar', $browser->getDefaultHeaderValue('foo'));
+        $this->assertEquals('bar', $browser->getDefaultHeaderValue('Foo'));
+        $this->assertEquals(['foo' => 'bar'], $browser->getDefaultHeaders());
     }
 
     public function testAccessors()

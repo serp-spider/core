@@ -15,8 +15,6 @@ use Serps\Core\Url\UrlArchiveInterface;
 
 class Browser extends AbstractBrowser
 {
-    protected $acceptLanguage;
-    protected $userAgent;
 
     /**
      * @var null|CookieJarInterface
@@ -48,26 +46,10 @@ class Browser extends AbstractBrowser
     ) {
 
         $this->httpClient = $httpClient;
-        $this->userAgent = $userAgent ? $userAgent : 'serps';
-        $this->acceptLanguage = $acceptLanguage ? $acceptLanguage : 'en-US,en;q=0.8';
+        $this->setAcceptLanguage($acceptLanguage ? $acceptLanguage : 'en-US,en;q=0.8');
+        $this->setUserAgent($userAgent ? $userAgent : 'serps');
         $this->cookieJar = $cookieJar;
         $this->proxy = $proxy;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getAcceptLanguage()
-    {
-        return $this->acceptLanguage;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getUserAgent()
-    {
-        return $this->userAgent;
     }
 
     /**
@@ -99,7 +81,7 @@ class Browser extends AbstractBrowser
      */
     public function setAcceptLanguage($acceptLanguage)
     {
-        $this->acceptLanguage = $acceptLanguage;
+        $this->setDefaultHeader('Accept-Language', $acceptLanguage);
     }
 
     /**
@@ -107,7 +89,7 @@ class Browser extends AbstractBrowser
      */
     public function setUserAgent($userAgent)
     {
-        $this->userAgent = $userAgent;
+        $this->setDefaultHeader('User-Agent', $userAgent);
     }
 
     /**
