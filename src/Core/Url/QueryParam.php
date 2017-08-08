@@ -111,10 +111,14 @@ class QueryParam
             if (is_array($v)) {
                 $str = $this->arrayToStringRecursive($key, $v);
             } else {
-                if (!$this->isRaw()) {
-                    $v = urlencode($v);
+                if (is_null($v)) {
+                    $str = $key;
+                } else {
+                    if (!$this->isRaw()) {
+                        $v = urlencode($v);
+                    }
+                    $str = $key . '=' . $v;
                 }
-                $str = $key . '=' . $v;
             }
             $data[] = $str;
         }

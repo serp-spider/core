@@ -21,6 +21,12 @@ class QueryParamTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($queryParam->isRaw());
     }
 
+    public function testArrayNullValue()
+    {
+        $queryParam = new QueryParam('foo', [1, null]);
+        $this->assertEquals('foo[0]=1&foo[1]', $queryParam->generate());
+    }
+
     public function testGetValue()
     {
         $queryParam = new QueryParam('foo', 'foo bar');
