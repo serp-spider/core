@@ -4,6 +4,16 @@
 
 > 20xx-xx-xx
 
+
+
+## 0.2.3
+
+> 2017-08-08
+
+* bug fix
+  * url query params was generating bad value for null array value [590ee240e9032ec1538fc6ffe5ad394cb9fac8d7](https://github.com/serp-spider/core/commit/590ee240e9032ec1538fc6ffe5ad394cb9fac8d7)
+
+
 ## 0.2.2
 
 > 2017-07-26
