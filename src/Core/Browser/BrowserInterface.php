@@ -15,7 +15,7 @@ use Serps\Core\Url\UrlArchiveInterface;
  *
  * the class Serps\Core\Browser\AbstractBrowser helps to implement this interface
  *
- * @see Serps\Core\Browser\AbstractBrowser
+ * @see \Serps\Core\Browser\AbstractBrowser
  */
 interface BrowserInterface
 {

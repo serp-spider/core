@@ -8,8 +8,6 @@ namespace Serps\Core\Browser;
 use Psr\Http\Message\RequestInterface;
 use Serps\Core\Psr7\RequestBuilder;
 use Serps\Core\Url\UrlArchiveInterface;
-use function strtoupper;
-use function var_dump;
 
 abstract class AbstractBrowser implements BrowserInterface
 {
