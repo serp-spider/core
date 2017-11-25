@@ -6,6 +6,7 @@
 namespace Serps\Test\TDD\Core;
 
 use Serps\Core\Serp\BaseResult;
+use Serps\Core\Serp\ResultSet;
 
 /**
  * @covers Serps\Core\Serp\BaseResult
@@ -91,6 +92,38 @@ class BaseResultTest extends \PHPUnit_Framework_TestCase
                         'foo' => 'boz'
                     ]),
                 ];
+            }
+        ]);
+        $this->assertEquals([
+            'foo' => 'bar',
+            'bar' => [
+                ['bar' => 'baz', 'foo' => 'qux'],
+                ['bar' => 'far', 'foo' => 'boz'],
+            ]
+        ], $result->getData());
+    }
+
+
+    public function testResultsetNestedInArrayGetData()
+    {
+
+
+
+        $result = new BaseResult('classical', [
+            'foo' => 'bar',
+            'bar' => function () {
+                $resultSet = new ResultSet();
+                $resultSet->addItems([
+                    new BaseResult('foo', [
+                        'bar' => 'baz',
+                        'foo' => 'qux'
+                    ]),
+                    new BaseResult('foo', [
+                        'bar' => 'far',
+                        'foo' => 'boz'
+                    ]),
+                ]);
+                return $resultSet;
             }
         ]);
         $this->assertEquals([

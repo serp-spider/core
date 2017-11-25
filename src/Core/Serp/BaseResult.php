@@ -65,10 +65,16 @@ class BaseResult implements ResultDataInterface
         $data = [];
         foreach ($this->data as $k => $v) {
             $datum = $this->getDataValue($k);
-            if (is_array($datum)) {
-                foreach ($datum as $subK => $subV) {
+            if (is_array($datum) || (is_object($datum) && $datum instanceof ResultSetInterface)) {
+                // make sur datum is an array
+                $baseDatum = $datum;
+                $datum = [];
+
+                foreach ($baseDatum as $subK => $subV) {
                     if (is_object($subV) && $subV instanceof ResultDataInterface) {
                         $datum[$subK] = $subV->getData();
+                    } else {
+                        $datum[$subK] = $subV;
                     }
                 }
             } elseif (is_object($datum) && $datum instanceof ResultDataInterface) {
