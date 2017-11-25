@@ -6,9 +6,10 @@ sudo: false
 matrix:
   include:
   - php: 5.5
-    env: PROCESS_CODECLIMATE=true
   - php: 5.6
+    env: PROCESS_CODECLIMATE=true
   - php: 7.0
+  - php: 7.1
   - php: nightly
   - php: hhvm
     env: IGNORE_XDEBUG=true
@@ -17,6 +18,7 @@ matrix:
 
   allow_failures:
   - php: nightly
+  - php: hhvm
 
 before_script:
   - if [ -z "$IGNORE_XDEBUG" ];then phpenv config-rm xdebug.ini; fi
