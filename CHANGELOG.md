@@ -5,6 +5,13 @@
 > 20xx-xx-xx
 
 
+## 0.2.4
+
+> 2017-11-25
+
+* new features
+  * data value can now depend on other results [aa59e55b10c28645decc5312b9c93681f5fe0691](https://github.com/serp-spider/core/commit/aa59e55b10c28645decc5312b9c93681f5fe0691)
+  * BaseResult::getData is now able to dump resultSetInterface [d6e1b3627a50a5cce56d5320b56accabd107d851](https://github.com/serp-spider/core/commit/d6e1b3627a50a5cce56d5320b56accabd107d851)
 
 ## 0.2.3
 
