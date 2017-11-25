@@ -120,6 +120,19 @@ class BaseResultTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('bar', $result->getDataValue('foo'));
     }
 
+    public function testGetDataValueCallableWithDependencies()
+    {
+        $result = new BaseResult('classical', [
+            'foo' => function (BaseResult $result) {
+                return $result->getDataValue('bar') . '-bar';
+            },
+            'bar' => function () {
+                return 'qux';
+            }
+        ]);
+        $this->assertEquals('qux-bar', $result->getDataValue('foo'));
+    }
+
     /**
      * covers a bug where string values are considered to be callable
      *

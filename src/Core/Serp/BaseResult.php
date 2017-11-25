@@ -47,7 +47,7 @@ class BaseResult implements ResultDataInterface
     {
         $data = isset($this->data[$name]) ? $this->data[$name] : null;
         if ($data instanceof Closure) {
-            $data = call_user_func($data);
+            $data = call_user_func($data, $this);
             $this->data[$name] = $data;
             return $this->getDataValue($name);
         }
