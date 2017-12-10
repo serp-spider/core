@@ -11,6 +11,7 @@
 
 * new features
   * **bc break** added method ``DomNodeInterface::hasClasses``
+  * added method ``DomNodeList::hasClasses``
   
   
 ## 0.2.4

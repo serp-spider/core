@@ -43,6 +43,22 @@ class DomNodeList implements \Countable, \Iterator
     }
 
     /**
+     * Check if at least one of the elements in the collection as all the given classes
+     * @param $className
+     * @return bool
+     */
+    public function hasClasses(array $classNames)
+    {
+        for ($i = 0; $i < $this->nodeList->length; $i++) {
+            if ($this->getNodeAt($i)->hasClasses($classNames)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * @param $index
      * @return DomNodeInterface|null
      */
