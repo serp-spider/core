@@ -5,6 +5,14 @@
 > 20xx-xx-xx
 
 
+## 0.2.5
+
+> 2017-12-10
+
+* new features
+  * **bc break** added method ``DomNodeInterface::hasClasses``
+  
+  
 ## 0.2.4
 
 > 2017-11-25
