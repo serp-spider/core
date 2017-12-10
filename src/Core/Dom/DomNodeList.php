@@ -33,15 +33,9 @@ class DomNodeList implements \Countable, \Iterator
      */
     public function hasClass($className)
     {
-        foreach ($this->nodeList as $node) {
-            if ($node instanceof \DOMElement) {
-                $classes = $node->getAttribute('class');
-                if ($classes) {
-                    $classes = explode(' ', $classes);
-                    if (in_array($className, $classes)) {
-                        return true;
-                    }
-                }
+        for ($i = 0; $i < $this->nodeList->length; $i++) {
+            if ($this->getNodeAt($i)->hasClass($className)) {
+                return true;
             }
         }
 
