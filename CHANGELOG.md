@@ -10,6 +10,7 @@
 
 * new features
   * **bc break** added method ``DomNodeInterface::hasAnyClass``
+  * added method ``DomNodeList::hasAnyClass``
 
 ## 0.2.5
 

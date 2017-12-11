@@ -76,6 +76,24 @@ class DomNodeListTest extends TestCase
         $this->assertFalse($nodeList->hasClasses(['bar', 'baz']));
     }
 
+    public function testHasAnyClass()
+    {
+
+        $dom = new DocumentWrapper('<html><div>foo</div><span class="foo bar">baz</span><span>qux</span><div class="baz"></div></html>');
+
+        $xpath = new \DOMXPath($dom->getDom());
+        $elements = $xpath->query(Css::toXPath('span'));
+        $nodeList = new DomNodeList($elements, $dom);
+
+
+        $this->assertTrue($nodeList->hasAnyClass(['foo']));
+        $this->assertTrue($nodeList->hasAnyClass(['foo', 'bar']));
+        $this->assertTrue($nodeList->hasAnyClass(['foo', 'baz']));
+        $this->assertTrue($nodeList->hasAnyClass(['baz', 'foo']));
+        $this->assertFalse($nodeList->hasAnyClass(['baz']));
+        $this->assertFalse($nodeList->hasAnyClass(['baz', 'qux']));
+    }
+
 
     public function testGetNodeAt()
     {
