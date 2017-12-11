@@ -32,6 +32,11 @@ class OtherDomNode implements DomNodeInterface
         return false;
     }
 
+    public function hasAnyClass(array $classNames)
+    {
+        return false;
+    }
+
     public function getAttribute($name)
     {
         return null;

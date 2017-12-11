@@ -14,10 +14,19 @@ class NullDomNode implements DomNodeInterface
     {
         return false;
     }
+
     /**
      * @inheritdoc
      */
     public function hasClasses(array $className)
+    {
+        return false;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function hasAnyClass(array $classNames)
     {
         return false;
     }

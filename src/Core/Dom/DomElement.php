@@ -8,13 +8,30 @@ namespace Serps\Core\Dom;
 class DomElement extends \DOMElement implements DomNodeInterface
 {
 
-    public function hasClass($className)
+    private function getClassList()
     {
         $classList = $this->getAttribute('class');
 
         if ($classList) {
-            $classList = explode(' ', $classList);
-            return in_array($className, $classList);
+            return explode(' ', $classList);
+        }
+
+        return [];
+    }
+
+    public function hasClass($className)
+    {
+        return in_array($className, $this->getClassList());
+    }
+
+    public function hasAnyClass(array $classNames)
+    {
+        $classList = $this->getClassList();
+
+        foreach ($classNames as $className) {
+            if (in_array($className, $classList)) {
+                return true;
+            }
         }
 
         return false;
@@ -22,10 +39,9 @@ class DomElement extends \DOMElement implements DomNodeInterface
 
     public function hasClasses(array $classNames)
     {
-        $classList = $this->getAttribute('class');
+        $classList = $this->getClassList();
 
-        if ($classList) {
-            $classList = explode(' ', $classList);
+        if (!empty($classList)) {
             foreach ($classNames as $className) {
                 if (!in_array($className, $classList)) {
                     return false;

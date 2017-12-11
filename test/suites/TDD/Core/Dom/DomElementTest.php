@@ -84,4 +84,27 @@ class DomElementTest extends TestCase
         $noClass = $nodeList->item(1);
         $this->assertFalse($noClass->hasClasses(['foo']));
     }
+
+    public function testHasAnyClass()
+    {
+
+        $dom = new DocumentWrapper('<html><div>foo</div><span class="foo bar">baz</span><span>qux</span></html>');
+
+        $xpath = new \DOMXPath($dom->getDom());
+        $elements = $xpath->query(Css::toXPath('span'));
+        $nodeList = new DomNodeList($elements, $dom);
+
+        $foobar = $nodeList->item(0);
+
+        $this->assertInstanceOf(DomElement::class, $foobar);
+        $this->assertTrue($foobar->hasAnyClass(['foo']));
+        $this->assertTrue($foobar->hasAnyClass(['foo', 'bar']));
+        $this->assertTrue($foobar->hasAnyClass(['foo', 'baz']));
+        $this->assertTrue($foobar->hasAnyClass(['baz', 'foo']));
+        $this->assertFalse($foobar->hasAnyClass(['baz']));
+        $this->assertFalse($foobar->hasAnyClass(['baz', 'qux']));
+
+        $noClass = $nodeList->item(1);
+        $this->assertFalse($noClass->hasAnyClass(['foo']));
+    }
 }
