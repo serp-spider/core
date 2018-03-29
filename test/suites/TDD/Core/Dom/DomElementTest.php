@@ -10,7 +10,7 @@ use Serps\Core\Dom\Css;
 use Serps\Core\Dom\DocumentWrapper;
 use Serps\Core\Dom\DomElement;
 use Serps\Core\Dom\DomNodeList;
-use Serps\Core\Dom\NullDomNode;
+use Serps\Core\Dom\DomNodeListInterface;
 
 /**
  * @covers \Serps\Core\Dom\DomElement
@@ -106,5 +106,24 @@ class DomElementTest extends TestCase
 
         $noClass = $nodeList->item(1);
         $this->assertFalse($noClass->hasAnyClass(['foo']));
+    }
+
+    public function testGetChildren()
+    {
+
+        $dom = new DocumentWrapper(
+            '<html>
+                <div class="foo bar"><span>foo</span><div>bar</div></div></html>'
+        );
+
+        $foobar = $dom->cssQuery('.foo.bar')->item(0);
+        $this->assertInstanceOf(DomElement::class, $foobar);
+
+        $children = $foobar->getChildren();
+
+        $this->assertInstanceOf(DomNodeListInterface::class, $children);
+        $this->assertCount(2, $children);
+        $this->assertEquals('foo', $children->getNodeAt(0)->getNodeValue());
+        $this->assertEquals('bar', $children->getNodeAt(1)->getNodeValue());
     }
 }

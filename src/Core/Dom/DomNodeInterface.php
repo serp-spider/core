@@ -14,4 +14,9 @@ interface DomNodeInterface
     public function getAttribute($name);
     public function getTagName();
     public function getNodeValue();
+
+    /**
+     * @return DomNodeList
+     */
+    public function getChildren();
 }

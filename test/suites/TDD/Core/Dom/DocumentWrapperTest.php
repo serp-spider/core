@@ -10,10 +10,11 @@ use Serps\Core\Dom\DomNodeList;
 use DOMElement;
 
 /**
- * @covers Serps\Core\Dom\DocumentWrapper
- * @covers Serps\Core\Dom\DomNodeList
- * @covers Serps\Core\Dom\DomElement
- * @covers Serps\Core\Dom\DomXpath
+ * @covers \Serps\Core\Dom\DocumentWrapper
+ * @covers \Serps\Core\Dom\InternalDocumentWrapper
+ * @covers \Serps\Core\Dom\DomNodeList
+ * @covers \Serps\Core\Dom\DomElement
+ * @covers \Serps\Core\Dom\DomXpath
  */
 class DocumentWrapperTest extends \PHPUnit_Framework_TestCase
 {

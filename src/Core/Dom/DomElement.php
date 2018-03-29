@@ -8,6 +8,9 @@ namespace Serps\Core\Dom;
 class DomElement extends \DOMElement implements DomNodeInterface
 {
 
+    /**
+     * @inheritdoc
+     */
     private function getClassList()
     {
         $classList = $this->getAttribute('class');
@@ -19,11 +22,17 @@ class DomElement extends \DOMElement implements DomNodeInterface
         return [];
     }
 
+    /**
+     * @inheritdoc
+     */
     public function hasClass($className)
     {
         return in_array($className, $this->getClassList());
     }
 
+    /**
+     * @inheritdoc
+     */
     public function hasAnyClass(array $classNames)
     {
         $classList = $this->getClassList();
@@ -37,6 +46,9 @@ class DomElement extends \DOMElement implements DomNodeInterface
         return false;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function hasClasses(array $classNames)
     {
         $classList = $this->getClassList();
@@ -54,14 +66,27 @@ class DomElement extends \DOMElement implements DomNodeInterface
         return empty($classNames);
     }
 
-
+    /**
+     * @inheritdoc
+     */
     public function getTagName()
     {
         return $this->tagName;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getNodeValue()
     {
         return $this->nodeValue;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getChildren()
+    {
+        return new DomNodeList($this->childNodes, new InternalDocumentWrapper($this->ownerDocument));
     }
 }

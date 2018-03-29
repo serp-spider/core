@@ -20,7 +20,7 @@ class DomXpath extends BaseDomXpath
      * DomXpath constructor.
      * @param DocumentWrapper $doc
      */
-    public function __construct(DocumentWrapper $doc)
+    public function __construct(InternalDocumentWrapper $doc)
     {
         $this->documentWrapper = $doc;
         parent::__construct($doc->getDom());

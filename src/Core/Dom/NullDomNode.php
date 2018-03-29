@@ -54,4 +54,12 @@ class NullDomNode implements DomNodeInterface
     {
         return '';
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function getChildren()
+    {
+        return new EmptyDomNodeList();
+    }
 }

@@ -5,16 +5,8 @@
 
 namespace Serps\Core\Dom;
 
-class DocumentWrapper
+class DocumentWrapper extends InternalDocumentWrapper
 {
-
-    protected $xpath;
-
-    /**
-     * @var \DOMDocument
-     */
-    protected $dom;
-
 
 
     /**
@@ -35,62 +27,13 @@ class DocumentWrapper
         }
 
         // Load DOM
-        $this->dom = new \DOMDocument();
-        libxml_use_internal_errors(true);
-        $this->dom->loadHTML($domString);
-        libxml_use_internal_errors(false);
+        $dom = new \DOMDocument();
+        $previousUseIE = libxml_use_internal_errors(true);
+        $dom->loadHTML($domString);
+        libxml_use_internal_errors($previousUseIE);
         libxml_clear_errors();
 
-        $this->dom->registerNodeClass(\DOMElement::class, DomElement::class);
-    }
-
-    /**
-     * get the object xpath to query it
-     * @return DomXpath
-     */
-    public function getXpath()
-    {
-        if (null === $this->xpath) {
-            $this->xpath = new DomXpath($this);
-        }
-        return $this->xpath;
-    }
-
-    /**
-     * @return \DOMDocument
-     */
-    public function getDom()
-    {
-        return $this->dom;
-    }
-
-    /**
-     * Runs a xpath query against the wrapped dom object
-     *
-     * That's a shortcut for  \DOMXPath::query()
-     *
-     * @link http://php.net/manual/en/domxpath.query.php
-     *
-     * @param string $query the xpath query
-     * @param \DOMNode|null $node the context node for the query, leave it null to query the root
-     * @return DomNodeList
-     */
-    public function xpathQuery($query, $node = null)
-    {
-        return $this->getXpath()->query($query, $node);
-    }
-
-    /**
-     * Runs a css query against the wrapped dom object. Internally the css will translate to xpath
-     *
-     * @link http://php.net/manual/en/domxpath.query.php
-     *
-     * @param string $query the css query
-     * @param \DOMNode|null $node the context node for the query, leave it null to query the root
-     * @return DomNodeList
-     */
-    public function cssQuery($query, $node = null)
-    {
-        return $this->getXpath()->query(Css::toXPath($query), $node);
+        $dom->registerNodeClass(\DOMElement::class, DomElement::class);
+        parent::__construct($dom);
     }
 }
