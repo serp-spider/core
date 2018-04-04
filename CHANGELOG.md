@@ -4,6 +4,16 @@
 
 > 20xx-xx-xx
 
+* new features
+  * **bc break** added method ``DomNodeInterface::getChildren``
+  * added interface ``DomNodeListInterface``
+  * added class ``EmptyDomNodeList``
+  * added class ``InternalDocumentWrapper``
+  * class ``DocumentWrapper`` now extends ``InternalDocumentWrapper``
+  * class ``NullDomNode`` now extends ``\DOMNode``
+  * method ``DomXpath`` is now able to handle ``NullDomNode`` as instances context
+
+
 ## 0.2.6
 
 > 2017-12-11

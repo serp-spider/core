@@ -5,7 +5,7 @@
 
 namespace Serps\Core\Dom;
 
-class NullDomNode implements DomNodeInterface
+class NullDomNode extends \DOMNode implements DomNodeInterface
 {
     /**
      * @inheritdoc
