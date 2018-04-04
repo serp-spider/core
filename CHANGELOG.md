@@ -1,8 +1,14 @@
 # CHANGELOG
 
-## 0.3.0 (not released)
 
-> 20xx-xx-xx
+## 0.3.1
+
+*2018-xx-xx* NOT RELEASED YET
+
+
+## 0.3.0
+
+> 2018-04-04
 
 * new features
   * **bc break** added method ``DomNodeInterface::getChildren``
