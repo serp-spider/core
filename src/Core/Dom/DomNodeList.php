@@ -98,15 +98,7 @@ class DomNodeList implements DomNodeListInterface
     {
         $item = $this->nodeList->item($index);
 
-        if (!$item) {
-            return new NullDomNode();
-        }
-
-        if (!$item instanceof DomNodeInterface) {
-            return new OtherDomNode($item);
-        }
-
-        return $item;
+        return InternalDocumentWrapper::toDomNodeInterface($item);
     }
 
     /**

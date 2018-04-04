@@ -62,4 +62,12 @@ class NullDomNode extends \DOMNode implements DomNodeInterface
     {
         return new EmptyDomNodeList();
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function getLastChild()
+    {
+        return new NullDomNode();
+    }
 }

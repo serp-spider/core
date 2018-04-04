@@ -89,4 +89,12 @@ class DomElement extends \DOMElement implements DomNodeInterface
     {
         return new DomNodeList($this->childNodes, new InternalDocumentWrapper($this->ownerDocument));
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function getLastChild()
+    {
+        return InternalDocumentWrapper::toDomNodeInterface($this->lastChild);
+    }
 }

@@ -6,6 +6,7 @@
 
 * new features
   * **bc break** added method ``DomNodeInterface::getChildren``
+  * **bc break** added method ``DomNodeInterface::getLastChild``
   * added interface ``DomNodeListInterface``
   * added class ``EmptyDomNodeList``
   * added class ``InternalDocumentWrapper``

@@ -19,4 +19,9 @@ interface DomNodeInterface
      * @return DomNodeList
      */
     public function getChildren();
+
+    /**
+     * @return DomNodeInterface
+     */
+    public function getLastChild();
 }

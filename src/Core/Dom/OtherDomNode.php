@@ -76,4 +76,16 @@ class OtherDomNode implements DomNodeInterface
     {
         return new EmptyDomNodeList();
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function getLastChild()
+    {
+        if (property_exists($this, 'lastChild')) {
+            return InternalDocumentWrapper::toDomNodeInterface($this->lastChild);
+        } else {
+            return new NullDomNode();
+        }
+    }
 }

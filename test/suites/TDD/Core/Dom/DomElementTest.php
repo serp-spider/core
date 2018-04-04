@@ -11,6 +11,8 @@ use Serps\Core\Dom\DocumentWrapper;
 use Serps\Core\Dom\DomElement;
 use Serps\Core\Dom\DomNodeList;
 use Serps\Core\Dom\DomNodeListInterface;
+use Serps\Core\Dom\NullDomNode;
+use Serps\Core\Dom\OtherDomNode;
 
 /**
  * @covers \Serps\Core\Dom\DomElement
@@ -125,5 +127,26 @@ class DomElementTest extends TestCase
         $this->assertCount(2, $children);
         $this->assertEquals('foo', $children->getNodeAt(0)->getNodeValue());
         $this->assertEquals('bar', $children->getNodeAt(1)->getNodeValue());
+    }
+
+    public function testLastChild()
+    {
+        $domString =
+            '<foo>
+                <bar a="b">bar baz</bar>
+            </foo>';
+
+        $document = new DocumentWrapper($domString);
+        $foo = $document->cssQuery('foo')->getNodeAt(0);
+
+        $bar = $foo->getLastChild();
+
+        $this->assertEquals('bar', $bar->getTagName());
+
+        $text = $bar->getLastChild();
+
+        $this->assertInstanceOf(OtherDomNode::class, $text);
+
+        $this->assertInstanceOf(NullDomNode::class, $text->getLastChild());
     }
 }

@@ -19,6 +19,24 @@ class InternalDocumentWrapper
     private $xpath;
 
     /**
+     * Transforms the given dom node to a domNodeInterface instance
+     * @param \DOMNode|null $item
+     * @return DomNodeInterface
+     */
+    public static function toDomNodeInterface(\DOMNode $item = null)
+    {
+        if (!$item) {
+            return new NullDomNode();
+        }
+
+        if (!$item instanceof DomNodeInterface) {
+            return new OtherDomNode($item);
+        }
+
+        return $item;
+    }
+
+    /**
      * InternalDocumentWrapper constructor.
      * @param \DOMDocument $dom
      */
