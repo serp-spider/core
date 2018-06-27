@@ -32,6 +32,7 @@ class Browser extends AbstractBrowser
     protected $httpClient;
 
     /**
+     * @param HttpClientInterface $httpClient HTTP client.
      * @param string|null $userAgent the user agent string
      * @param string|null $acceptLanguage the accept language header. Default to 'en-US,en;q=0.8'
      * @param CookieJarInterface|null $cookieJar a cookie jar to use for requests
