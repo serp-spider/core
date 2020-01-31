@@ -1,7 +1,7 @@
 {
 
-  "name": "serps/core",
-  "description": "Search engine scrapper",
+  "name": "repat/serps-core",
+  "description": "Search engine scrapper, updated for PHP 7.4",
   "type": "library",
   "keywords": ["google", "yahoo", "bing", "search engine", "scrapper"],
   "homepage": "https://github.com/serp-spider/core",
@@ -11,6 +11,10 @@
     {
       "name": "Soufiane GHZAL",
       "homepage": "https://github.com/gsouf"
+    },
+    {
+      "name": "repat",
+      "homepage": "https://repat.de"
     }
   ],
 
