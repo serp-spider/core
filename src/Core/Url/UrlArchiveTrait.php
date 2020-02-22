@@ -383,7 +383,7 @@ trait UrlArchiveTrait
                     if (empty($delta->getParams())) {
                         $delta->setParams($this->getParams());
                     }
-                } elseif ('/' !== $path{0}) {
+                } elseif ('/' !== $path[0]) {
                     $path = $this->getPath();
                     if (strpos($path, '/') !== false) {
                         $path = substr($path, 0, strrpos($path, '/'));
