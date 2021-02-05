@@ -11,7 +11,7 @@ interface DomNodeInterface
     public function hasClass($className);
     public function hasClasses(array $classNames);
     public function hasAnyClass(array $classNames);
-    public function getAttribute($name);
+    public function getAttribute(string $name);
     public function getTagName();
     public function getNodeValue();
 
