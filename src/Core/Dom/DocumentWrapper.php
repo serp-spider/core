@@ -28,10 +28,10 @@ class DocumentWrapper extends InternalDocumentWrapper
 
         // Load DOM
         $dom = new \DOMDocument();
-        $previousUseIE = libxml_use_internal_errors(true);
-        $dom->loadHTML($domString);
-        libxml_use_internal_errors($previousUseIE);
-        libxml_clear_errors();
+//        $previousUseIE = libxml_use_internal_errors(true);
+        @$dom->loadHTML($domString);
+//        libxml_use_internal_errors($previousUseIE);
+//        libxml_clear_errors();
 
         $dom->registerNodeClass(\DOMElement::class, DomElement::class);
         parent::__construct($dom);
