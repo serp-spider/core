@@ -49,4 +49,16 @@ class ProxyResult implements ResultDataInterface
     {
         return $this->itemData->getTypes();
     }
+
+    public function getNodePath() {
+        return $this->itemData->getNodePath();
+    }
+
+    public function serpFeatureHasPosition() {
+        return $this->itemData->serpFeatureHasPosition();
+    }
+
+    public function serpFeatureHasSidePosition() {
+        return $this->itemData->serpFeatureHasSidePosition();
+    }
 }

@@ -10,6 +10,24 @@ class ItemPosition extends ProxyResult
 
     protected $positionOnPage;
     protected $realPosition;
+    protected $serpFeaturePositionOnPage;
+
+    /**
+     * @return false
+     */
+    public function getSerpFeaturePositionOnPage() {
+        if($this->serpFeatureHasSidePosition() && $this->serpFeaturePositionOnPage) {
+            return 'side';
+        }
+        return $this->serpFeaturePositionOnPage;
+    }
+
+    /**
+     * @param false $serpFeaturePositionOnPage
+     */
+    public function setSerpFeaturePositionOnPage(int $serpFeaturePositionOnPage): void {
+        $this->serpFeaturePositionOnPage = $serpFeaturePositionOnPage;
+    }
 
     /**
      * ItemPosition constructor.

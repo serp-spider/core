@@ -13,11 +13,26 @@ class BaseResult implements ResultDataInterface
 
     protected $types;
     protected $data;
+    protected $nodePath                   = '';
+    private $serpFeatureHasPosition     = false;
+    private $serpFeatureHasSidePosition = false;
 
-    public function __construct($types, array $data = [])
+    public function __construct(
+        $types,
+        array $data = [],
+        ?\DOMElement $domElement = null,
+        $hasSerpFeaturePosition = false,
+        $hasSideSerpFeaturePosition = false
+    )
     {
         $this->types = is_array($types) ? $types : [$types];
         $this->data = $data;
+        if ($domElement) {
+            $this->nodePath = $domElement->getNodePath();
+        }
+
+        $this->serpFeatureHasPosition = $hasSerpFeaturePosition;
+        $this->serpFeatureHasSidePosition = $hasSideSerpFeaturePosition;
     }
 
     public function getTypes()
@@ -83,5 +98,17 @@ class BaseResult implements ResultDataInterface
             $data[$k] = $datum;
         }
         return $data;
+    }
+
+    public function getNodePath() {
+        return $this->nodePath;
+    }
+
+    public function serpFeatureHasPosition() {
+        return $this->serpFeatureHasPosition;
+    }
+
+    public function serpFeatureHasSidePosition() {
+        return $this->serpFeatureHasSidePosition;
     }
 }

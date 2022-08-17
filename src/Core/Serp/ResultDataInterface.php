@@ -26,6 +26,12 @@ interface ResultDataInterface
 
     public function getData();
 
+    public function getNodePath();
+
+    public function serpFeatureHasPosition();
+
+    public function serpFeatureHasSidePosition();
+
     /**
      * Shortcut for getDataValue()
      */
